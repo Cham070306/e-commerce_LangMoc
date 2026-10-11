@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+dist/
+build/
+.next/
+coverage/
+*.log
+*.sql.dump
+*.dump
+frontend/public/uploads/
+backend/uploads/

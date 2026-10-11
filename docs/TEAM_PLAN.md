@@ -2,34 +2,13 @@
 
 ## Hiện trạng và quyết định chung
 
-Ngày 11/10/2026, thư mục clone `e-commerce_vietcraft` chỉ có `.git`, nhánh `main` chưa có commit. Giao diện responsive mà nhóm đã làm chưa có trong thư mục này, nên phân công frontend dưới đây là theo **chức năng**, chưa gắn với tên file thật. Khi đưa giao diện vào repo, giữ lại layout hiện có và gắn API theo hợp đồng ở [API.md](API.md). Tài liệu này không lấy bảng CLOUDBOT UTH làm phân công Việt Craft.
+Ngày 12/10/2026, repo đã có tài liệu thiết kế và cây thư mục khung. Giao diện responsive mà nhóm đã làm chưa có trong thư mục này, nên phân công frontend dưới đây là theo **chức năng**, chưa gắn với tên file thật. Khi đưa giao diện vào repo, giữ lại layout hiện có và gắn API theo hợp đồng ở [API.md](API.md). Tài liệu này không lấy bảng CLOUDBOT UTH làm phân công Việt Craft.
 
 Stack đã chốt: PostgreSQL. Đề xuất dùng TypeScript xuyên suốt; frontend React + Vite nếu giao diện hiện tại đã là React, backend Node.js + Express hoặc NestJS theo kỹ năng nhóm. **Không tạo frontend mới trước khi xác nhận giao diện hiện có dùng framework nào.** Mô hình đầu tiên có một tài khoản admin quản lý sản phẩm; bảng `sellers` chuẩn bị dữ liệu nguồn gốc, chưa có portal cho người bán. COD là phương thức đủ để chạy trọn luồng demo; gateway là phần mở rộng nếu thời gian cho phép.
 
 ## Cấu trúc thư mục khi nhập giao diện hiện có
 
-```text
-e-commerce_vietcraft/
-  frontend/               # giao diện responsive hiện có, giữ framework gốc
-    src/
-      pages/              # Home, Catalog, Product, Cart, Checkout, Auth, Contact, Policies
-      components/         # Header, ProductCard, Filters, Price, ReviewList...
-      features/           # catalog, cart, auth, checkout, reviews
-      lib/api.ts           # một nơi cấu hình base URL, cookie và xử lý lỗi
-  backend/
-    src/
-      modules/            # auth, catalog, cart, orders, reviews, contact, admin
-      db/                 # connection, queries, transaction helpers
-      middleware/         # auth, validate, error handler
-  database/
-    001_initial.sql       # lược đồ PostgreSQL hiện tại
-    002_seed.sql          # dữ liệu mẫu do nhóm tạo, không dùng dữ liệu thật của khách
-  docs/
-    API.md
-    TEAM_PLAN.md
-  .env.example            # tên biến môi trường, không có mật khẩu thật
-  README.md               # hướng dẫn chạy cho Windows và macOS
-```
+Cây thư mục đã được tạo và giải thích ở [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md). Các thư mục trống có `.gitkeep` để GitHub hiển thị được trước khi có code. Người 1 đưa giao diện responsive hiện có vào `frontend/` và giữ framework gốc; người 3 và 4 phát triển trong `backend/` cùng `database/`.
 
 Nếu giao diện là HTML/CSS/JS thuần, giữ nguyên cấu trúc thực tế thay vì ép sang React. Chỉ tạo `lib/api.js` và module theo trang; hợp đồng API không đổi. Nếu nhóm đã có frontend trong repo khác, copy bằng một PR riêng để tránh xung đột khi bốn người cùng làm.
 
