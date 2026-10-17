@@ -1,4 +1,4 @@
--- VietCraft MVP, PostgreSQL 16+. Run on an empty database.
+-- Làng Mộc MVP, PostgreSQL 16+. Run on an empty database.
 -- All monetary values are integer VND. Timestamps use UTC (timestamptz).
 BEGIN;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;

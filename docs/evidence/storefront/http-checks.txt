@@ -1,0 +1,2 @@
+PASS: categories=4, products=449, page size=12; non search; detail; reviews=2 (demo); HTTP 400/404/503.
+PASS: cùng smoke test trên production preview http://127.0.0.1:4173.

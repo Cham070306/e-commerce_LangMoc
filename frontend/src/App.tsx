@@ -1,0 +1,7 @@
+import {useEffect,useState} from 'react';
+import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
+import Home from './pages/Home';
+import Catalog from './pages/Catalog';
+import Product from './pages/Product';
+export default function App(){const [hash,setHash]=useState(location.hash||'#/');useEffect(()=>{const change=()=>setHash(location.hash||'#/');window.addEventListener('hashchange',change);return()=>window.removeEventListener('hashchange',change)},[]);const [route,query='']=hash.replace(/^#/,'').split('?');const home=['','/','main','lang-nghe','cau-chuyen','danh-muc','san-pham','lien-he'].includes(route);useEffect(()=>{if(route.startsWith('/'))window.scrollTo({top:0,behavior:'instant'});else requestAnimationFrame(()=>document.getElementById(route)?.scrollIntoView({behavior:'smooth'}));document.title=route.startsWith('/catalog')?'Bộ sưu tập thủ công | Làng Mộc':route.startsWith('/product')?'Chi tiết sản phẩm | Làng Mộc':'Làng Mộc — Nét Việt, từ đôi bàn tay'},[hash]);const pageKey=route.startsWith('/product')?'product':route.startsWith('/catalog')?'catalog':'home';return <><Header home={home}/><div className="page-transition" key={pageKey}>{route==='/catalog'?<Catalog params={new URLSearchParams(query)}/>:route.startsWith('/product/')?<Product slug={decodeURIComponent(route.slice(9))}/>:home?<Home/>:<main id="main" className="store-page state-box"><h1>Trang chưa tồn tại</h1><a href="#/">Về trang chủ</a></main>}</div><Footer/></>}

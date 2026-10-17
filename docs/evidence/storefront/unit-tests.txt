@@ -1,0 +1,18 @@
+
+> langmoc-frontend@0.1.0 test
+> node --experimental-strip-types --test tests/catalog.test.ts
+
+✔ accent-insensitive search and category intersection (7.294625ms)
+✔ price bounds exclude unknown prices; asc/desc keep null last (0.482167ms)
+✔ pagination is stable, non-overlapping, and preserves total (0.33825ms)
+✔ invalid ranges, sort and paging fail rather than silently altering request (0.093ms)
+✔ stable IDs/slugs, valid sale prices and images in fixture (0.147ms)
+✔ every primary product image is a verified local asset (27.549792ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.446166
