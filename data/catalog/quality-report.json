@@ -1,0 +1,24 @@
+{
+  "total": 449,
+  "with_price": 414,
+  "with_images": 449,
+  "with_description": 401,
+  "sources": {
+    "suyenlam": 196,
+    "tiemgomviet": 25,
+    "maries": 7,
+    "craftlink": 16,
+    "minhphong": 5,
+    "balothocam": 200
+  },
+  "checks": [
+    "unique_source_ids",
+    "nonempty_names",
+    "positive_integer_or_null_prices"
+  ],
+  "flag_counts": {
+    "no_text_description": 48,
+    "origin_not_verified": 445,
+    "price_not_published_or_not_extracted": 35
+  }
+}

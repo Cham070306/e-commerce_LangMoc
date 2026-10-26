@@ -1,0 +1,186 @@
+{
+  "data": [
+    {
+      "id": "16018f0b-dbb7-5e71-8940-bab3f6d799c1",
+      "slug": "vai-tho-cam-dan-toc",
+      "name": "Vải thổ cẩm dân tộc",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": null,
+      "price_vnd": 10000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 10000,
+      "currency": "VND",
+      "description": "Chất liệu vải thổ cẩm dày dặn, chắc chắn và bền đẹp. Hơn nữa, màu sắc trên thổ cẩm cũng rất ít bị phai khi giặt hoặc sử dụng trong thời gian dài. Các họa tiết trên thổ cẩm được bố trí... [Xem tiếp]",
+      "attributes": {},
+      "images": [
+        {
+          "url": "http://bizweb.dktcdn.net/thumb/grande/100/335/513/products/vi-tho-cam-thai-1495528322-1-2533832-1495635238.jpg?v=1541653371707",
+          "alt": "Vải thổ cẩm dân tộc",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "minhphong",
+      "source_url": "https://khanminhphong.com/vai-tho-cam-dan-toc",
+      "collected_at": "2026-10-14T14:43:17.331066+00:00",
+      "source_availability": null,
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "source_price_text": "10.000₫",
+      "description_image_urls": [],
+      "source_display_name": "Khăn Minh Phong"
+    },
+    {
+      "id": "89fc9b11-42a0-5b06-a76b-6e7b638511a1",
+      "slug": "vai-tho-cam-dan-toc-dep-1",
+      "name": "Vải thổ cẩm đẹp",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": null,
+      "price_vnd": null,
+      "sale_price_vnd": null,
+      "current_price_vnd": null,
+      "currency": null,
+      "description": "Chất liệu vải thổ cẩm dày dặn, chắc chắn và bền đẹp. Hơn nữa, màu sắc trên thổ cẩm cũng rất ít bị phai khi giặt hoặc sử dụng trong thời gian dài. Các họa tiết trên thổ cẩm được bố trí... [Xem tiếp]",
+      "attributes": {},
+      "images": [
+        {
+          "url": "http://bizweb.dktcdn.net/thumb/grande/100/335/513/products/htb1dnktkxxxxxc4xpxxq6xxfxxxa.jpg?v=1541434864033",
+          "alt": "Vải thổ cẩm đẹp",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "minhphong",
+      "source_url": "https://khanminhphong.com/vai-tho-cam-dan-toc-dep-1",
+      "collected_at": "2026-10-14T14:43:18.844404+00:00",
+      "source_availability": null,
+      "review_flags": [
+        "origin_not_verified",
+        "price_not_published_or_not_extracted"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "source_price_text": "Liên hệ",
+      "description_image_urls": [],
+      "source_display_name": "Khăn Minh Phong"
+    },
+    {
+      "id": "5e57dc4a-3c1f-5591-921e-ca4e3ac93ac6",
+      "slug": "vai-tho-cam-dan-toc-2",
+      "name": "Vải thổ cẩm dân tộc",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": null,
+      "price_vnd": null,
+      "sale_price_vnd": null,
+      "current_price_vnd": null,
+      "currency": null,
+      "description": "Chất liệu vải thổ cẩm dày dặn, chắc chắn và bền đẹp. Hơn nữa, màu sắc trên thổ cẩm cũng rất ít bị phai khi giặt hoặc sử dụng trong thời gian dài. Các họa tiết trên thổ cẩm được bố trí... [Xem tiếp]",
+      "attributes": {},
+      "images": [
+        {
+          "url": "http://bizweb.dktcdn.net/thumb/grande/100/335/513/products/ethnic-handmade-colorful-strips-cloth-yunnan-cotton-cloth-for-sofa-curtain-bags-diy-cloth-145-150cm.jpg?v=1541434831940",
+          "alt": "Vải thổ cẩm dân tộc",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "minhphong",
+      "source_url": "https://khanminhphong.com/vai-tho-cam-dan-toc-2",
+      "collected_at": "2026-10-14T14:43:20.527575+00:00",
+      "source_availability": null,
+      "review_flags": [
+        "origin_not_verified",
+        "price_not_published_or_not_extracted"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "source_price_text": "Liên hệ",
+      "description_image_urls": [],
+      "source_display_name": "Khăn Minh Phong"
+    },
+    {
+      "id": "0ce058fa-c07b-5bba-abdf-9c751c024b21",
+      "slug": "vai-tho-cam-dan-toc-dep",
+      "name": "Vải thổ cẩm dân tộc đẹp",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": null,
+      "price_vnd": null,
+      "sale_price_vnd": null,
+      "current_price_vnd": null,
+      "currency": null,
+      "description": "Ở Việt Nam, thổ cẩm là một biểu tượng biểu đạt rõ nét văn hóa đặc trưng của mỗi dân tộc ở mỗi vùng miền khác nhau. Thổ cẩm của dân tộc Tày cũng vậy, nó được tạo nên bởi những... [Xem tiếp]",
+      "attributes": {},
+      "images": [
+        {
+          "url": "http://bizweb.dktcdn.net/thumb/grande/100/335/513/products/miao-bordir-hmong-asli-kain-tenun-lace-jahit-potong-ribbon-pita-anyaman-boho-gypsy-tribal-etnis-jpg-640x640.jpg?v=1541434642340",
+          "alt": "Vải thổ cẩm dân tộc đẹp",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "minhphong",
+      "source_url": "https://khanminhphong.com/vai-tho-cam-dan-toc-dep",
+      "collected_at": "2026-10-14T14:43:21.999584+00:00",
+      "source_availability": null,
+      "review_flags": [
+        "origin_not_verified",
+        "price_not_published_or_not_extracted"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "source_price_text": "Liên hệ",
+      "description_image_urls": [],
+      "source_display_name": "Khăn Minh Phong"
+    },
+    {
+      "id": "422471ee-0c33-532f-95bb-9b7b6435b1c8",
+      "slug": "vai-tho-cam",
+      "name": "Vải thổ cẩm",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": null,
+      "price_vnd": null,
+      "sale_price_vnd": null,
+      "current_price_vnd": null,
+      "currency": null,
+      "description": "Ở Việt Nam, thổ cẩm là một biểu tượng biểu đạt rõ nét văn hóa đặc trưng của mỗi dân tộc ở mỗi vùng miền khác nhau. Thổ cẩm của dân tộc Tày cũng vậy, nó được tạo nên bởi những... [Xem tiếp]",
+      "attributes": {},
+      "images": [
+        {
+          "url": "http://bizweb.dktcdn.net/thumb/grande/100/335/513/products/1.jpg?v=1541433871467",
+          "alt": "Vải thổ cẩm",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "minhphong",
+      "source_url": "https://khanminhphong.com/vai-tho-cam",
+      "collected_at": "2026-10-14T14:43:23.552158+00:00",
+      "source_availability": null,
+      "review_flags": [
+        "origin_not_verified",
+        "price_not_published_or_not_extracted"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "source_price_text": "Liên hệ",
+      "description_image_urls": [],
+      "source_display_name": "Khăn Minh Phong"
+    }
+  ],
+  "report": {
+    "source": "minhphong",
+    "start_url": "https://khanminhphong.com/vai-tho-cam-dan-toc-1",
+    "listing_pages": 1,
+    "discovered_products": 5,
+    "saved_products": 5,
+    "remaining_listing_pages": 0,
+    "limits": {
+      "listing_pages": 30,
+      "products": 200
+    },
+    "errors": []
+  }
+}
