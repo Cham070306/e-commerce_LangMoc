@@ -1,11 +1,13 @@
 import catalog from './catalog.json';
 import {queryProducts} from '../src/features/catalog/query';
 import type {Product} from '../src/lib/types';
+import {handleC2Mock} from './c2Mock';
 const products=catalog.products as Product[];
-export function mockApi(req:any,res:any,next:any){
+export async function mockApi(req:any,res:any,next:any){
  const url=new URL(req.url||'/','http://localhost');if(!url.pathname.startsWith('/api/v1/'))return next();
- if(req.method!=='GET'){res.statusCode=405;res.setHeader('Content-Type','application/json');res.end(JSON.stringify({error:{code:'METHOD_NOT_ALLOWED',message:'Mock storefront chỉ hỗ trợ GET.'}}));return;}
  const send=(code:number,data:unknown)=>{res.statusCode=code;res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.setHeader('X-Lang-Moc-Data','mock');res.end(JSON.stringify(data))};
+ if(await handleC2Mock(req,res,url,send))return;
+ if(req.method!=='GET'){res.statusCode=405;res.setHeader('Content-Type','application/json');res.end(JSON.stringify({error:{code:'METHOD_NOT_ALLOWED',message:'Mock storefront chỉ hỗ trợ GET.'}}));return;}
  setTimeout(()=>{
  if(url.searchParams.get('_demo')==='error')return send(503,{error:{code:'DEMO_ERROR',message:'Tình huống lỗi API minh họa. Bạn có thể thử lại.'}});
  const path=decodeURIComponent(url.pathname.replace('/api/v1',''));
