@@ -41,12 +41,27 @@ export default function AdminLayout({ children, activeTab = 'orders' }: AdminLay
     }
   };
 
-  const navItems = [
-    { id: 'orders', label: 'Đơn hàng', href: '#/admin/orders', icon: ClipboardList },
-    { id: 'products', label: 'Sản phẩm', href: '#/admin/products', icon: Package },
-    { id: 'categories', label: 'Danh mục', href: '#/admin/categories', icon: FolderTree },
-    { id: 'reviews', label: 'Đánh giá', href: '#/admin/reviews', icon: Star },
-    { id: 'contact', label: 'Hộp thư liên hệ', href: '#/admin/contact', icon: Mail },
+  const navGroups = [
+    {
+      groupLabel: 'Bán hàng',
+      items: [
+        { id: 'orders', label: 'Đơn hàng', href: '#/admin/orders', icon: ClipboardList }
+      ]
+    },
+    {
+      groupLabel: 'Danh mục hàng hóa',
+      items: [
+        { id: 'categories', label: 'Danh mục', href: '#/admin/categories', icon: FolderTree },
+        { id: 'products', label: 'Sản phẩm', href: '#/admin/products', icon: Package }
+      ]
+    },
+    {
+      groupLabel: 'Tương tác',
+      items: [
+        { id: 'reviews', label: 'Đánh giá', href: '#/admin/reviews', icon: Star },
+        { id: 'contact', label: 'Hộp thư liên hệ', href: '#/admin/contact', icon: Mail }
+      ]
+    }
   ];
 
   return (
@@ -62,7 +77,7 @@ export default function AdminLayout({ children, activeTab = 'orders' }: AdminLay
 
       {/* Sidebar */}
       <aside className={`admin-sidebar ${mobileOpen ? 'open' : ''}`} aria-label="Điều hướng quản trị">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
           <a href="#/admin/orders" className="admin-brand" onClick={() => setMobileOpen(false)}>
             <Leaf size={22} aria-hidden="true" />
             <span>Làng Mộc <small>Quản trị</small></span>
@@ -77,27 +92,34 @@ export default function AdminLayout({ children, activeTab = 'orders' }: AdminLay
           </button>
         </div>
 
-        <nav className="admin-nav" style={{ marginTop: '24px' }}>
-          {navItems.map(item => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <a
-                key={item.id}
-                href={item.href}
-                className={`admin-nav-item ${isActive ? 'active' : ''}`}
-                aria-current={isActive ? 'page' : undefined}
-                onClick={() => setMobileOpen(false)}
-              >
-                <Icon size={18} />
-                <span>{item.label}</span>
-              </a>
-            );
-          })}
+        <nav className="admin-nav" style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {navGroups.map(grp => (
+            <div key={grp.groupLabel} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'rgba(255,255,255,0.45)', padding: '0 12px 4px', fontWeight: 600 }}>
+                {grp.groupLabel}
+              </span>
+              {grp.items.map(item => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
+                return (
+                  <a
+                    key={item.id}
+                    href={item.href}
+                    className={`admin-nav-item ${isActive ? 'active' : ''}`}
+                    aria-current={isActive ? 'page' : undefined}
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <Icon size={17} />
+                    <span>{item.label}</span>
+                  </a>
+                );
+              })}
+            </div>
+          ))}
         </nav>
 
-        <div className="admin-sidebar-footer" style={{ marginTop: 'auto', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '8px' }}>
+        <div className="admin-sidebar-footer" style={{ marginTop: 'auto', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+          <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.6)', marginBottom: '8px', padding: '0 4px' }}>
             Đang trực: <strong>{user?.full_name || 'Admin'}</strong>
           </div>
           <button

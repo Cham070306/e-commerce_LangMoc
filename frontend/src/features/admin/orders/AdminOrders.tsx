@@ -57,7 +57,7 @@ export default function AdminOrders({ search }: { search: string }) {
         <div>
           <p className="admin-eyebrow">Quản lý đơn hàng</p>
           <h1>Đơn hàng</h1>
-          <p>Theo dõi snapshot, người nhận và trạng thái vận đơn.</p>
+          <p>Theo dõi thông tin người nhận, trạng thái xử lý và vận đơn của khách hàng.</p>
         </div>
         <span className="admin-count">{total} đơn</span>
       </div>
@@ -91,7 +91,7 @@ export default function AdminOrders({ search }: { search: string }) {
                     <tr key={order.id}>
                       <td data-label="Mã đơn"><strong>{order.order_number}</strong></td>
                       <td data-label="Ngày đặt">{new Date(order.created_at).toLocaleDateString('vi-VN')}</td>
-                      <td data-label="Người nhận"><span>{order.recipient_name}</span><small>{order.phone}</small></td>
+                      <td data-label="Người nhận"><div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}><strong style={{ color: 'var(--brown, #493421)' }}>{order.recipient_name}</strong><span style={{ fontSize: '12px', color: 'var(--muted, #7c6a57)' }}>{order.phone}</span></div></td>
                       <td data-label="Trạng thái"><span className="admin-status-pair">{getStatusBadge(order.status)}{order.payment_status && getPaymentBadge(order.payment_status, order.payment_method)}</span></td>
                       <td data-label="Tổng"><strong>{formatMoney(order.total_vnd)}</strong></td>
                       <td data-label="Chi tiết"><a className="admin-link-button" href={`#/admin/orders/${encodeURIComponent(order.id)}?status=${encodeURIComponent(status)}&page=${page}`}><Eye size={15} /> Chi tiết <ArrowRight size={14} /></a></td>

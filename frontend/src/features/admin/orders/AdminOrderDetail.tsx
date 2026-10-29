@@ -163,7 +163,7 @@ export default function AdminOrderDetail({ id, search }: { id: string; search: s
 
       <div className="admin-detail-grid">
         <section className="admin-panel">
-          <h2><Package size={18} /> Sản phẩm trong đơn (snapshot)</h2>
+          <h2><Package size={18} /> Thông tin sản phẩm lúc đặt mua</h2>
           <div className="admin-snapshot-list">
             {order.items.map(item => (
               <article className="admin-snapshot-item" key={item.id || item.product_id}>
