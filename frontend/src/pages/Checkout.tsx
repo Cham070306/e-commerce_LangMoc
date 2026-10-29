@@ -6,6 +6,7 @@ import type { Address, AddressPayload, CheckoutPreview, Order } from '../lib/typ
 import { formatMoney, ProductImage } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { getIdempotencyKey, clearIdempotencyKey } from '../features/checkout/idempotency';
+import { validatePhone } from '../lib/validation';
 import { isMockMode } from '../config/site';
 import {
   MapPin,
@@ -20,8 +21,8 @@ import {
 } from 'lucide-react';
 
 export default function CheckoutPage() {
-  const { user } = useAuth();
-  const { items, appliedPromo, refreshCart } = useCart();
+  const { user, loading: authLoading } = useAuth();
+  const { items, appliedPromo, refreshCart, loading: cartLoading } = useCart();
 
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
@@ -52,12 +53,12 @@ export default function CheckoutPage() {
   // Cờ chống bấm đúp
   const isSubmittingRef = useRef(false);
 
-  // Kiểm tra giỏ hàng rỗng
+  // F04: Kiểm tra giỏ hàng rỗng an toàn, chờ auth và cart hoàn tất tải/gộp dữ liệu
   useEffect(() => {
-    if (items.length === 0 && !isSubmittingRef.current) {
+    if (!authLoading && !cartLoading && !loadingAddresses && items.length === 0 && !isSubmittingRef.current) {
       window.location.hash = '#/cart';
     }
-  }, [items]);
+  }, [items, authLoading, cartLoading, loadingAddresses]);
 
   // Tải sổ địa chỉ
   const loadAddresses = async () => {
@@ -123,7 +124,10 @@ export default function CheckoutPage() {
     e.preventDefault();
     const errs: Record<string, string> = {};
     if (!newAddr.full_name.trim()) errs.full_name = 'Vui lòng nhập tên người nhận';
-    if (!newAddr.phone.trim()) errs.phone = 'Vui lòng nhập số điện thoại';
+    const phoneCheck = validatePhone(newAddr.phone);
+    if (!phoneCheck.valid) {
+      errs.phone = phoneCheck.error || 'Số điện thoại không hợp lệ';
+    }
     if (!newAddr.province.trim()) errs.province = 'Vui lòng nhập tỉnh/thành';
     if (!newAddr.district.trim()) errs.district = 'Vui lòng nhập quận/huyện';
     if (!newAddr.ward.trim()) errs.ward = 'Vui lòng nhập phường/xã';

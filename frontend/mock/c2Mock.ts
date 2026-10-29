@@ -1381,14 +1381,31 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
     const body = await parseBody(req);
     const { full_name, phone, province, district, ward, street_address, is_default } = body || {};
 
-    if (!full_name || !phone || !province || !district || !ward || !street_address) {
+    const rawPhone = String(phone || '').trim();
+    let phoneError: string | null = null;
+    if (!rawPhone) {
+      phoneError = 'Vui lòng nhập số điện thoại';
+    } else if (rawPhone.length > 20) {
+      phoneError = 'Số điện thoại không được vượt quá 20 ký tự';
+    } else if (!/^[0-9+\s\-().]+$/.test(rawPhone)) {
+      phoneError = 'Số điện thoại chỉ được chứa chữ số và các ký tự (+, -, ., ())';
+    } else if (rawPhone.indexOf('+') > 0 || (rawPhone.match(/\+/g) || []).length > 1) {
+      phoneError = 'Dấu + chỉ được đặt ở đầu số điện thoại';
+    } else {
+      const digits = rawPhone.replace(/\D/g, '');
+      if (digits.length < 8 || digits.length > 15) {
+        phoneError = 'Số điện thoại phải có từ 8 đến 15 chữ số';
+      }
+    }
+
+    if (!full_name || !province || !district || !ward || !street_address || phoneError) {
       send(400, {
         error: {
           code: 'VALIDATION_ERROR',
-          message: 'Vui lòng điền đầy đủ các thông tin địa chỉ bắt buộc.',
+          message: 'Thông tin địa chỉ không hợp lệ hoặc chưa đầy đủ.',
           fields: {
             ...(!full_name ? { full_name: 'Vui lòng nhập họ tên người nhận' } : {}),
-            ...(!phone ? { phone: 'Vui lòng nhập số điện thoại' } : {}),
+            ...(phoneError ? { phone: phoneError } : {}),
             ...(!province ? { province: 'Vui lòng chọn tỉnh/thành phố' } : {}),
             ...(!district ? { district: 'Vui lòng chọn quận/huyện' } : {}),
             ...(!ward ? { ward: 'Vui lòng chọn phường/xã' } : {}),

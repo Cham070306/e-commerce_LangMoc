@@ -3,10 +3,11 @@ import { api, ApiError } from '../lib/api';
 import type { Order } from '../lib/types';
 import { formatMoney } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
-import { Package, ArrowRight, Clock, MapPin, AlertCircle, CheckCircle, XCircle, ChevronRight, Ban, Eye } from 'lucide-react';
+import { Package, ArrowRight, Clock, MapPin, AlertCircle, CheckCircle, XCircle, ChevronRight, Ban, Eye, Truck } from 'lucide-react';
+import { getStatusBadge, getPaymentBadge } from '../lib/orderStatusView';
 import { isMockMode } from '../config/site';
 
-type FilterStatus = 'all' | 'pending' | 'confirmed' | 'shipping' | 'delivered' | 'cancelled';
+type FilterStatus = 'all' | 'pending' | 'confirmed' | 'packing' | 'shipping' | 'delivered' | 'cancelled';
 
 interface TabItem {
   id: FilterStatus;
@@ -17,28 +18,13 @@ const TABS: TabItem[] = [
   { id: 'all', label: 'Tất cả' },
   { id: 'pending', label: 'Chờ xác nhận' },
   { id: 'confirmed', label: 'Đã xác nhận' },
-  { id: 'shipping', label: 'Đang giao' },
-  { id: 'delivered', label: 'Hoàn thành' },
+  { id: 'packing', label: 'Đang đóng gói' },
+  { id: 'shipping', label: 'Đang vận chuyển' },
+  { id: 'delivered', label: 'Giao thành công' },
   { id: 'cancelled', label: 'Đã hủy' }
 ];
 
-export function getStatusBadge(status: string) {
-  switch (status) {
-    case 'pending':
-      return <span className="c2-order-status-badge c2-status-pending"><Clock size={12} /> Chờ xác nhận</span>;
-    case 'confirmed':
-      return <span className="c2-order-status-badge c2-status-confirmed"><CheckCircle size={12} /> Đã xác nhận</span>;
-    case 'packing':
-    case 'shipping':
-      return <span className="c2-order-status-badge c2-status-shipping"><Package size={12} /> Đang giao hàng</span>;
-    case 'delivered':
-      return <span className="c2-order-status-badge c2-status-delivered"><CheckCircle size={12} /> Đã giao hàng</span>;
-    case 'cancelled':
-      return <span className="c2-order-status-badge c2-status-cancelled"><XCircle size={12} /> Đã hủy</span>;
-    default:
-      return <span className="c2-order-status-badge c2-status-pending">{status}</span>;
-  }
-}
+// getStatusBadge duoc import dung chung tu lib/orderStatusView
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -259,7 +245,10 @@ export default function OrdersPage() {
                   <div style={{ fontSize: '12px', color: 'var(--cafe, #3b352d)', maxWidth: '520px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
                       <MapPin size={13} style={{ color: 'var(--copper, #a5754b)', flexShrink: 0 }} />
-                      <span>{order.recipient_name} ({order.phone})</span>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <span>{order.recipient_name}</span>
+                        <span style={{ fontSize: '12px', color: 'var(--muted, #7c6a57)', fontWeight: 400 }}>{order.phone}</span>
+                      </div>
                     </div>
                     <div style={{ color: 'var(--muted, #7c6a57)', fontSize: '11px', marginTop: '2px', paddingLeft: '19px' }}>
                       {order.shipping_address}
@@ -269,7 +258,7 @@ export default function OrdersPage() {
                   <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
                     <div>
                       <span style={{ fontSize: '12px', color: 'var(--muted, #7c6a57)' }}>Tổng thanh toán: </span>
-                      <strong style={{ fontSize: '16px', color: '#b91c1c' }}>
+                      <strong style={{ fontSize: '16px', color: 'var(--cafe, #3b352d)' }}>
                         {formatMoney(order.total_vnd)}
                       </strong>
                     </div>

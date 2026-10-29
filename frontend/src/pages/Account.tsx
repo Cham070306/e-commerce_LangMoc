@@ -4,6 +4,7 @@ import { api, ApiError } from '../lib/api';
 import type { Address } from '../lib/types';
 import { Loading } from '../components/common/States';
 import { isMockMode } from '../config/site';
+import { validatePhone } from '../lib/validation';
 
 interface AccountPageProps {
   initialTab?: 'info' | 'addresses';
@@ -57,7 +58,10 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
   const validateAddressForm = (): boolean => {
     const errs: Record<string, string> = {};
     if (!fullName.trim()) errs.fullName = 'Vui lòng nhập họ tên người nhận.';
-    if (!phone.trim()) errs.phone = 'Vui lòng nhập số điện thoại.';
+    const phoneCheck = validatePhone(phone);
+    if (!phoneCheck.valid) {
+      errs.phone = phoneCheck.error || 'Số điện thoại không hợp lệ.';
+    }
     if (!province.trim()) errs.province = 'Vui lòng chọn hoặc nhập Tỉnh/Thành phố.';
     if (!district.trim()) errs.district = 'Vui lòng nhập Quận/Huyện.';
     if (!ward.trim()) errs.ward = 'Vui lòng nhập Phường/Xã.';

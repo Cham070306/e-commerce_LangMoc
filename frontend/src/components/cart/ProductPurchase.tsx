@@ -109,7 +109,7 @@ export default function ProductPurchase({product:p}:{product:Product}){
    <dialog ref={dialog} className="purchase-dialog" onCancel={e=>{e.preventDefault();close()}} onClick={e=>{if(e.target===e.currentTarget)close()}} aria-labelledby="purchase-title">
     <button className="icon-button purchase-close" aria-label="Đóng giỏ hàng" onClick={close}><X/></button>
     <h2 id="purchase-title">{mode==='buy'?'Xem trước đơn hàng':'Giỏ hàng của bạn'}</h2>
-    <p className="data-note">Bản demo · Chưa kết nối đặt hàng và thanh toán.</p>
+    <p className="data-note">MÔ PHỎNG · Hệ thống đặt hàng COD thử nghiệm (C2 Mock API).</p>
     {shown.length?(
      <>
       <div className="purchase-items">

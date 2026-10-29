@@ -5,6 +5,33 @@
    ========================================================================== */
 
 /* Thẻ MÔ PHỎNG / DEV BADGE */
+
+/* Scoped tokens cho C2 va Admin */
+.c2-page-wrap, .admin-shell {
+  --c2-brown: #a87542;
+  --c2-brown-dark: #493421;
+  --c2-cafe: #3b352d;
+  --c2-muted: #786d5c;
+  --c2-line: #d9cfbc;
+  --c2-bone: #f7f3e9;
+  --c2-card-bg: #fbf9f4;
+  --c2-error: #c94a29;
+  --c2-success: #1e5922;
+}
+
+/* F02: Reset letter-spacing va line-height cho tieu de C2/Admin */
+.c2-page-wrap h1,
+.c2-page-wrap h2,
+.c2-card h1,
+.c2-card h2,
+.c2-title,
+.admin-shell h1,
+.admin-shell h2,
+.admin-page-heading h1 {
+  letter-spacing: -0.01em !important;
+  line-height: 1.25 !important;
+}
+
 .c2-mock-badge {
   display: inline-flex;
   align-items: center;
@@ -97,7 +124,72 @@
   margin-left: 2px;
 }
 
-.c2-input {
+/* F01: Form Controls hop nhat giua Checkout, Auth, Address, Contact */
+.c2-form-label, .c2-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c2-cafe, #3b352d);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.c2-form-input, .c2-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--c2-cafe, #3b352d);
+  background: #ffffff;
+  border: 1px solid var(--c2-line, #d9cfbc);
+  border-radius: 4px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.c2-form-input:focus, .c2-input:focus {
+  outline: none;
+  border-color: var(--c2-brown, #a87542);
+  box-shadow: 0 0 0 3px rgba(168, 117, 66, 0.15);
+}
+
+.c2-form-input:disabled, .c2-input:disabled {
+  background-color: #f5f2eb;
+  color: var(--c2-muted, #786d5c);
+  cursor: not-allowed;
+  border-color: #e5ded3;
+}
+
+.c2-form-input.c2-input-error, .c2-input.c2-input-error, .c2-form-input.error, .c2-input.error {
+  border-color: var(--c2-error, #c94a29);
+  background-color: #fff9f8;
+}
+
+.c2-textarea, textarea.c2-form-input, textarea.c2-input {
+  min-height: 88px;
+  font-family: inherit !important;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+/* Hop nhat class loi duoi input */
+.c2-error-text, .c2-field-error, .field-error {
+  display: block;
+  font-size: 12px;
+  color: var(--c2-error, #c94a29);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* F06: Badge trang thai packing */
+.c2-status-packing {
+  background: #fef3c7 !important;
+  color: #92400e !important;
+  border: 1px solid #fde68a !important;
+}
+
+.c2-old-input {
   width: 100%;
   padding: 12px 14px;
   font-size: 14px;
@@ -1049,6 +1141,48 @@ header.site-header nav a[aria-current="page"] {
   color: #fff;
   cursor: pointer;
   padding: 4px;
+}
+
+/* F03: Bọc lập hoàn toàn Admin Sidebar & Nav khỏi rule nav của Storefront */
+.admin-sidebar .admin-nav {
+  display: flex !important;
+  position: static !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: 100% !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  z-index: auto !important;
+}
+
+.admin-sidebar {
+  background: #241B14 !important;
+  color: #f7f3e9 !important;
+  z-index: 999 !important;
+}
+
+.admin-sidebar .admin-nav-item {
+  color: rgba(245, 237, 228, 0.82) !important;
+  padding: 10px 14px !important;
+  border-radius: 6px !important;
+  font-size: 0.9rem !important;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  transition: background 0.15s, color 0.15s !important;
+}
+
+.admin-sidebar .admin-nav-item:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.admin-sidebar .admin-nav-item.active {
+  background: #b85d38 !important;
+  color: #ffffff !important;
 }
 
 .admin-nav {

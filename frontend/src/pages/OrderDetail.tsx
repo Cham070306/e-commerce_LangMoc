@@ -5,7 +5,7 @@ import { formatMoney } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { ArrowLeft, Clock, MapPin, Package, CheckCircle, AlertCircle, Ban, Truck, ShieldCheck, Printer } from 'lucide-react';
 import { isMockMode } from '../config/site';
-import { getStatusBadge } from './Orders';
+import { getStatusBadge, getPaymentBadge } from '../lib/orderStatusView';
 
 interface OrderDetailProps {
   id: string;
@@ -86,7 +86,7 @@ export default function OrderDetailPage({ id }: OrderDetailProps) {
       <main id="main" className="c2-page-wrap">
         <div className="c2-main-container">
           <div className="c2-card" style={{ textAlign: 'center', padding: '60px 20px' }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#fef2f2', display: 'grid', placeItems: 'center', margin: '0 auto 16px', color: '#b91c1c' }}>
+            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#fef2f2', display: 'grid', placeItems: 'center', margin: '0 auto 16px', color: 'var(--cafe, #3b352d)' }}>
               <AlertCircle size={32} />
             </div>
             <h2 className="c2-title" style={{ fontSize: '20px', marginBottom: '8px' }}>

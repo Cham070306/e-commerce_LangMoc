@@ -13,7 +13,11 @@ export default function LoginPage() {
 
   // Lấy đường dẫn chuyển hướng sau khi đăng nhập thành công
   const searchParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
-  const redirectTarget = searchParams.get('redirect') || '/';
+  // An toàn: Chặn open redirect, chỉ cho phép đường dẫn nội bộ hợp lệ
+  const rawRedirect = searchParams.get('redirect') || '/';
+  const redirectTarget = (rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') && !rawRedirect.includes('://'))
+    ? rawRedirect
+    : '/';
 
   const validate = (): boolean => {
     const nextErrors: Record<string, string> = {};
