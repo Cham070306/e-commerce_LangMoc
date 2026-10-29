@@ -7,6 +7,7 @@ import { formatMoney, ProductImage } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { getIdempotencyKey, clearIdempotencyKey } from '../features/checkout/idempotency';
 import { validatePhone } from '../lib/validation';
+import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar';
 import { isMockMode } from '../config/site';
 import {
   MapPin,
@@ -214,6 +215,19 @@ export default function CheckoutPage() {
 
       const { key: idempotencyKey } = getIdempotencyKey(fingerprintInput);
 
+      // Lưu lại thông tin lần đặt đang chờ kết quả vào sessionStorage để reload vẫn retry được
+      try {
+        sessionStorage.setItem('langmoc.pending_checkout', JSON.stringify({
+          key: idempotencyKey,
+          payload: {
+            address_id: selectedAddressId,
+            promotion_code: appliedPromo || undefined,
+            payment_method: 'cod',
+            note: note.trim() || undefined
+          }
+        }));
+      } catch {}
+
       // 3. Gửi đơn hàng lên server
       const res = await api.createOrder(
         {
@@ -224,6 +238,8 @@ export default function CheckoutPage() {
         },
         idempotencyKey
       );
+      // Tạo đơn thành công -> dọn pending_checkout
+      try { sessionStorage.removeItem('langmoc.pending_checkout'); } catch {}
 
       const createdOrder: Order = res.data;
 
@@ -275,6 +291,7 @@ export default function CheckoutPage() {
   return (
     <main id="main" className="c2-page-wrap">
       <div className="c2-main-container">
+        <CheckoutProgressBar currentStep="checkout" />
         {/* Tiêu đề & Nhãn Mock */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
@@ -614,7 +631,7 @@ export default function CheckoutPage() {
 
                 <div className="c2-summary-row c2-summary-total">
                   <span>Tổng thanh toán</span>
-                  <span style={{ fontSize: '20px', color: '#b91c1c' }}>
+                  <span style={{ fontSize: '20px', color: 'var(--cafe, #3b352d)', fontWeight: 700 }}>
                     {formatMoney(preview?.total_vnd ?? 0)}
                   </span>
                 </div>
@@ -637,10 +654,10 @@ export default function CheckoutPage() {
               >
                 {submitting ? (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                    <span className="spinner" style={{ width: '14px', height: '14px', margin: 0 }} /> Đang xử lý tạo đơn…
+                    <span className="spinner" style={{ width: '14px', height: '14px', margin: 0 }} /> Đang xử lý đặt hàng…
                   </span>
                 ) : (
-                  <>Xác nhận đặt hàng (COD) <ArrowRight size={16} /></>
+                  <>Đặt hàng COD — {preview ? formatMoney(preview.total_vnd) : '...'} <ArrowRight size={16} /></>
                 )}
               </button>
 

@@ -5,6 +5,7 @@ import { formatMoney, ProductImage } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { CheckCircle2, PackageCheck, ShoppingBag, ArrowRight } from 'lucide-react';
 import { isMockMode } from '../config/site';
+import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar';
 
 export default function OrderSuccessPage({ id }: { id: string }) {
   const [order, setOrder] = useState<Order | null>(null);
@@ -58,6 +59,7 @@ export default function OrderSuccessPage({ id }: { id: string }) {
     return (
       <main id="main" className="c2-page-wrap">
         <div className="c2-main-container">
+        <CheckoutProgressBar currentStep="success" />
           <div className="c2-card" style={{ textAlign: 'center', padding: '60px 24px', maxWidth: '520px', margin: '40px auto' }}>
             <h1 className="c2-title" style={{ fontSize: '22px', marginBottom: '12px' }}>Không tìm thấy đơn hàng</h1>
             <p className="c2-subtitle" style={{ marginBottom: '24px' }}>

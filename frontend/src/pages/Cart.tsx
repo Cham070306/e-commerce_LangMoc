@@ -5,6 +5,7 @@ import { formatMoney, ProductImage } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { ShoppingBag, Trash2, ArrowRight, Tag, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { isMockMode } from '../config/site';
+import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar';
 
 export default function CartPage() {
   const { user } = useAuth();
@@ -46,6 +47,7 @@ export default function CartPage() {
     return (
       <main id="main" className="c2-page-wrap">
         <div className="c2-main-container">
+        <CheckoutProgressBar currentStep="cart" />
           <div className="c2-card" style={{ textAlign: 'center', padding: '64px 24px', maxWidth: '560px', margin: '40px auto' }}>
             <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(73,52,33,0.06)', display: 'grid', placeItems: 'center', margin: '0 auto 20px', color: 'var(--brown, #493421)' }}>
               <ShoppingBag size={34} />
