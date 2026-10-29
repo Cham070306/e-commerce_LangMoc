@@ -440,34 +440,34 @@ export interface DemoReview {
 export const demoReviews: DemoReview[] = [
   {
     id: 'rev-01',
-    product_id: 'khan-quang-co-to-tam-in-hoa-sen-28ec9761',
-    product_name: 'Khăn quàng cổ tơ tằm in hoa sen thủ công',
+    product_id: '4b35fd2d-a8ce-5af5-83c5-b49b98dab8a6',
+    product_name: 'Balo Cú Lớn (BC111)',
     user_id: 'user-customer-linh',
     user_name: 'Linh Nguyễn',
     rating: 5,
-    comment: 'Khăn tơ tằm rất mềm mịn, hoa sen in sắc nét, đóng gói hộp gỗ đẹp mắt.',
+    comment: 'Balo thổ cẩm chất vải rất dày dặn, hoa văn sắc sảo, đựng vừa cả laptop và tài liệu A4 mang đi làm rất tiện.',
     status: 'visible',
     created_at: '2026-10-22T09:00:00.000Z'
   },
   {
     id: 'rev-02',
-    product_id: 'balo-phoi-vai-theu-tay-h-mong-d51e21fd',
-    product_name: 'Balo thổ cẩm phối vải thêu tay H’Mông',
+    product_id: 'd51e21fd-db71-5d45-ab83-c5e815569ac8',
+    product_name: 'Balô phối vải thêu tay H\'Mông',
     user_id: 'user-customer-minh',
     user_name: 'Minh Trần',
     rating: 4,
-    comment: 'Balo chắc chắn, hoa văn thêu tay độc đáo nhưng giao hàng hơi chậm một ngày.',
+    comment: 'Họa tiết thêu tay độc đáo, đường may chắc chắn. Giao hàng nhanh và đóng gói chỉn chu.',
     status: 'pending',
     created_at: '2026-10-24T11:30:00.000Z'
   },
   {
     id: 'rev-03',
-    product_id: 'bo-am-chen-men-ran-co-bat-trang-67b14d88',
-    product_name: 'Bộ ấm chén men rạn cổ Bát Tràng',
+    product_id: 'c170f93a-193b-5082-9e74-b299e4674359',
+    product_name: 'Balo Cú Nhỏ (BC406)',
     user_id: 'user-customer-linh',
     user_name: 'Linh Nguyễn',
-    rating: 2,
-    comment: 'Sản phẩm giao bị sứt nhẹ mép chén, cần kiểm tra lại khâu bọc xốp.',
+    rating: 4,
+    comment: 'Balo nhỏ xinh vừa vặn cho các bé hoặc bạn nữ mang dạo phố nhẹ nhàng.',
     status: 'pending',
     created_at: '2026-10-25T14:15:00.000Z'
   }
@@ -1081,58 +1081,72 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
       const body = await parseBody(req);
       const fields: Record<string, string> = {};
 
+      let validatedName: string | undefined;
+      let validatedPrice: number | undefined;
+      let validatedSalePrice: number | null | undefined;
+      let validatedStock: number | undefined;
+      let validatedStatus: 'draft' | 'active' | 'hidden' | undefined;
+
       if (body?.name !== undefined) {
         const name = String(body.name).trim();
         if (!name || name.length > 200) fields.name = 'Tên sản phẩm tối đa 200 ký tự.';
-        else product.name = name;
+        else validatedName = name;
       }
       if (body?.price_vnd !== undefined) {
         const price = Number(body.price_vnd);
         if (!Number.isInteger(price) || price < 0) fields.price_vnd = 'Giá gốc phải là số nguyên không âm.';
-        else product.price_vnd = price;
+        else validatedPrice = price;
       }
       if (body?.sale_price_vnd !== undefined) {
         if (body.sale_price_vnd === null || body.sale_price_vnd === '') {
-          product.sale_price_vnd = null;
+          validatedSalePrice = null;
         } else {
           const sale = Number(body.sale_price_vnd);
-          const currentPrice = body?.price_vnd !== undefined ? Number(body.price_vnd) : product.price_vnd;
-          if (!Number.isInteger(sale) || sale < 0 || sale >= currentPrice) {
+          const compPrice = validatedPrice !== undefined ? validatedPrice : product.price_vnd;
+          if (!Number.isInteger(sale) || sale < 0 || sale >= compPrice) {
             fields.sale_price_vnd = 'Giá khuyến mãi phải nhỏ hơn giá gốc.';
           } else {
-            product.sale_price_vnd = sale;
+            validatedSalePrice = sale;
           }
         }
       }
       if (body?.stock_quantity !== undefined) {
         const stock = Number(body.stock_quantity);
         if (!Number.isInteger(stock) || stock < 0) fields.stock_quantity = 'Tồn kho phải là số nguyên không âm.';
-        else {
-          product.stock_quantity = stock;
-          demoStockMap[product.id] = stock;
-        }
+        else validatedStock = stock;
       }
       if (body?.status !== undefined) {
         if (['draft', 'active', 'hidden'].includes(body.status)) {
-          product.status = body.status;
+          validatedStatus = body.status;
         } else {
           fields.status = 'Trạng thái không hợp lệ.';
         }
       }
-      if (body?.description !== undefined) {
-        product.description = String(body.description).trim();
+      if (body?.material !== undefined && body.material && String(body.material).length > 120) {
+        fields.material = 'Chất liệu không quá 120 ký tự.';
       }
-      if (body?.material !== undefined) {
-        product.material = body.material ? String(body.material).trim() : null;
-      }
-      if (body?.origin_province !== undefined) {
-        product.origin_province = body.origin_province ? String(body.origin_province).trim() : null;
+      if (body?.origin_province !== undefined && body.origin_province && String(body.origin_province).length > 100) {
+        fields.origin_province = 'Tỉnh xuất xứ không quá 100 ký tự.';
       }
 
+      // NGUYÊN TẮC ĐỢT B: Lỗi validate thì DỪNG NGAY, không làm thay đổi bất kỳ trường nào của dữ liệu hiện tại
       if (Object.keys(fields).length) {
         send(400, { error: { code: 'VALIDATION_ERROR', message: 'Dữ liệu cập nhật không hợp lệ.', fields } });
         return true;
       }
+
+      // Validate đạt toàn bộ -> Mới áp dụng cập nhật
+      if (validatedName !== undefined) product.name = validatedName;
+      if (validatedPrice !== undefined) product.price_vnd = validatedPrice;
+      if (validatedSalePrice !== undefined) product.sale_price_vnd = validatedSalePrice;
+      if (validatedStock !== undefined) {
+        product.stock_quantity = validatedStock;
+        demoStockMap[product.id] = validatedStock;
+      }
+      if (validatedStatus !== undefined) product.status = validatedStatus;
+      if (body?.description !== undefined) product.description = String(body.description).trim();
+      if (body?.material !== undefined) product.material = body.material ? String(body.material).trim() : null;
+      if (body?.origin_province !== undefined) product.origin_province = body.origin_province ? String(body.origin_province).trim() : null;
 
       product.updated_at = new Date().toISOString();
 

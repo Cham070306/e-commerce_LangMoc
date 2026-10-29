@@ -1,8 +1,10 @@
 import catalog from './catalog.json';
 import {queryProducts} from '../src/features/catalog/query';
 import type {Product} from '../src/lib/types';
-import {handleC2Mock} from './c2Mock';
+import {handleC2Mock, demoReviews} from './c2Mock';
+
 const products=catalog.products as Product[];
+
 export async function mockApi(req:any,res:any,next:any){
  const url=new URL(req.url||'/','http://localhost');if(!url.pathname.startsWith('/api/v1/'))return next();
  const send=(code:number,data:unknown)=>{res.statusCode=code;res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');res.setHeader('X-Lang-Moc-Data','mock');res.end(JSON.stringify(data))};
@@ -14,10 +16,45 @@ export async function mockApi(req:any,res:any,next:any){
  if(path==='/categories')return send(200,{data:catalog.categories});
  if(path==='/products'){try{return send(200,queryProducts(products,Object.fromEntries(url.searchParams)))}catch(e){return send(400,{error:{code:'VALIDATION_ERROR',message:(e as Error).message}})}}
  const review=path.match(/^\/products\/([^/]+)\/reviews$/);
- if(review){if(!products.some(p=>p.id===review[1]))return send(404,{error:{code:'NOT_FOUND',message:'Không tìm thấy sản phẩm.'}});
- const page=Number(url.searchParams.get('page')||1),limit=Number(url.searchParams.get('limit')||5);if(!Number.isSafeInteger(page)||page<1||!Number.isSafeInteger(limit)||limit<1||limit>100)return send(400,{error:{code:'VALIDATION_ERROR',message:'Phân trang đánh giá không hợp lệ.'}});
- const rows=((catalog.reviews as Record<string,any[]>)[review[1]]||[]).filter(r=>r.status==='visible');return send(200,{data:rows.slice((page-1)*limit,page*limit),meta:{page,limit,total:rows.length},summary:{average_rating:rows.length?rows.reduce((a,r)=>a+r.rating,0)/rows.length:null,review_count:rows.length},is_demo:true});}
- const detail=path.match(/^\/products\/([^/]+)$/);if(detail){const p=products.find(p=>p.slug===detail[1]);return p?send(200,{data:p}):send(404,{error:{code:'NOT_FOUND',message:'Không tìm thấy sản phẩm.'}})}
+ if(review){
+   const prodIdOrSlug=review[1];
+   const p=products.find(p=>p.id===prodIdOrSlug||p.slug===prodIdOrSlug);
+   if(!p)return send(404,{error:{code:'NOT_FOUND',message:'Không tìm thấy sản phẩm.'}});
+   const page=Number(url.searchParams.get('page')||1),limit=Number(url.searchParams.get('limit')||5);
+   if(!Number.isSafeInteger(page)||page<1||!Number.isSafeInteger(limit)||limit<1||limit>100)return send(400,{error:{code:'VALIDATION_ERROR',message:'Phân trang đánh giá không hợp lệ.'}});
+   
+   // ĐỢT B: Dùng chung kho demoReviews giữa admin và storefront, chỉ hiện status === 'visible'
+   const dynamicReviews = demoReviews.filter(r => (r.product_id === p.id || r.product_id === p.slug) && r.status === 'visible').map(r => ({
+     id: r.id,
+     rating: r.rating,
+     author_name: r.user_name || 'Khách hàng',
+     body: r.comment,
+     created_at: r.created_at,
+     status: r.status,
+     is_demo: true
+   }));
+   
+   const catalogRows = ((catalog.reviews as Record<string,any[]>)[p.id]||(catalog.reviews as Record<string,any[]>)[p.slug]||[]).filter(r=>r.status==='visible');
+   // Gộp và loại trùng ID
+   const allRows = [...dynamicReviews];
+   for (const cr of catalogRows) {
+     if (!allRows.some(x => x.id === cr.id)) {
+       allRows.push(cr);
+     }
+   }
+   
+   return send(200,{
+     data:allRows.slice((page-1)*limit,page*limit),
+     meta:{page,limit,total:allRows.length},
+     summary:{average_rating:allRows.length?allRows.reduce((a,r)=>a+r.rating,0)/allRows.length:null,review_count:allRows.length},
+     is_demo:true
+   });
+ }
+ const detail=path.match(/^\/products\/([^/]+)$/);
+ if(detail){
+   const p=products.find(p=>p.slug===detail[1]||p.id===detail[1]);
+   return p?send(200,{data:p}):send(404,{error:{code:'NOT_FOUND',message:'Không tìm thấy sản phẩm.'}});
+ }
  send(404,{error:{code:'NOT_FOUND',message:'Không tìm thấy endpoint.'}});
  },url.searchParams.get('_demo')==='slow'?1600:180);
 }
