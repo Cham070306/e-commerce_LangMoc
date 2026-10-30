@@ -29,7 +29,6 @@ export default function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const { items, appliedPromo, refreshCart, clearGuestCart, loading: cartLoading } = useCart();
 
-  const [guestMode, setGuestMode] = useState(false);
   const [guestInfo, setGuestInfo] = useState({
     recipient_name: '',
     phone: '',
@@ -69,7 +68,7 @@ export default function CheckoutPage() {
   const isSubmittingRef = useRef(false);
   const isDeletingAddressRef = useRef(false);
   const termsCheckboxRef = useRef<HTMLInputElement>(null);
-  const isGuestFlow = !user && isGuestCheckoutEnabled && guestMode;
+  const isGuestFlow = !user && isGuestCheckoutEnabled;
 
   // F04: Kiểm tra giỏ hàng rỗng an toàn, chờ auth và cart hoàn tất tải/gộp dữ liệu
   useEffect(() => {
@@ -158,7 +157,7 @@ export default function CheckoutPage() {
     if (items.length > 0 && (user || isGuestFlow)) {
       updatePreview(selectedAddressId);
     }
-  }, [selectedAddressId, appliedPromo, items, guestMode, user]);
+  }, [selectedAddressId, appliedPromo, items, user]);
 
   // Thêm địa chỉ mới ngay tại checkout
   const handleCreateAddress = async (e: React.FormEvent) => {
@@ -433,21 +432,6 @@ export default function CheckoutPage() {
         <div className="c2-cart-grid">
           {/* CỘT TRÁI: ĐỊA CHỈ, PHƯƠNG THỨC THANH TOÁN & GHI CHÚ */}
           <div className="c2-cart-items-col" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {!user && isGuestCheckoutEnabled && !guestMode && (
-              <div className="c2-card" style={{ padding: '24px' }}>
-                <h2 style={{ fontSize: '16px', margin: '0 0 12px', color: 'var(--brown, #493421)' }}>Chọn cách đặt hàng</h2>
-                <p style={{ fontSize: '13px', color: 'var(--muted, #7c6a57)', margin: '0 0 16px' }}>
-                  Bạn có thể đăng nhập hoặc tiếp tục đặt hàng không cần tài khoản.
-                </p>
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                  <a href="#/login?redirect=%2Fcheckout" className="c2-btn c2-btn-outline">Đăng nhập</a>
-                  <button type="button" className="c2-btn c2-btn-primary" onClick={() => setGuestMode(true)}>
-                    Tiếp tục không cần tài khoản
-                  </button>
-                </div>
-              </div>
-            )}
-
             {(user || isGuestFlow) && (
             <div className="c2-card" style={{ padding: '24px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
@@ -455,9 +439,9 @@ export default function CheckoutPage() {
                   <MapPin size={18} /> {isGuestFlow ? 'Thông tin người nhận và địa chỉ' : 'Địa chỉ nhận hàng'}
                 </h2>
                 {isGuestFlow ? (
-                  <button type="button" className="c2-btn c2-btn-outline c2-btn-sm" onClick={() => setGuestMode(false)}>
-                    Chọn đăng nhập
-                  </button>
+                  <a href="#/login?redirect=%2Fcheckout" className="c2-btn c2-btn-outline c2-btn-sm">
+                    Đăng nhập
+                  </a>
                 ) : !showAddAddress && (
                   <button
                     type="button"
