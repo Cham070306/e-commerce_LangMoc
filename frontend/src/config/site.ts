@@ -37,3 +37,6 @@ export const isMockMode = env.VITE_API_MODE !== 'live';
 
 // ĐỀ XUẤT CHỜ KHẢI: DELETE /me/addresses/:id chưa có trong docs/API.md.
 export const canDeleteAddress = isMockMode || env.VITE_FEATURE_ADDRESS_DELETE === 'true';
+
+// F08: mặc định tắt; live luôn tắt vì schema/API chưa hỗ trợ đơn khách.
+export const isGuestCheckoutEnabled = isMockMode && env.VITE_GUEST_CHECKOUT === 'true';
