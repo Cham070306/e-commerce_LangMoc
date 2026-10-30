@@ -731,7 +731,11 @@ export default function CheckoutPage() {
                       setHasAcceptedTerms(event.target.checked);
                       if (event.target.checked) setTermsError(null);
                     }}
-                    aria-describedby="checkout-terms-help"
+                    aria-invalid={Boolean(termsError)}
+                    aria-describedby={[
+                      !hasAcceptedTerms ? 'checkout-terms-help' : null,
+                      termsError ? 'checkout-terms-error' : null
+                    ].filter(Boolean).join(' ') || undefined}
                   />
                   <div>
                     <label htmlFor="checkout-terms">{CHECKOUT_TERMS.intro}</label>{' '}
@@ -750,10 +754,12 @@ export default function CheckoutPage() {
                     ))}
                   </div>
                 </div>
-                <p id="checkout-terms-help" className="c2-checkout-terms-help">
-                  {CHECKOUT_TERMS.requiredMessage}
-                </p>
-                {termsError && <p className="c2-error-text" role="alert">{termsError}</p>}
+                {!hasAcceptedTerms && (
+                  <p id="checkout-terms-help" className="c2-checkout-terms-help">
+                    {CHECKOUT_TERMS.requiredMessage}
+                  </p>
+                )}
+                {termsError && <p id="checkout-terms-error" className="c2-error-text" role="alert">{termsError}</p>}
               </div>
 
               {/* Nút Xác nhận đặt hàng */}
@@ -764,7 +770,7 @@ export default function CheckoutPage() {
                 onClick={handlePlaceOrder}
                 disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || !selectedAddressId}
                 aria-disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || !selectedAddressId || requiresCheckoutTermsAcceptance(hasAcceptedTerms)}
-                aria-describedby="checkout-terms-help"
+                aria-describedby={requiresCheckoutTermsAcceptance(hasAcceptedTerms) ? 'checkout-terms-help' : undefined}
               >
                 {submitting ? (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>

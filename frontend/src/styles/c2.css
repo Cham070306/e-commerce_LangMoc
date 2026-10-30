@@ -509,6 +509,8 @@
 }
 
 .c2-checkout-terms-row label {
+  display: inline-block;
+  padding: 4px 0;
   cursor: pointer;
 }
 
@@ -1752,5 +1754,4 @@ header.site-header nav a[aria-current="page"] {
     grid-template-columns: 1fr;
   }
 }
-
 

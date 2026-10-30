@@ -5,7 +5,7 @@
 - **T1 — Số điện thoại:** Frontend và mock dùng cùng quy tắc `^0[235789][0-9]{8}$`: đúng 10 chữ số liền nhau, bắt đầu bằng `0`, tiếp theo là `2/3/5/7/8/9`. Đây là **ĐỀ XUẤT CHỜ KHẢI XÁC NHẬN** phía server vì có chặn số quốc tế và cần nhóm chốt để không chặn số hợp lệ ngoài phạm vi Việt Nam.
 - **T2 — Địa chỉ hành chính:** Chưa nạp dữ liệu; cần bộ dữ liệu hai cấp tại `fix_note/data` và quyết định hợp đồng cho `district` đang `NOT NULL`. Khi được cung cấp, phải ghi nguồn, ngày cập nhật, giấy phép và kế hoạch cập nhật khi đơn vị hành chính thay đổi.
 - **T3 — Xóa địa chỉ:** `DELETE /me/addresses/:id` là **ĐỀ XUẤT CHỜ KHẢI**, không có trong `docs/API.md`; chỉ mock được bật mặc định.
-- **T4 — Đồng ý điều khoản:** Chặn tại UI, không gửi trường mới vì hợp đồng chưa có. **ĐỀ XUẤT CHỜ SƠN:** lưu thời điểm và phiên bản điều khoản đã đồng ý. Các trang chính sách vẫn có mục “CẦN NHÓM CHỐT”, nên ô tích chỉ có giá trị pháp lý sau khi nội dung được chốt.
+- **T4 — Đồng ý điều khoản:** UI-only; checkbox không tích sẵn mỗi lần mở Checkout, chặn đặt đơn đến khi đồng ý và không gửi trường mới vì hợp đồng chưa có. **ĐỀ XUẤT CHỜ SƠN:** lưu thời điểm và phiên bản điều khoản đã đồng ý. Các trang chính sách vẫn có mục “CẦN NHÓM CHỐT”, nên ô tích chỉ có giá trị pháp lý sau khi nội dung được chốt.
 - **T5 — Khách vãng lai:** Leader F08 yêu cầu không tự bật. `VITE_GUEST_CHECKOUT` mặc định tắt và chỉ mô phỏng khi mock; live luôn tắt. Chờ leader cùng Khải/Sơn đổi schema/API vì `orders.user_id` đang `NOT NULL` và `POST /orders` lấy giỏ theo tài khoản.
 
 ### Câu hỏi mở bổ sung
