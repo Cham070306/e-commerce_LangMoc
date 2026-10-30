@@ -18,6 +18,8 @@ import AdminApp from './features/admin/AdminApp';
 import {AuthProvider} from './features/auth/AuthContext';
 import {CartProvider} from './features/cart/CartContext';
 import {RequireAuth,RequireAdmin} from './features/auth/guards';
+import {isGuestCheckoutEnabled} from './config/site';
+import {hasGuestOrderSnapshot} from './lib/guestContracts';
 import './styles/c2.css';
 
 function AppContent(){
@@ -35,8 +37,8 @@ function AppContent(){
    {route==='/catalog'?<Catalog params={new URLSearchParams(query)}/>:
     route.startsWith('/product/')?<Product slug={decodeURIComponent(route.slice(9))}/>:
     route==='/cart'?<Cart/>:
-    route==='/checkout'?<RequireAuth><Checkout/></RequireAuth>:
-    route.startsWith('/order-success/')?<RequireAuth><OrderSuccess id={route.replace('/order-success/','')}/></RequireAuth>:
+    route==='/checkout'?(isGuestCheckoutEnabled?<Checkout/>:<RequireAuth><Checkout/></RequireAuth>):
+    route.startsWith('/order-success/')?(isGuestCheckoutEnabled&&hasGuestOrderSnapshot(route.replace('/order-success/',''))?<OrderSuccess id={route.replace('/order-success/','')}/>:<RequireAuth><OrderSuccess id={route.replace('/order-success/','')}/></RequireAuth>):
     route.startsWith('/orders/')?<RequireAuth><OrderDetail id={decodeURIComponent(route.replace('/orders/',''))}/></RequireAuth>:
     route==='/orders'?<RequireAuth><Orders/></RequireAuth>:
     route==='/contact'?<Contact/>:

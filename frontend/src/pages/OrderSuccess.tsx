@@ -11,6 +11,7 @@ export default function OrderSuccessPage({ id }: { id: string }) {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isGuestOrder = order?.user_id === null;
 
   useEffect(() => {
     // 1. Kiểm tra trong sessionStorage trước để tải lại trang vẫn xem được
@@ -92,6 +93,11 @@ export default function OrderSuccessPage({ id }: { id: string }) {
           <p className="c2-subtitle" style={{ maxWidth: '540px', margin: '0 auto' }}>
             Đơn hàng của quý khách đã được ghi nhận vào hệ thống. Nghệ nhân và xưởng nghề đang chuẩn bị kiện hàng thủ công chu đáo nhất.
           </p>
+          {isGuestOrder && (
+            <p role="status" style={{ maxWidth: '540px', margin: '12px auto 0', fontSize: '13px', lineHeight: 1.6 }}>
+              Vui lòng ghi lại mã đơn hàng để tiện đối chiếu. Đây là đơn mô phỏng; hiện chưa có trang tra cứu đơn khách.
+            </p>
+          )}
 
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(73,52,33,0.04)', padding: '10px 20px', borderRadius: '30px', marginTop: '20px' }}>
             <span style={{ fontSize: '13px', color: 'var(--muted, #7c6a57)' }}>Mã đơn hàng:</span>
@@ -187,12 +193,19 @@ export default function OrderSuccessPage({ id }: { id: string }) {
 
         {/* Nút hành động */}
         <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href="#/orders" className="c2-btn c2-btn-primary" style={{ padding: '12px 24px', fontSize: '13px' }}>
-            Xem đơn hàng của tôi <ArrowRight size={16} />
-          </a>
+          {!isGuestOrder && (
+            <a href="#/orders" className="c2-btn c2-btn-primary" style={{ padding: '12px 24px', fontSize: '13px' }}>
+              Xem đơn hàng của tôi <ArrowRight size={16} />
+            </a>
+          )}
           <a href="#/catalog" className="c2-btn c2-btn-outline" style={{ padding: '12px 24px', fontSize: '13px' }}>
             <ShoppingBag size={16} /> Tiếp tục mua sắm
           </a>
+          {isGuestOrder && (
+            <a href="#/register" className="c2-btn c2-btn-primary" style={{ padding: '12px 24px', fontSize: '13px' }}>
+              Tạo tài khoản Làng Mộc <ArrowRight size={16} />
+            </a>
+          )}
         </div>
       </div>
     </main>

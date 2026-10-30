@@ -4,7 +4,7 @@ import { useAuth } from '../features/auth/AuthContext';
 import { formatMoney, ProductImage } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { ShoppingBag, Trash2, ArrowRight, Tag, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { isMockMode } from '../config/site';
+import { isGuestCheckoutEnabled, isMockMode } from '../config/site';
 import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar';
 
 export default function CartPage() {
@@ -43,7 +43,7 @@ export default function CartPage() {
     );
   }
 
-  if (!user) {
+  if (!user && !isGuestCheckoutEnabled) {
     return (
       <main id="main" className="c2-page-wrap">
         <div className="c2-main-container">
@@ -233,6 +233,14 @@ export default function CartPage() {
                         >
                           Hủy mã
                         </button>
+                      ) : isGuestCheckoutEnabled ? (
+                        <a
+                          href="#/checkout"
+                          className="c2-btn c2-btn-primary c2-btn-block"
+                          style={{ fontSize: '14px', padding: '14px' }}
+                        >
+                          Tiếp tục đặt hàng không cần tài khoản <ArrowRight size={16} />
+                        </a>
                       ) : (
                         <button
                           type="submit"
@@ -253,7 +261,7 @@ export default function CartPage() {
                   </div>
                 ) : (
                   <div style={{ marginBottom: '20px', padding: '12px', background: '#f4efe6', borderRadius: '4px', fontSize: '12px', color: 'var(--muted, #7c6a57)', lineHeight: '1.5' }}>
-                    ℹ️ <strong>Đăng nhập</strong> để nhập mã giảm giá và tính phí vận chuyển chính xác từ server.
+                    ℹ️ <strong>Đăng nhập để dùng mã giảm giá.</strong>
                   </div>
                 )}
 
@@ -302,6 +310,14 @@ export default function CartPage() {
                       style={{ fontSize: '14px', padding: '14px' }}
                     >
                       Tiến hành đặt hàng (COD) <ArrowRight size={16} />
+                    </a>
+                  ) : isGuestCheckoutEnabled ? (
+                    <a
+                      href="#/checkout"
+                      className="c2-btn c2-btn-primary c2-btn-block"
+                      style={{ fontSize: '14px', padding: '14px' }}
+                    >
+                      Tiếp tục đặt hàng không cần tài khoản <ArrowRight size={16} />
                     </a>
                   ) : (
                     <a

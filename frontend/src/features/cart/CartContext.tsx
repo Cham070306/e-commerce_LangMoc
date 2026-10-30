@@ -3,6 +3,7 @@ import type { Product, CartItem, CheckoutPreview } from '../../lib/types';
 import { api, ApiError } from '../../lib/api';
 import { useAuth } from '../auth/AuthContext';
 import { planCartMerge, type LocalCartItem, type ServerCartItem } from './mergeCart';
+import { isGuestCheckoutEnabled } from '../../config/site';
 
 const LOCAL_STORAGE_KEY = 'langmoc.cart.v1';
 
@@ -34,6 +35,7 @@ interface CartContextType {
   applyPromotion: (code: string) => Promise<boolean>;
   removePromotion: () => Promise<void>;
   refreshCart: () => Promise<void>;
+  clearGuestCart: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -117,13 +119,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (err instanceof ApiError) setError(err.message);
       }
     } else {
-      // Chưa đăng nhập: không lưu giỏ vãng lai
-      setItems([]);
       setPreview(null);
-      try {
-        localStorage.removeItem(LOCAL_STORAGE_KEY);
-      } catch {
-        // bỏ qua nếu browser chặn localStorage
+      if (isGuestCheckoutEnabled) {
+        setItems(readLocalCart().map(item => ({
+          id: item.id,
+          slug: item.slug,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          quantity: item.quantity,
+          stock_quantity: 8,
+          origin: item.origin,
+          price_is_demo: item.price_is_demo
+        })));
+      } else {
+        // Chưa bật guest checkout: giữ nguyên hành vi không lưu giỏ vãng lai
+        setItems([]);
+        try {
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
+        } catch {
+          // bỏ qua nếu browser chặn localStorage
+        }
       }
     }
     setLoading(false);
@@ -138,9 +154,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     if (isLoggingOut) {
       // Logout: xóa giỏ trên giao diện, giỏ trên server vẫn nguyên vẹn
-      setItems([]);
-      setPreview(null);
       setAppliedPromo(null);
+      if (isGuestCheckoutEnabled) {
+        void loadCart();
+      } else {
+        setItems([]);
+        setPreview(null);
+      }
       return;
     }
 
@@ -205,6 +225,36 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (!product || quantity <= 0) return false;
 
     if (!user) {
+      if (isGuestCheckoutEnabled) {
+        const existing = readLocalCart();
+        const found = existing.find(item => item.id === product.id);
+        const localItem: LocalCartItem = {
+          id: product.id,
+          slug: product.slug,
+          name: product.name,
+          image: product.images[0]?.url || '',
+          price: product.current_price_vnd ?? product.sale_price_vnd ?? product.price_vnd,
+          quantity: (found?.quantity || 0) + quantity,
+          price_is_demo: product.price_is_demo,
+          origin: product.origin
+        };
+        writeLocalCart(found
+          ? existing.map(item => item.id === product.id ? localItem : item)
+          : [...existing, localItem]);
+        setItems(readLocalCart().map(item => ({
+          id: item.id,
+          slug: item.slug,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          quantity: item.quantity,
+          stock_quantity: 8,
+          origin: item.origin,
+          price_is_demo: item.price_is_demo
+        })));
+        return true;
+      }
+
       setError('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
       const currentPath = window.location.hash.replace(/^#/, '') || '/';
       window.location.hash = `#/login?redirect=${encodeURIComponent(currentPath)}`;
@@ -331,6 +381,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const clearGuestCart = async (): Promise<void> => {
+    try {
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+    } catch {
+      setError('Không thể làm trống giỏ hàng trên thiết bị này.');
+      return;
+    }
+    setItems([]);
+    setPreview(null);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -348,7 +409,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         removeFromCart,
         applyPromotion,
         removePromotion,
-        refreshCart: loadCart
+        refreshCart: loadCart,
+        clearGuestCart
       }}
     >
       {children}

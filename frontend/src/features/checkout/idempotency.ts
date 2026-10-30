@@ -12,6 +12,11 @@ export interface CheckoutFingerprintInput {
   address_id: string;
   promotion_code?: string | null;
   note?: string | null;
+  guest_details?: {
+    recipient_name: string;
+    phone: string;
+    address_line: string;
+  };
 }
 
 export const IDEMPOTENCY_STORAGE_KEY = 'langmoc.checkout.idempotency.v1';
@@ -25,7 +30,14 @@ export function computeOrderFingerprint(input: CheckoutFingerprintInput): string
     items: normalizedItems,
     address_id: (input.address_id || '').trim(),
     promotion_code: (input.promotion_code || '').trim().toUpperCase(),
-    note: (input.note || '').trim()
+    note: (input.note || '').trim(),
+    ...(input.guest_details ? {
+      guest_details: {
+        recipient_name: input.guest_details.recipient_name.trim(),
+        phone: input.guest_details.phone.trim(),
+        address_line: input.guest_details.address_line.trim()
+      }
+    } : {})
   });
 }
 

@@ -98,6 +98,7 @@ export interface OrderItem {
 
 export interface Order {
   id: string;
+  user_id?: string | null;
   order_number: string;
   status: 'pending' | 'confirmed' | 'packing' | 'shipping' | 'delivered' | 'cancelled';
   payment_status: 'unpaid' | 'pending' | 'paid' | 'failed' | 'refunded';
@@ -140,5 +141,4 @@ export interface ContactMessage {
   status: 'new' | 'read' | 'resolved';
   created_at: string;
 }
-
 

@@ -6,13 +6,15 @@
 - **T2 — Địa chỉ hành chính:** Chưa nạp dữ liệu; cần bộ dữ liệu hai cấp tại `fix_note/data` và quyết định hợp đồng cho `district` đang `NOT NULL`. Khi được cung cấp, phải ghi nguồn, ngày cập nhật, giấy phép và kế hoạch cập nhật khi đơn vị hành chính thay đổi.
 - **T3 — Xóa địa chỉ:** `DELETE /me/addresses/:id` là **ĐỀ XUẤT CHỜ KHẢI**, không có trong `docs/API.md`; chỉ mock được bật mặc định.
 - **T4 — Đồng ý điều khoản:** UI-only; checkbox không tích sẵn mỗi lần mở Checkout, chặn đặt đơn đến khi đồng ý và không gửi trường mới vì hợp đồng chưa có. **ĐỀ XUẤT CHỜ SƠN:** lưu thời điểm và phiên bản điều khoản đã đồng ý. Các trang chính sách vẫn có mục “CẦN NHÓM CHỐT”, nên ô tích chỉ có giá trị pháp lý sau khi nội dung được chốt.
-- **T5 — Khách vãng lai:** Leader F08 yêu cầu không tự bật. `VITE_GUEST_CHECKOUT` mặc định tắt và chỉ mô phỏng khi mock; live luôn tắt. Chờ leader cùng Khải/Sơn đổi schema/API vì `orders.user_id` đang `NOT NULL` và `POST /orders` lấy giỏ theo tài khoản.
+- **T5 — Khách vãng lai:** Leader F08 yêu cầu không tự bật. `VITE_GUEST_CHECKOUT` mặc định tắt; chỉ mock bật cờ mới có thể đặt đơn, live luôn tắt và không gọi endpoint đề xuất. Theo yêu cầu bổ sung của người dùng, mock cho khách nhập tên, điện thoại và địa chỉ tự do trong Checkout; đây không phải xác thực địa chỉ chuẩn T2, không lưu vào sổ địa chỉ và không chứng minh đơn live có thể tạo. Hợp đồng live vẫn cần leader đồng ý và Khải/Sơn đổi schema/API vì `orders.user_id` đang `NOT NULL` và `POST /orders` lấy giỏ theo tài khoản. Endpoint guest, preview, rate-limit và đơn khách hiện tại hoàn toàn **MÔ PHỎNG / ĐỀ XUẤT CHỜ KHẢI-SƠN**.
 
 ### Câu hỏi mở bổ sung
 
 1. Khải xác nhận hay điều chỉnh quy tắc số điện thoại Việt Nam 10 chữ số ở backend?
 2. Khải/Sơn chốt hợp đồng địa chỉ hai cấp thế nào khi schema/API hiện bắt buộc `district`?
 3. Leader có phê duyệt luồng khách vãng lai sau khi Khải/Sơn có hợp đồng backend chưa?
+4. Khải/Sơn chốt API tạo đơn khách, lưu người nhận/địa chỉ, idempotency, truy vấn đơn, rate limit và lưu trạng thái đồng ý điều khoản thế nào?
+5. Địa chỉ tự khai báo trong mock cần thay bằng dữ liệu tỉnh-xã chuẩn T2 sau khi có dữ liệu và hợp đồng chưa?
 
 *Cập nhật lần cuối: Đợt Feedback Leader C2 — Commit 60516b2*
 

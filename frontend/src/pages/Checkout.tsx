@@ -8,10 +8,11 @@ import { Loading } from '../components/common/States';
 import { getIdempotencyKey, clearIdempotencyKey } from '../features/checkout/idempotency';
 import { sanitizePhoneInput, validateVietnamPhone } from '../lib/addressValidation';
 import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar';
-import { isMockMode } from '../config/site';
+import { isGuestCheckoutEnabled, isMockMode } from '../config/site';
 import { canDeleteAddress } from '../config/site';
 import { getAddressSelectionAfterDelete } from '../lib/addressContracts';
 import { CHECKOUT_TERMS, requiresCheckoutTermsAcceptance } from '../content/checkoutConsent';
+import type { MockGuestCheckoutPayload } from '../lib/guestContracts';
 import {
   MapPin,
   CreditCard,
@@ -26,8 +27,15 @@ import {
 
 export default function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
-  const { items, appliedPromo, refreshCart, loading: cartLoading } = useCart();
+  const { items, appliedPromo, refreshCart, clearGuestCart, loading: cartLoading } = useCart();
 
+  const [guestMode, setGuestMode] = useState(false);
+  const [guestInfo, setGuestInfo] = useState({
+    recipient_name: '',
+    phone: '',
+    address_line: ''
+  });
+  const [guestErrors, setGuestErrors] = useState<Record<string, string>>({});
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string>('');
   const [loadingAddresses, setLoadingAddresses] = useState(true);
@@ -49,7 +57,7 @@ export default function CheckoutPage() {
   // Ghi chú & Trạng thái thanh toán
   const [note, setNote] = useState('');
   const [preview, setPreview] = useState<CheckoutPreview | null>(null);
-  const [previewLoading, setPreviewLoading] = useState(true);
+  const [previewLoading, setPreviewLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [priceChangeWarning, setPriceChangeWarning] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -61,6 +69,7 @@ export default function CheckoutPage() {
   const isSubmittingRef = useRef(false);
   const isDeletingAddressRef = useRef(false);
   const termsCheckboxRef = useRef<HTMLInputElement>(null);
+  const isGuestFlow = !user && isGuestCheckoutEnabled && guestMode;
 
   // F04: Kiểm tra giỏ hàng rỗng an toàn, chờ auth và cart hoàn tất tải/gộp dữ liệu
   useEffect(() => {
@@ -99,13 +108,29 @@ export default function CheckoutPage() {
   };
 
   useEffect(() => {
+    if (authLoading) return;
+    if (!user && isGuestCheckoutEnabled) {
+      setAddresses([]);
+      setSelectedAddressId('');
+      setLoadingAddresses(false);
+      return;
+    }
+    setLoadingAddresses(true);
     loadAddresses();
-  }, []);
+  }, [user, authLoading]);
 
   // Tải giá từ POST /checkout/preview
   const updatePreview = async (addrId?: string): Promise<CheckoutPreview | null> => {
     setPreviewLoading(true);
     try {
+      if (isGuestFlow) {
+        const res = await api.guestCheckoutPreview(items.map(item => ({
+          product_id: item.id,
+          quantity: item.quantity
+        })));
+        setPreview(res.data);
+        return res.data;
+      }
       const res = await api.checkoutPreview({
         address_id: addrId || selectedAddressId || undefined,
         promotion_code: appliedPromo || undefined,
@@ -130,10 +155,10 @@ export default function CheckoutPage() {
   };
 
   useEffect(() => {
-    if (items.length > 0) {
+    if (items.length > 0 && (user || isGuestFlow)) {
       updatePreview(selectedAddressId);
     }
-  }, [selectedAddressId, appliedPromo, items]);
+  }, [selectedAddressId, appliedPromo, items, guestMode, user]);
 
   // Thêm địa chỉ mới ngay tại checkout
   const handleCreateAddress = async (e: React.FormEvent) => {
@@ -221,7 +246,16 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!selectedAddressId) {
+    if (isGuestFlow) {
+      const errors: Record<string, string> = {};
+      if (!guestInfo.recipient_name.trim()) errors.recipient_name = 'Vui lòng nhập họ tên người nhận.';
+      const phoneCheck = validateVietnamPhone(guestInfo.phone);
+      if (!phoneCheck.valid) errors.phone = phoneCheck.error || 'Số điện thoại không hợp lệ.';
+      if (!guestInfo.address_line.trim()) errors.address_line = 'Vui lòng nhập địa chỉ nhận hàng.';
+      else if (guestInfo.address_line.trim().length > 255) errors.address_line = 'Địa chỉ không được vượt quá 255 ký tự.';
+      setGuestErrors(errors);
+      if (Object.keys(errors).length > 0) return;
+    } else if (!selectedAddressId) {
       setErrorMessage('Vui lòng chọn hoặc thêm địa chỉ nhận hàng trước khi thanh toán.');
       return;
     }
@@ -256,9 +290,16 @@ export default function CheckoutPage() {
       // 2. Lấy Idempotency-Key gắn với dấu vân tay đơn hàng (Quy tắc bắt buộc số 3)
       const fingerprintInput = {
         items: items.map(i => ({ id: i.id, quantity: i.quantity })),
-        address_id: selectedAddressId,
-        promotion_code: appliedPromo || undefined,
-        note: note.trim() || undefined
+        address_id: isGuestFlow ? 'guest-checkout' : selectedAddressId,
+        promotion_code: isGuestFlow ? undefined : appliedPromo || undefined,
+        note: note.trim() || undefined,
+        ...(isGuestFlow ? {
+          guest_details: {
+            recipient_name: guestInfo.recipient_name.trim(),
+            phone: guestInfo.phone,
+            address_line: guestInfo.address_line.trim()
+          }
+        } : {})
       };
 
       const { key: idempotencyKey } = getIdempotencyKey(fingerprintInput);
@@ -267,7 +308,13 @@ export default function CheckoutPage() {
       try {
         sessionStorage.setItem('langmoc.pending_checkout', JSON.stringify({
           key: idempotencyKey,
-          payload: {
+          payload: isGuestFlow ? {
+            recipient_name: guestInfo.recipient_name.trim(),
+            phone: guestInfo.phone,
+            address_line: guestInfo.address_line.trim(),
+            items: items.map(item => ({ product_id: item.id, quantity: item.quantity })),
+            note: note.trim() || undefined
+          } : {
             address_id: selectedAddressId,
             promotion_code: appliedPromo || undefined,
             payment_method: 'cod',
@@ -277,15 +324,21 @@ export default function CheckoutPage() {
       } catch {}
 
       // 3. Gửi đơn hàng lên server
-      const res = await api.createOrder(
-        {
+      const guestPayload: MockGuestCheckoutPayload = {
+        recipient_name: guestInfo.recipient_name.trim(),
+        phone: guestInfo.phone,
+        address_line: guestInfo.address_line.trim(),
+        items: items.map(item => ({ product_id: item.id, quantity: item.quantity })),
+        note: note.trim() || undefined
+      };
+      const res = isGuestFlow
+        ? await api.createGuestOrder(guestPayload, idempotencyKey)
+        : await api.createOrder({
           address_id: selectedAddressId,
           promotion_code: appliedPromo || undefined,
           payment_method: 'cod',
           note: note.trim() || undefined
-        },
-        idempotencyKey
-      );
+        }, idempotencyKey);
       // Tạo đơn thành công -> dọn pending_checkout
       try { sessionStorage.removeItem('langmoc.pending_checkout'); } catch {}
 
@@ -301,7 +354,8 @@ export default function CheckoutPage() {
 
       // Xóa key & làm sạch giỏ hàng
       clearIdempotencyKey();
-      await refreshCart();
+      if (isGuestFlow) await clearGuestCart();
+      else await refreshCart();
 
       // Chuyển sang route /#/order-success/<id>
       window.location.hash = `#/order-success/${encodeURIComponent(createdOrder.id)}`;
@@ -379,13 +433,32 @@ export default function CheckoutPage() {
         <div className="c2-cart-grid">
           {/* CỘT TRÁI: ĐỊA CHỈ, PHƯƠNG THỨC THANH TOÁN & GHI CHÚ */}
           <div className="c2-cart-items-col" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            {/* 1. SỔ ĐỊA CHỈ NHẬN HÀNG */}
+            {!user && isGuestCheckoutEnabled && !guestMode && (
+              <div className="c2-card" style={{ padding: '24px' }}>
+                <h2 style={{ fontSize: '16px', margin: '0 0 12px', color: 'var(--brown, #493421)' }}>Chọn cách đặt hàng</h2>
+                <p style={{ fontSize: '13px', color: 'var(--muted, #7c6a57)', margin: '0 0 16px' }}>
+                  Bạn có thể đăng nhập hoặc tiếp tục đặt hàng không cần tài khoản.
+                </p>
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                  <a href="#/login?redirect=%2Fcheckout" className="c2-btn c2-btn-outline">Đăng nhập</a>
+                  <button type="button" className="c2-btn c2-btn-primary" onClick={() => setGuestMode(true)}>
+                    Tiếp tục không cần tài khoản
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {(user || isGuestFlow) && (
             <div className="c2-card" style={{ padding: '24px' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                 <h2 style={{ fontSize: '16px', fontWeight: 600, margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brown, #493421)' }}>
-                  <MapPin size={18} /> Địa chỉ nhận hàng
+                  <MapPin size={18} /> {isGuestFlow ? 'Thông tin người nhận và địa chỉ' : 'Địa chỉ nhận hàng'}
                 </h2>
-                {!showAddAddress && (
+                {isGuestFlow ? (
+                  <button type="button" className="c2-btn c2-btn-outline c2-btn-sm" onClick={() => setGuestMode(false)}>
+                    Chọn đăng nhập
+                  </button>
+                ) : !showAddAddress && (
                   <button
                     type="button"
                     onClick={() => setShowAddAddress(true)}
@@ -397,6 +470,70 @@ export default function CheckoutPage() {
                 )}
               </div>
 
+              {isGuestFlow ? (
+                <div>
+                  <p className="c2-mock-badge" style={{ display: 'inline-block', margin: '0 0 14px' }}>
+                    MÔ PHỎNG / ĐỀ XUẤT CHỜ KHẢI-SƠN — địa chỉ tự khai báo, chưa đối chiếu dữ liệu hành chính chuẩn
+                  </p>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+                    <div>
+                      <label className="c2-form-label" htmlFor="guest-recipient-name">Họ và tên người nhận *</label>
+                      <input
+                        id="guest-recipient-name"
+                        className="c2-form-input"
+                        value={guestInfo.recipient_name}
+                        onChange={event => {
+                          setGuestInfo(current => ({ ...current, recipient_name: event.target.value }));
+                          setGuestErrors(current => ({ ...current, recipient_name: '' }));
+                        }}
+                        maxLength={120}
+                        autoComplete="name"
+                        placeholder="VD: Nguyễn Văn A"
+                      />
+                      {guestErrors.recipient_name && <small className="field-error">{guestErrors.recipient_name}</small>}
+                    </div>
+                    <div>
+                      <label className="c2-form-label" htmlFor="guest-recipient-phone">Số điện thoại *</label>
+                      <input
+                        id="guest-recipient-phone"
+                        type="tel"
+                        inputMode="numeric"
+                        maxLength={10}
+                        autoComplete="tel"
+                        className="c2-form-input"
+                        value={guestInfo.phone}
+                        onChange={event => {
+                          const phone = sanitizePhoneInput(event.target.value);
+                          setGuestInfo(current => ({ ...current, phone }));
+                          const check = validateVietnamPhone(phone);
+                          setGuestErrors(current => ({ ...current, phone: check.valid ? '' : check.error || '' }));
+                        }}
+                        placeholder="VD: 0901234567"
+                      />
+                      {guestErrors.phone && <small className="field-error">{guestErrors.phone}</small>}
+                    </div>
+                    <div style={{ gridColumn: '1 / -1' }}>
+                      <label className="c2-form-label" htmlFor="guest-address-line">Địa chỉ nhận hàng *</label>
+                      <textarea
+                        id="guest-address-line"
+                        className="c2-form-input"
+                        value={guestInfo.address_line}
+                        onChange={event => {
+                          setGuestInfo(current => ({ ...current, address_line: event.target.value }));
+                          setGuestErrors(current => ({ ...current, address_line: '' }));
+                        }}
+                        maxLength={255}
+                        rows={3}
+                        autoComplete="street-address"
+                        placeholder="Nhập số nhà, đường, phường/xã và tỉnh/thành phố"
+                        style={{ width: '100%', resize: 'vertical' }}
+                      />
+                      {guestErrors.address_line && <small className="field-error">{guestErrors.address_line}</small>}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
               {/* Form thêm địa chỉ mới inline */}
               {showAddAddress && (
                 <div style={{ background: 'rgba(73,52,33,0.03)', padding: '18px', borderRadius: '6px', marginBottom: '18px', border: '1px solid var(--line, #c8b99e)' }}>
@@ -565,7 +702,10 @@ export default function CheckoutPage() {
                   })}
                 </div>
               )}
+                </>
+              )}
             </div>
+            )}
 
             {/* 2. PHƯƠNG THỨC THANH TOÁN (COD) */}
             <div className="c2-card" style={{ padding: '24px' }}>
@@ -686,6 +826,11 @@ export default function CheckoutPage() {
 
               {/* Bảng tính chi phí từ server */}
               <div className="c2-summary-rows">
+                {isGuestFlow && (
+                  <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'var(--muted, #7c6a57)' }}>
+                    Đăng nhập để dùng mã giảm giá.
+                  </p>
+                )}
                 <div className="c2-summary-row">
                   <span>Tạm tính</span>
                   <strong>{formatMoney(preview?.subtotal_vnd ?? 0)}</strong>
@@ -714,9 +859,13 @@ export default function CheckoutPage() {
               </div>
 
               {/* Địa chỉ giao dự kiến */}
-              {selectedAddr && (
+              {(selectedAddr || isGuestFlow) && (
                 <div style={{ marginTop: '16px', padding: '10px', background: 'rgba(73,52,33,0.03)', borderRadius: '4px', fontSize: '11px', color: 'var(--muted, #7c6a57)', lineHeight: 1.5 }}>
-                  <strong>Giao đến:</strong> {selectedAddr.full_name} ({selectedAddr.phone}) - {selectedAddr.street_address}, {selectedAddr.ward}, {selectedAddr.district}, {selectedAddr.province}
+                  {isGuestFlow ? (
+                    <><strong>Giao đến:</strong> {guestInfo.recipient_name || 'Người nhận'} ({guestInfo.phone || 'Chưa nhập số điện thoại'}) - {guestInfo.address_line || 'Chưa nhập địa chỉ'}</>
+                  ) : selectedAddr && (
+                    <><strong>Giao đến:</strong> {selectedAddr.full_name} ({selectedAddr.phone}) - {selectedAddr.street_address}, {selectedAddr.ward}, {selectedAddr.district}, {selectedAddr.province}</>
+                  )}
                 </div>
               )}
 
@@ -768,8 +917,8 @@ export default function CheckoutPage() {
                 className={`c2-btn c2-btn-primary ${requiresCheckoutTermsAcceptance(hasAcceptedTerms) ? 'c2-btn-terms-locked' : ''}`}
                 style={{ width: '100%', marginTop: '20px', padding: '14px', fontSize: '14px', fontWeight: 600 }}
                 onClick={handlePlaceOrder}
-                disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || !selectedAddressId}
-                aria-disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || !selectedAddressId || requiresCheckoutTermsAcceptance(hasAcceptedTerms)}
+                disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || (!isGuestFlow && !selectedAddressId)}
+                aria-disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || (!isGuestFlow && !selectedAddressId) || requiresCheckoutTermsAcceptance(hasAcceptedTerms)}
                 aria-describedby={requiresCheckoutTermsAcceptance(hasAcceptedTerms) ? 'checkout-terms-help' : undefined}
               >
                 {submitting ? (

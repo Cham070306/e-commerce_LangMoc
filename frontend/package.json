@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --experimental-strip-types --test tests/catalog.test.ts tests/cart.test.ts tests/checkout.test.ts tests/orders.test.ts tests/contact.test.ts tests/admin.test.ts"
+    "test": "node --experimental-strip-types --test tests/catalog.test.ts tests/cart.test.ts tests/checkout.test.ts tests/orders.test.ts tests/contact.test.ts tests/admin.test.ts tests/address_validation.test.ts tests/address_delete.test.ts tests/checkout_consent.test.ts tests/guest_contracts.test.ts tests/guest_checkout.test.ts"
   },
   "dependencies": {
     "react": "^19.0.0",

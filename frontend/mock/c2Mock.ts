@@ -1,8 +1,9 @@
-// Mock tầng mạng cho phần C2 (tuân thủ 100% docs/API.md)
-// Chỉ hoạt động khi VITE_API_MODE !== 'live' trong môi trường Vite dev/preview.
+// Mock C2 cho API hiện có và các luồng guest được gắn nhãn đề xuất.
+// Chỉ hoạt động ở chế độ mock trong môi trường Vite dev/preview.
 import catalog from './catalog.json' with { type: 'json' };
 import { isOrderStatus, isValidTransition } from '../src/lib/orderStatus.ts';
 import { validateVietnamPhone } from '../src/lib/addressValidation.ts';
+import type { MockGuestCheckoutPayload } from '../src/lib/guestContracts.ts';
 
 interface DemoUser {
   id: string;
@@ -118,7 +119,7 @@ export interface DemoOrderItem {
 export interface DemoOrder {
   id: string;
   order_number: string;
-  user_id: string;
+  user_id: string | null;
   recipient_name: string;
   phone: string;
   shipping_address: string;
@@ -275,6 +276,9 @@ demoOrders.push(
 );
 
 export const mockIdempotencyMap: Record<string, Record<string, { fingerprint: string; address_id?: string; order: DemoOrder }>> = {};
+export const guestOrderIdempotencyMap: Record<string, { fingerprint: string; order: DemoOrder }> = {};
+export const guestOrderRateLimitMap: Record<string, number> = {};
+export const GUEST_ORDER_PHONE_COOLDOWN_MS = 15000;
 
 let orderCounter = 3;
 export function generateOrderNumber(): string {
@@ -786,6 +790,171 @@ export function processOrderCreation(
     statusCode: 201,
     data: { data: newOrder }
   };
+}
+
+type GuestItemInput = { product_id: string; quantity: number };
+
+function validateGuestItems(input: unknown): {
+  items: Array<GuestItemInput & { product: any; price: number }>;
+  error?: { error: { code: string; message: string; fields?: Record<string, string> } };
+} {
+  if (!Array.isArray(input) || input.length === 0) {
+    return {
+      items: [],
+      error: { error: { code: 'VALIDATION_ERROR', message: 'Giỏ hàng đang trống.', fields: { items: 'Vui lòng thêm sản phẩm vào giỏ.' } } }
+    };
+  }
+
+  const fields: Record<string, string> = {};
+  const items: Array<GuestItemInput & { product: any; price: number }> = [];
+  for (const [index, raw] of input.entries()) {
+    if (!raw || typeof raw.product_id !== 'string' || !Number.isInteger(raw.quantity) || raw.quantity < 1) {
+      fields[`items.${index}`] = 'Sản phẩm hoặc số lượng không hợp lệ.';
+      continue;
+    }
+    const product = (catalog.products as any[]).find(item => item.id === raw.product_id);
+    if (!product || product.status === 'hidden') {
+      fields[`items.${index}`] = 'Sản phẩm không còn khả dụng.';
+      continue;
+    }
+    items.push({
+      product_id: raw.product_id,
+      quantity: raw.quantity,
+      product,
+      price: product.current_price_vnd ?? product.sale_price_vnd ?? product.price_vnd ?? 0
+    });
+  }
+  return Object.keys(fields).length
+    ? { items, error: { error: { code: 'VALIDATION_ERROR', message: 'Danh sách sản phẩm không hợp lệ.', fields } } }
+    : { items };
+}
+
+export function processGuestCheckoutPreview(input: unknown) {
+  const validated = validateGuestItems(input);
+  if (validated.error) return { statusCode: 400, error: validated.error };
+
+  for (const item of validated.items) {
+    const stock = getStockForProduct(item.product_id);
+    if (item.quantity > stock) {
+      return {
+        statusCode: 409,
+        error: { error: { code: 'CONFLICT', message: `${item.product.name} chỉ còn ${stock} sản phẩm trong kho.` } }
+      };
+    }
+  }
+
+  const subtotal_vnd = validated.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping_fee_vnd = subtotal_vnd > 0 ? 30000 : 0;
+  return {
+    statusCode: 200,
+    data: { data: { subtotal_vnd, discount_vnd: 0, shipping_fee_vnd, total_vnd: subtotal_vnd + shipping_fee_vnd } }
+  };
+}
+
+export function processGuestOrderCreation(
+  idempotencyKey: string | null | undefined,
+  body: MockGuestCheckoutPayload,
+  now = Date.now()
+): OrderProcessResult {
+  if (!idempotencyKey || !idempotencyKey.trim()) {
+    return { statusCode: 400, error: { error: { code: 'VALIDATION_ERROR', message: 'Thiếu mã giao dịch đặt hàng.' } } };
+  }
+
+  const recipientName = typeof body?.recipient_name === 'string' ? body.recipient_name.trim() : '';
+  const phone = typeof body?.phone === 'string' ? body.phone : '';
+  const addressLine = typeof body?.address_line === 'string' ? body.address_line.trim() : '';
+  const note = typeof body?.note === 'string' ? body.note.trim() : '';
+  const fields: Record<string, string> = {};
+  if (!recipientName) fields.recipient_name = 'Vui lòng nhập họ tên người nhận.';
+  else if (recipientName.length > 120) fields.recipient_name = 'Họ tên không được vượt quá 120 ký tự.';
+  const phoneCheck = validateVietnamPhone(phone);
+  if (!phoneCheck.valid) fields.phone = phoneCheck.error || 'Số điện thoại không hợp lệ.';
+  if (!addressLine) fields.address_line = 'Vui lòng nhập địa chỉ nhận hàng.';
+  else if (addressLine.length > 255) fields.address_line = 'Địa chỉ không được vượt quá 255 ký tự.';
+  if (note.length > 500) fields.note = 'Ghi chú không được vượt quá 500 ký tự.';
+  const validated = validateGuestItems(body?.items);
+  if (validated.error?.error.fields) Object.assign(fields, validated.error.error.fields);
+  if (Object.keys(fields).length) {
+    return { statusCode: 400, error: { error: { code: 'VALIDATION_ERROR', message: 'Vui lòng kiểm tra lại thông tin đặt hàng.', fields } } };
+  }
+
+  const normalizedItems = validated.items
+    .map(item => ({ product_id: item.product_id, quantity: item.quantity }))
+    .sort((a, b) => a.product_id.localeCompare(b.product_id));
+  const fingerprint = JSON.stringify({
+    recipient_name: recipientName,
+    phone,
+    address_line: addressLine,
+    note,
+    items: normalizedItems
+  });
+  const previous = guestOrderIdempotencyMap[idempotencyKey];
+  if (previous) {
+    return previous.fingerprint === fingerprint
+      ? { statusCode: 200, data: { data: previous.order } }
+      : { statusCode: 409, error: { error: { code: 'CONFLICT', message: 'Mã giao dịch này đã được dùng cho thông tin đặt hàng khác.' } } };
+  }
+
+  const lastOrderAt = guestOrderRateLimitMap[phone];
+  if (lastOrderAt !== undefined && now - lastOrderAt < GUEST_ORDER_PHONE_COOLDOWN_MS) {
+    return {
+      statusCode: 429,
+      error: { error: { code: 'RATE_LIMITED', message: 'Bạn vừa gửi yêu cầu đặt hàng. Vui lòng chờ một chút rồi thử lại.' } }
+    };
+  }
+
+  for (const item of validated.items) {
+    const stock = getStockForProduct(item.product_id);
+    if (item.quantity > stock) {
+      return {
+        statusCode: 409,
+        error: { error: { code: 'CONFLICT', message: `${item.product.name} chỉ còn ${stock} sản phẩm trong kho.` } }
+      };
+    }
+  }
+
+  const subtotal_vnd = validated.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const shipping_fee_vnd = subtotal_vnd > 0 ? 30000 : 0;
+  const orderId = `ord-guest-${now.toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+  const createdAt = new Date(now).toISOString();
+  const order: DemoOrder = {
+    id: orderId,
+    order_number: generateOrderNumber(),
+    user_id: null,
+    recipient_name: recipientName,
+    phone,
+    shipping_address: addressLine,
+    note: note || null,
+    status: 'pending',
+    payment_method: 'cod',
+    payment_status: 'unpaid',
+    subtotal_vnd,
+    discount_vnd: 0,
+    shipping_fee_vnd,
+    total_vnd: subtotal_vnd + shipping_fee_vnd,
+    promotion_code: null,
+    idempotency_key: idempotencyKey,
+    items: validated.items.map(item => ({
+      id: `item-${Math.random().toString(36).slice(2, 8)}`,
+      order_id: orderId,
+      product_id: item.product_id,
+      product_name: item.product.name,
+      product_image_url: item.product.images?.[0]?.url || null,
+      unit_price_vnd: item.price,
+      quantity: item.quantity,
+      line_total_vnd: item.price * item.quantity
+    })),
+    created_at: createdAt,
+    updated_at: createdAt
+  };
+
+  for (const item of validated.items) {
+    demoStockMap[item.product_id] = Math.max(0, getStockForProduct(item.product_id) - item.quantity);
+  }
+  demoOrders.push(order);
+  guestOrderIdempotencyMap[idempotencyKey] = { fingerprint, order };
+  guestOrderRateLimitMap[phone] = now;
+  return { statusCode: 201, data: { data: order } };
 }
 
 // Helper đọc body JSON từ IncomingMessage
@@ -1591,6 +1760,30 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
       res.end();
       return true;
     }
+  }
+
+  // --- GUEST CHECKOUT MOCK (MÔ PHỎNG / ĐỀ XUẤT CHỜ KHẢI-SƠN) ---
+  if (path === '/guest/checkout/preview' && method === 'POST') {
+    if (url.searchParams.get('_guest_checkout') !== 'true') {
+      send(404, { error: { code: 'NOT_FOUND', message: 'Tính năng khách vãng lai chưa được bật.' } });
+      return true;
+    }
+    const body = await parseBody(req);
+    const result = processGuestCheckoutPreview(body?.items);
+    send(result.statusCode, result.error || result.data);
+    return true;
+  }
+
+  if (path === '/guest/orders' && method === 'POST') {
+    if (url.searchParams.get('_guest_checkout') !== 'true') {
+      send(404, { error: { code: 'NOT_FOUND', message: 'Tính năng khách vãng lai chưa được bật.' } });
+      return true;
+    }
+    const body = await parseBody(req);
+    const idempotencyKey = req.headers['idempotency-key'] || req.headers['Idempotency-Key'];
+    const result = processGuestOrderCreation(idempotencyKey, body);
+    send(result.statusCode, result.error || result.data);
+    return true;
   }
 
   // --- CHECKOUT PREVIEW ENDPOINT (docs/API.md dòng 50) ---

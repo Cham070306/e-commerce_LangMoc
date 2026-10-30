@@ -28,4 +28,6 @@
 
 ## Phạm vi frontend hiện tại
 
-`VITE_GUEST_CHECKOUT` mặc định tắt. Dù biến được đặt `true`, luồng guest chưa được nối vào UI/mock vì điều kiện địa chỉ chuẩn ở trên chưa được đáp ứng. Live luôn phải tắt; không được gọi các endpoint đề xuất này.
+`VITE_GUEST_CHECKOUT` mặc định tắt. Khi cờ bật, UI hỗ trợ đặt đơn guest chỉ trong mock: khách tự nhập họ tên, điện thoại và địa chỉ nhận hàng dạng văn bản tự do; địa chỉ được giới hạn tối đa 255 ký tự theo độ dài `address_line` hiện có nhưng KHÔNG được đối chiếu dữ liệu hành chính chuẩn T2. Preview lấy danh sách món để mock tính lại giá; mock kiểm tra tồn kho, áp dụng khóa idempotency, và mô phỏng giới hạn gửi đơn theo số điện thoại. Giỏ hàng guest được lưu ở localStorage. Không lưu địa chỉ khách vào sổ địa chỉ tài khoản.
+
+Đây chỉ là **MÔ PHỎNG / ĐỀ XUẤT CHỜ KHẢI-SƠN** theo yêu cầu bổ sung của người dùng. Live luôn phải tắt và không được gọi endpoint đề xuất. Việc mock nhận địa chỉ tự khai không gỡ chặn T2 hoặc thay đổi hợp đồng hai cấp; trước khi mở live cần Khải/Sơn chốt schema/API, leader phê duyệt, bộ dữ liệu chuẩn T2 và yêu cầu lưu đồng ý điều khoản.

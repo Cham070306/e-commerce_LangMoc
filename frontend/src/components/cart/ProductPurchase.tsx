@@ -4,6 +4,7 @@ import type {Product} from '../../lib/types';
 import {formatMoney,ProductImage} from '../catalog/ProductCard';
 import {useCart} from '../../features/cart/CartContext';
 import {useAuth} from '../../features/auth/AuthContext';
+import {isGuestCheckoutEnabled} from '../../config/site';
 
 type Item={id:string;slug:string;name:string;image:string;price:number|null;quantity:number;origin?:string|null;price_is_demo?:boolean};
 
@@ -18,7 +19,7 @@ export default function ProductPurchase({product:p}:{product:Product}){
  useEffect(()=>{if(mode)dialog.current?.showModal();else dialog.current?.close()},[mode]);
 
  async function add(){
-  if(!user){
+  if(!user&&!isGuestCheckoutEnabled){
    setNotice('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.');
    const currentPath=location.hash.replace(/^#/,'')||'/';
    window.location.hash=`#/login?redirect=${encodeURIComponent(currentPath)}`;
@@ -29,25 +30,7 @@ export default function ProductPurchase({product:p}:{product:Product}){
  }
 
  async function buyNow(){
-  if(!user){
-   // Tự động bỏ sản phẩm vào giỏ hàng tạm thời (local) để khi khách đăng nhập xong sẽ tự động gộp vào giỏ
-   try{
-    const raw=localStorage.getItem('langmoc.cart.v1');
-    const local=raw?JSON.parse(raw):[];
-    if(!local.some((x:any)=>x.id===p.id)){
-     local.push({
-      id:p.id,
-      slug:p.slug,
-      name:p.name,
-      image:p.images[0]?.url||'',
-      price:p.current_price_vnd,
-      quantity:1,
-      origin:p.origin||null,
-      price_is_demo:p.price_is_demo
-     });
-     localStorage.setItem('langmoc.cart.v1',JSON.stringify(local));
-    }
-   }catch{}
+  if(!user&&!isGuestCheckoutEnabled){
    setNotice('Vui lòng đăng nhập để tiến hành mua ngay.');
    window.location.hash=`#/login?redirect=${encodeURIComponent('/checkout')}`;
    return;
@@ -75,7 +58,7 @@ export default function ProductPurchase({product:p}:{product:Product}){
  }
 
  function open(nextMode:'cart'|'buy',trigger:HTMLButtonElement){
-  if(!user){
+  if(!user&&!isGuestCheckoutEnabled){
    setNotice('Vui lòng đăng nhập để tiếp tục.');
    const currentPath=location.hash.replace(/^#/,'')||'/';
    window.location.hash=`#/login?redirect=${encodeURIComponent(currentPath)}`;
@@ -89,7 +72,7 @@ export default function ProductPurchase({product:p}:{product:Product}){
 
  const shown=mode==='buy'?[item]:contextItems;
  const total=shown.reduce((sum,x)=>sum+(x.price||0)*x.quantity,0);
- const count=user?contextItems.reduce((s,x)=>s+x.quantity,0):0;
+ const count=user||isGuestCheckoutEnabled?contextItems.reduce((s,x)=>s+x.quantity,0):0;
 
  return (
   <div className="purchase-area">
@@ -101,9 +84,9 @@ export default function ProductPurchase({product:p}:{product:Product}){
      <Zap size={18}/>{buying?'Đang chuyển đến thanh toán…':'Mua ngay'}
     </button>
    </div>
-   {!user&&<p className="data-note" style={{marginTop:'6px',fontSize:'11px'}}>💡 Đăng nhập để thêm sản phẩm vào giỏ hàng và đặt hàng.</p>}
+   {!user&&!isGuestCheckoutEnabled&&<p className="data-note" style={{marginTop:'6px',fontSize:'11px'}}>💡 Đăng nhập để thêm sản phẩm vào giỏ hàng và đặt hàng.</p>}
    <p className="purchase-status" role="status">{notice}</p>
-   <button className="cart-preview-link" onClick={e=>{if(!user){window.location.hash='#/login?redirect='+encodeURIComponent('/cart')}else{open('cart',e.currentTarget)}}}>
+   <button className="cart-preview-link" onClick={e=>{if(!user&&!isGuestCheckoutEnabled){window.location.hash='#/login?redirect='+encodeURIComponent('/cart')}else{open('cart',e.currentTarget)}}}>
     Xem giỏ hàng ({count})
    </button>
    <dialog ref={dialog} className="purchase-dialog" onCancel={e=>{e.preventDefault();close()}} onClick={e=>{if(e.target===e.currentTarget)close()}} aria-labelledby="purchase-title">
