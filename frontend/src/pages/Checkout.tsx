@@ -11,6 +11,7 @@ import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar'
 import { isMockMode } from '../config/site';
 import { canDeleteAddress } from '../config/site';
 import { getAddressSelectionAfterDelete } from '../lib/addressContracts';
+import { CHECKOUT_TERMS, requiresCheckoutTermsAcceptance } from '../content/checkoutConsent';
 import {
   MapPin,
   CreditCard,
@@ -53,10 +54,13 @@ export default function CheckoutPage() {
   const [priceChangeWarning, setPriceChangeWarning] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [deletingAddressId, setDeletingAddressId] = useState<string | null>(null);
+  const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
+  const [termsError, setTermsError] = useState<string | null>(null);
 
   // Cờ chống bấm đúp
   const isSubmittingRef = useRef(false);
   const isDeletingAddressRef = useRef(false);
+  const termsCheckboxRef = useRef<HTMLInputElement>(null);
 
   // F04: Kiểm tra giỏ hàng rỗng an toàn, chờ auth và cart hoàn tất tải/gộp dữ liệu
   useEffect(() => {
@@ -206,6 +210,12 @@ export default function CheckoutPage() {
     if (isSubmittingRef.current) return;
     setErrorMessage(null);
     setPriceChangeWarning(null);
+
+    if (requiresCheckoutTermsAcceptance(hasAcceptedTerms)) {
+      setTermsError(CHECKOUT_TERMS.requiredMessage);
+      termsCheckboxRef.current?.focus();
+      return;
+    }
 
     if (!selectedAddressId) {
       setErrorMessage('Vui lòng chọn hoặc thêm địa chỉ nhận hàng trước khi thanh toán.');
@@ -706,13 +716,51 @@ export default function CheckoutPage() {
                 </div>
               )}
 
+              <div className="c2-checkout-terms">
+                <div className="c2-checkout-terms-row">
+                  <input
+                    ref={termsCheckboxRef}
+                    id="checkout-terms"
+                    type="checkbox"
+                    checked={hasAcceptedTerms}
+                    onChange={event => {
+                      setHasAcceptedTerms(event.target.checked);
+                      if (event.target.checked) setTermsError(null);
+                    }}
+                    aria-describedby="checkout-terms-help"
+                  />
+                  <div>
+                    <label htmlFor="checkout-terms">{CHECKOUT_TERMS.intro}</label>{' '}
+                    {CHECKOUT_TERMS.policies.map((policy, index) => (
+                      <React.Fragment key={policy.href}>
+                        {index > 0 && ', '}
+                        <a
+                          href={policy.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={event => event.stopPropagation()}
+                        >
+                          [{policy.label}]
+                        </a>
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+                <p id="checkout-terms-help" className="c2-checkout-terms-help">
+                  {CHECKOUT_TERMS.requiredMessage}
+                </p>
+                {termsError && <p className="c2-error-text" role="alert">{termsError}</p>}
+              </div>
+
               {/* Nút Xác nhận đặt hàng */}
               <button
                 type="button"
-                className="c2-btn c2-btn-primary"
+                className={`c2-btn c2-btn-primary ${requiresCheckoutTermsAcceptance(hasAcceptedTerms) ? 'c2-btn-terms-locked' : ''}`}
                 style={{ width: '100%', marginTop: '20px', padding: '14px', fontSize: '14px', fontWeight: 600 }}
                 onClick={handlePlaceOrder}
                 disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || !selectedAddressId}
+                aria-disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || !selectedAddressId || requiresCheckoutTermsAcceptance(hasAcceptedTerms)}
+                aria-describedby="checkout-terms-help"
               >
                 {submitting ? (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>

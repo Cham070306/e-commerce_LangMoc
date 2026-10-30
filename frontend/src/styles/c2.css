@@ -485,6 +485,47 @@
   line-height: 1.5;
 }
 
+.c2-checkout-terms {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid var(--line, #c8b99e);
+  border-radius: 6px;
+  background: rgba(73, 52, 33, 0.03);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.c2-checkout-terms-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.c2-checkout-terms-row input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+
+.c2-checkout-terms-row label {
+  cursor: pointer;
+}
+
+.c2-checkout-terms a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.c2-checkout-terms-help {
+  margin: 8px 0 0 28px;
+  color: var(--muted, #7c6a57);
+}
+
+.c2-btn-terms-locked[aria-disabled='true'] {
+  opacity: 0.62;
+}
+
 /* Header Integration */
 .c2-header-user-btn {
   display: inline-flex;
