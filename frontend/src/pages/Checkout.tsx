@@ -88,6 +88,10 @@ export default function CheckoutPage() {
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
         window.location.hash = '#/login?redirect=' + encodeURIComponent('/checkout');
+      } else if (err instanceof ApiError) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage('Không thể tải lại danh sách địa chỉ. Danh sách đang hiển thị chưa được cập nhật.');
       }
     } finally {
       setLoadingAddresses(false);
