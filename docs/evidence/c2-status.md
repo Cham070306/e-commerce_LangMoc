@@ -47,7 +47,7 @@
 ## 2. Danh sách Câu Hỏi & Điểm Cần Phối Hợp
 
 1. **Gửi Khải (Auth / Catalog / Addresses):**
-   - Đã đề xuất quy tắc xác thực số điện thoại: cho phép chữ số, khoảng trắng, ký tự phân cách `+ - . ( )`, 8-15 chữ số sau khi lọc, tối đa 20 ký tự (khớp `varchar(20)`). Nhờ Khải xác nhận backend sẽ áp dụng tương tự.
+   - T1 đề xuất xác thực số Việt Nam bằng đúng 10 chữ số liền nhau theo mẫu `^0[235789][0-9]{8}$`; quy tắc này thay thế đề xuất cũ 8-15 chữ số có dấu phân cách. Nhờ Khải xác nhận backend, đặc biệt cách xử lý số quốc tế và các số hợp lệ ngoài phạm vi Việt Nam.
    - Khi nào có endpoint upload ảnh `POST /admin/uploads/images` để nối form tạo sản phẩm?
 
 2. **Gửi Sơn (Orders / Shipments / Admin):**

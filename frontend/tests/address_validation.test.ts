@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { PassThrough } from 'node:stream';
+import { handleC2Mock } from '../mock/c2Mock.ts';
 import {
   PHONE_INVALID_MESSAGE,
   PHONE_REQUIRED_MESSAGE,
@@ -22,4 +24,31 @@ test('T1: input điện thoại chỉ giữ chữ số và tối đa 10 ký tự
   assert.equal(sanitizePhoneInput('090-123-4567'), '0901234567');
   assert.equal(sanitizePhoneInput('+84 901234567'), '8490123456');
   assert.equal(sanitizePhoneInput('abc'), '');
+});
+
+test('T1: mock địa chỉ từ chối số điện thoại sai và trả lỗi ở fields.phone', async () => {
+  const req = new PassThrough() as PassThrough & { method: string; headers: Record<string, string> };
+  req.method = 'POST';
+  req.headers = { cookie: 'vc_session=user-customer-linh' };
+
+  let response: { status: number; body: any } = { status: 0, body: null };
+  const handled = handleC2Mock(
+    req,
+    { setHeader() {} },
+    new URL('http://localhost/api/v1/me/addresses'),
+    (status, body) => { response = { status, body }; }
+  );
+  req.end(JSON.stringify({
+    full_name: 'Người nhận thử nghiệm',
+    phone: '090-123-4567',
+    province: 'Thành phố Hồ Chí Minh',
+    district: 'Quận 1',
+    ward: 'Phường Bến Nghé',
+    street_address: '12 Đường Thử Nghiệm'
+  }));
+
+  assert.equal(await handled, true);
+  assert.equal(response.status, 400);
+  assert.equal(response.body.error.code, 'VALIDATION_ERROR');
+  assert.equal(response.body.error.fields.phone, PHONE_INVALID_MESSAGE);
 });
