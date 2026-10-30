@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../features/auth/AuthContext';
 import { api, ApiError } from '../lib/api';
 import type { Address } from '../lib/types';
 import { Loading } from '../components/common/States';
 import { isMockMode } from '../config/site';
 import { sanitizePhoneInput, validateVietnamPhone } from '../lib/addressValidation';
+import { canDeleteAddress } from '../config/site';
 
 interface AccountPageProps {
   initialTab?: 'info' | 'addresses';
@@ -31,6 +32,8 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [submittingAddress, setSubmittingAddress] = useState(false);
   const [formSuccess, setFormSuccess] = useState<string | null>(null);
+  const [deletingAddressId, setDeletingAddressId] = useState<string | null>(null);
+  const isDeletingAddressRef = useRef(false);
 
   useEffect(() => {
     if (activeTab === 'addresses') {
@@ -106,6 +109,33 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
       }
     } finally {
       setSubmittingAddress(false);
+    }
+  };
+
+  const handleDeleteAddress = async (address: Address) => {
+    if (isDeletingAddressRef.current || deletingAddressId || submittingAddress) return;
+    const shortAddress = `${address.street_address}, ${address.ward}, ${address.district}, ${address.province}`;
+    if (!window.confirm(`Xóa địa chỉ của ${address.full_name}: ${shortAddress}?`)) return;
+
+    isDeletingAddressRef.current = true;
+    setDeletingAddressId(address.id);
+    setAddressError(null);
+    try {
+      await api.deleteAddress(address.id);
+      await fetchAddresses();
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 404) {
+        setAddressError('Địa chỉ không còn tồn tại hoặc không thuộc tài khoản của bạn. Danh sách vẫn được giữ nguyên.');
+      } else if (err instanceof ApiError && err.status === 409) {
+        setAddressError('Không thể xóa địa chỉ lúc này. Vui lòng thử lại sau.');
+      } else if (err instanceof ApiError) {
+        setAddressError(err.message);
+      } else {
+        setAddressError('Lỗi kết nối khi xóa địa chỉ. Danh sách vẫn được giữ nguyên.');
+      }
+    } finally {
+      isDeletingAddressRef.current = false;
+      setDeletingAddressId(null);
     }
   };
 
@@ -427,6 +457,16 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
                           📍 {addr.street_address}, {addr.ward}, {addr.district}, {addr.province}
                         </div>
                       </div>
+                      {canDeleteAddress && (
+                        <button
+                          type="button"
+                          className="c2-btn c2-btn-outline c2-btn-sm"
+                          onClick={() => handleDeleteAddress(addr)}
+                          disabled={Boolean(deletingAddressId) || submittingAddress}
+                        >
+                          {deletingAddressId === addr.id ? 'Đang xóa…' : 'Xóa'}
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>

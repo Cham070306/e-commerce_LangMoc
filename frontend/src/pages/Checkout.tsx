@@ -9,6 +9,8 @@ import { getIdempotencyKey, clearIdempotencyKey } from '../features/checkout/ide
 import { sanitizePhoneInput, validateVietnamPhone } from '../lib/addressValidation';
 import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar';
 import { isMockMode } from '../config/site';
+import { canDeleteAddress } from '../config/site';
+import { getAddressSelectionAfterDelete } from '../lib/addressContracts';
 import {
   MapPin,
   CreditCard,
@@ -50,9 +52,11 @@ export default function CheckoutPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [priceChangeWarning, setPriceChangeWarning] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingAddressId, setDeletingAddressId] = useState<string | null>(null);
 
   // Cờ chống bấm đúp
   const isSubmittingRef = useRef(false);
+  const isDeletingAddressRef = useRef(false);
 
   // F04: Kiểm tra giỏ hàng rỗng an toàn, chờ auth và cart hoàn tất tải/gộp dữ liệu
   useEffect(() => {
@@ -62,14 +66,17 @@ export default function CheckoutPage() {
   }, [items, authLoading, cartLoading, loadingAddresses]);
 
   // Tải sổ địa chỉ
-  const loadAddresses = async () => {
+  const loadAddresses = async (deletedAddressId?: string) => {
     try {
       const res = await api.addresses();
       const list = res.data || [];
       setAddresses(list);
       if (list.length > 0) {
         const defaultOne = list.find(a => a.is_default);
-        setSelectedAddressId(prev => (prev && list.some(a => a.id === prev) ? prev : defaultOne?.id || list[0].id));
+        setSelectedAddressId(prev => {
+          if (deletedAddressId) return getAddressSelectionAfterDelete(list, deletedAddressId, prev);
+          return prev && list.some(address => address.id === prev) ? prev : defaultOne?.id || list[0].id;
+        });
       } else {
         setSelectedAddressId('');
         setShowAddAddress(true);
@@ -164,6 +171,33 @@ export default function CheckoutPage() {
       }
     } finally {
       setAddrSubmitting(false);
+    }
+  };
+
+  const handleDeleteAddress = async (address: Address) => {
+    if (isDeletingAddressRef.current || deletingAddressId || submitting || isSubmittingRef.current) return;
+    const shortAddress = `${address.street_address}, ${address.ward}, ${address.district}, ${address.province}`;
+    if (!window.confirm(`Xóa địa chỉ của ${address.full_name}: ${shortAddress}?`)) return;
+
+    isDeletingAddressRef.current = true;
+    setDeletingAddressId(address.id);
+    setErrorMessage(null);
+    try {
+      await api.deleteAddress(address.id);
+      await loadAddresses(address.id);
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 404) {
+        setErrorMessage('Địa chỉ không còn tồn tại hoặc không thuộc tài khoản của bạn. Danh sách vẫn được giữ nguyên.');
+      } else if (err instanceof ApiError && err.status === 409) {
+        setErrorMessage('Không thể xóa địa chỉ lúc này. Vui lòng thử lại sau.');
+      } else if (err instanceof ApiError) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage('Lỗi kết nối khi xóa địa chỉ. Danh sách vẫn được giữ nguyên.');
+      }
+    } finally {
+      isDeletingAddressRef.current = false;
+      setDeletingAddressId(null);
     }
   };
 
@@ -498,6 +532,20 @@ export default function CheckoutPage() {
                             {addr.street_address}, {addr.ward}, {addr.district}, {addr.province}
                           </div>
                         </div>
+                        {canDeleteAddress && (
+                          <button
+                            type="button"
+                            className="c2-btn c2-btn-outline c2-btn-sm"
+                            onClick={event => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              handleDeleteAddress(addr);
+                            }}
+                            disabled={Boolean(deletingAddressId) || submitting}
+                          >
+                            {deletingAddressId === addr.id ? 'Đang xóa…' : 'Xóa'}
+                          </button>
+                        )}
                       </label>
                     );
                   })}
@@ -664,7 +712,7 @@ export default function CheckoutPage() {
                 className="c2-btn c2-btn-primary"
                 style={{ width: '100%', marginTop: '20px', padding: '14px', fontSize: '14px', fontWeight: 600 }}
                 onClick={handlePlaceOrder}
-                disabled={submitting || items.length === 0 || !selectedAddressId}
+                disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || !selectedAddressId}
               >
                 {submitting ? (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>

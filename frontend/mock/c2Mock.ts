@@ -13,7 +13,7 @@ interface DemoUser {
   phone?: string | null;
 }
 
-interface DemoAddress {
+export interface DemoAddress {
   id: string;
   user_id: string;
   full_name: string;
@@ -75,7 +75,7 @@ const demoUsers: DemoUser[] = [
   }
 ];
 
-const demoAddresses: DemoAddress[] = [
+export const demoAddresses: DemoAddress[] = [
   {
     id: 'addr-demo-01',
     user_id: 'user-customer-linh',
@@ -284,6 +284,26 @@ export function generateOrderNumber(): string {
   const d = String(now.getDate()).padStart(2, '0');
   const num = String(orderCounter++).padStart(4, '0');
   return `LM-${y}${m}${d}-${num}`;
+}
+
+export interface MockResult<T> {
+  statusCode: number;
+  data?: { data: T };
+  error?: { error: { code: string; message: string } };
+}
+
+export function deleteAddressForUser(userId: string, addressId: string): MockResult<void> {
+  const addressIndex = demoAddresses.findIndex(address => address.id === addressId);
+  const address = addressIndex >= 0 ? demoAddresses[addressIndex] : null;
+  if (!address || address.user_id !== userId) {
+    return {
+      statusCode: 404,
+      error: { error: { code: 'NOT_FOUND', message: 'Không tìm thấy địa chỉ của bạn.' } }
+    };
+  }
+
+  demoAddresses.splice(addressIndex, 1);
+  return { statusCode: 204 };
 }
 
 export interface CancelOrderResult {
@@ -1372,6 +1392,25 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
   }
 
   // --- ADDRESSES ENDPOINTS (chỉ GET và POST theo docs/API.md) ---
+  const deleteAddressMatch = path.match(/^\/me\/addresses\/([^/]+)$/);
+  if (deleteAddressMatch && method === 'DELETE') {
+    const userId = getSessionUserId(req);
+    if (!userId || !demoUsers.some(user => user.id === userId)) {
+      send(401, { error: { code: 'UNAUTHENTICATED', message: 'Vui lòng đăng nhập' } });
+      return true;
+    }
+
+    const result = deleteAddressForUser(userId, decodeURIComponent(deleteAddressMatch[1]));
+    if (result.statusCode === 204) {
+      res.statusCode = 204;
+      res.setHeader('X-Lang-Moc-Data', 'mock');
+      res.end();
+      return true;
+    }
+    send(result.statusCode, result.error);
+    return true;
+  }
+
   if (path === '/me/addresses' && method === 'GET') {
     const userId = getSessionUserId(req);
     if (!userId || !demoUsers.some(u => u.id === userId)) {

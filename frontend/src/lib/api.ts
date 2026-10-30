@@ -16,6 +16,7 @@ import type {
   AdminContactMessage,
   AdminContactWrite
 } from './adminContracts';
+import { ADDRESS_DELETE_CONTRACT } from './addressContracts';
 const env=(import.meta as ImportMeta&{env:Record<string,string>}).env;
 export const isMock=env.VITE_API_MODE!=='live';
 
@@ -77,6 +78,7 @@ export const api={
   // Addresses (chỉ GET và POST theo docs/API.md)
   addresses:(s?:AbortSignal)=>request<{data:Address[]}>('GET','/me/addresses',undefined,s),
   createAddress:(b:AddressPayload)=>request<{data:Address}>('POST','/me/addresses',b),
+  deleteAddress:(id:string)=>request<void>(ADDRESS_DELETE_CONTRACT.method,ADDRESS_DELETE_CONTRACT.path(id)),
 
   // Cart & Preview (docs/API.md lines 47-50)
   cart:(s?:AbortSignal)=>request<{data:CartData}>('GET','/me/cart',undefined,s),

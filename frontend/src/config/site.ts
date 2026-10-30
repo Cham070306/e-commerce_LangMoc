@@ -34,3 +34,6 @@ export const siteContact: SiteContactInfo = {
 };
 
 export const isMockMode = env.VITE_API_MODE !== 'live';
+
+// ĐỀ XUẤT CHỜ KHẢI: DELETE /me/addresses/:id chưa có trong docs/API.md.
+export const canDeleteAddress = isMockMode || env.VITE_FEATURE_ADDRESS_DELETE === 'true';
