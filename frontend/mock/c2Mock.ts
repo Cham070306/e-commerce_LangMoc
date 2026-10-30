@@ -2,6 +2,7 @@
 // Chỉ hoạt động khi VITE_API_MODE !== 'live' trong môi trường Vite dev/preview.
 import catalog from './catalog.json' with { type: 'json' };
 import { isOrderStatus, isValidTransition } from '../src/lib/orderStatus.ts';
+import { validateVietnamPhone } from '../src/lib/addressValidation.ts';
 
 interface DemoUser {
   id: string;
@@ -1395,22 +1396,8 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
     const body = await parseBody(req);
     const { full_name, phone, province, district, ward, street_address, is_default } = body || {};
 
-    const rawPhone = String(phone || '').trim();
-    let phoneError: string | null = null;
-    if (!rawPhone) {
-      phoneError = 'Vui lòng nhập số điện thoại';
-    } else if (rawPhone.length > 20) {
-      phoneError = 'Số điện thoại không được vượt quá 20 ký tự';
-    } else if (!/^[0-9+\s\-().]+$/.test(rawPhone)) {
-      phoneError = 'Số điện thoại chỉ được chứa chữ số và các ký tự (+, -, ., ())';
-    } else if (rawPhone.indexOf('+') > 0 || (rawPhone.match(/\+/g) || []).length > 1) {
-      phoneError = 'Dấu + chỉ được đặt ở đầu số điện thoại';
-    } else {
-      const digits = rawPhone.replace(/\D/g, '');
-      if (digits.length < 8 || digits.length > 15) {
-        phoneError = 'Số điện thoại phải có từ 8 đến 15 chữ số';
-      }
-    }
+    const phoneCheck = validateVietnamPhone(typeof phone === 'string' ? phone : '');
+    const phoneError = phoneCheck.valid ? null : phoneCheck.error || null;
 
     if (!full_name || !province || !district || !ward || !street_address || phoneError) {
       send(400, {

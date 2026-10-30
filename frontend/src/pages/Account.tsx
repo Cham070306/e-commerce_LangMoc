@@ -4,7 +4,7 @@ import { api, ApiError } from '../lib/api';
 import type { Address } from '../lib/types';
 import { Loading } from '../components/common/States';
 import { isMockMode } from '../config/site';
-import { validatePhone } from '../lib/validation';
+import { sanitizePhoneInput, validateVietnamPhone } from '../lib/addressValidation';
 
 interface AccountPageProps {
   initialTab?: 'info' | 'addresses';
@@ -58,7 +58,7 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
   const validateAddressForm = (): boolean => {
     const errs: Record<string, string> = {};
     if (!fullName.trim()) errs.fullName = 'Vui lòng nhập họ tên người nhận.';
-    const phoneCheck = validatePhone(phone);
+    const phoneCheck = validateVietnamPhone(phone);
     if (!phoneCheck.valid) {
       errs.phone = phoneCheck.error || 'Số điện thoại không hợp lệ.';
     }
@@ -276,9 +276,21 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
                         <input
                           id="addr-phone"
                           type="tel"
+                          inputMode="numeric"
+                          maxLength={10}
                           className={`c2-input ${formErrors.phone ? 'c2-input-error' : ''}`}
                           value={phone}
-                          onChange={e => setPhone(e.target.value)}
+                          onChange={e => {
+                            const nextPhone = sanitizePhoneInput(e.target.value);
+                            const phoneCheck = validateVietnamPhone(nextPhone);
+                            setPhone(nextPhone);
+                            setFormErrors(current => {
+                              const next = { ...current };
+                              if (phoneCheck.valid) delete next.phone;
+                              else next.phone = phoneCheck.error || '';
+                              return next;
+                            });
+                          }}
                           placeholder="0901234567"
                         />
                         {formErrors.phone && <span className="c2-error-text">{formErrors.phone}</span>}

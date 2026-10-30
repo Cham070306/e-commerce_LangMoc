@@ -6,7 +6,7 @@ import type { Address, AddressPayload, CheckoutPreview, Order } from '../lib/typ
 import { formatMoney, ProductImage } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { getIdempotencyKey, clearIdempotencyKey } from '../features/checkout/idempotency';
-import { validatePhone } from '../lib/validation';
+import { sanitizePhoneInput, validateVietnamPhone } from '../lib/addressValidation';
 import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar';
 import { isMockMode } from '../config/site';
 import {
@@ -125,7 +125,7 @@ export default function CheckoutPage() {
     e.preventDefault();
     const errs: Record<string, string> = {};
     if (!newAddr.full_name.trim()) errs.full_name = 'Vui lòng nhập tên người nhận';
-    const phoneCheck = validatePhone(newAddr.phone);
+    const phoneCheck = validateVietnamPhone(newAddr.phone);
     if (!phoneCheck.valid) {
       errs.phone = phoneCheck.error || 'Số điện thoại không hợp lệ';
     }
@@ -376,11 +376,25 @@ export default function CheckoutPage() {
                       {addrErrors.full_name && <small className="field-error">{addrErrors.full_name}</small>}
                     </div>
                     <div>
-                      <label className="c2-form-label">Số điện thoại *</label>
+                      <label className="c2-form-label" htmlFor="checkout-address-phone">Số điện thoại *</label>
                       <input
+                        id="checkout-address-phone"
+                        type="tel"
+                        inputMode="numeric"
+                        maxLength={10}
                         className="c2-form-input"
                         value={newAddr.phone}
-                        onChange={e => setNewAddr({ ...newAddr, phone: e.target.value })}
+                        onChange={e => {
+                          const phone = sanitizePhoneInput(e.target.value);
+                          const phoneCheck = validateVietnamPhone(phone);
+                          setNewAddr({ ...newAddr, phone });
+                          setAddrErrors(current => {
+                            const next = { ...current };
+                            if (phoneCheck.valid) delete next.phone;
+                            else next.phone = phoneCheck.error || '';
+                            return next;
+                          });
+                        }}
                         placeholder="VD: 0901234567"
                       />
                       {addrErrors.phone && <small className="field-error">{addrErrors.phone}</small>}
