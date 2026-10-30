@@ -1,0 +1,54 @@
+Làng Mộc — kết quả test backend
+Sinh lúc: 2026-10-30T17:16:45.049Z
+Môi trường: Node v24.18.0, PostgreSQL 16 local
+Lệnh: npm test (tsx --test tests/*.test.ts)
+Exit code: 0
+==============================================================================
+
+▶ Auth: register/login/logout/me
+  ✔ trả 401 khi /auth/me không có phiên (42.5886ms)
+  ✔ đăng ký tài khoản mới trả 201 và role customer (1818.9726ms)
+  ✔ đăng ký trùng email trả 409 (1498.8692ms)
+  ✔ đăng ký với email sai trả 400 và có fields (14.4388ms)
+  ✔ đăng nhập đúng trả 200 và đặt cookie HttpOnly (1756.5099ms)
+  ✔ đăng nhập sai mật khẩu trả 401 (1539.9866ms)
+  ✔ /auth/me trả hồ sơ khi có phiên và logout thu hồi phiên (1551.9862ms)
+✔ Auth: register/login/logout/me (11832.4669ms)
+▶ Phân quyền admin/customer
+  ✔ khách chưa đăng nhập bị 401 khi vào admin (17.9838ms)
+  ✔ customer bị 403 khi vào admin (1754.8625ms)
+  ✔ admin truy cập được danh sách admin (1552.449ms)
+  ✔ admin tạo/sửa danh mục và sản phẩm (1530.5103ms)
+  ✔ admin không đặt giá giảm lớn hơn giá gốc (1703.4364ms)
+✔ Phân quyền admin/customer (9819.8063ms)
+▶ Địa chỉ của người dùng
+  ✔ chưa đăng nhập không xem được địa chỉ (13.8931ms)
+  ✔ customer xem và tạo được địa chỉ của mình (1713.8939ms)
+✔ Địa chỉ của người dùng (4990.0119ms)
+▶ Catalog công khai
+  ✔ GET /categories trả 4 danh mục đang bật kèm product_count (86.9987ms)
+  ✔ GET /products phân trang mặc định 12/trang (57.1681ms)
+  ✔ chỉ trả sản phẩm active (31.7024ms)
+  ✔ lọc theo danh mục slug (22.1977ms)
+  ✔ tìm kiếm không dấu trả đúng kết quả (gom) (36.2046ms)
+  ✔ tìm kiếm không có kết quả trả mảng rỗng (25.4764ms)
+  ✔ sắp xếp price_asc tăng dần (23.289ms)
+  ✔ sắp xếp price_desc giảm dần (18.961ms)
+  ✔ lọc khoảng giá loại sản phẩm ngoài khoảng (19.2825ms)
+  ✔ từ chối sort không hợp lệ với 400 (14.3388ms)
+  ✔ từ chối khoảng giá ngược với 400 (14.3587ms)
+  ✔ limit vượt 100 bị từ chối (8.759ms)
+  ✔ GET chi tiết theo slug trả đủ ảnh và category_name (12.8374ms)
+  ✔ chi tiết không tồn tại trả 404 (13.0092ms)
+  ✔ GET reviews trả summary và mảng data đúng shape (34.2515ms)
+  ✔ reviews của sản phẩm không tồn tại trả 404 (10.7555ms)
+  ✔ response envelope luôn có data (12.5006ms)
+✔ Catalog công khai (4051.9781ms)
+ℹ tests 31
+ℹ suites 4
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 28299.4935
