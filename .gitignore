@@ -12,3 +12,9 @@ coverage/
 *.dump
 frontend/public/uploads/
 backend/uploads/
+
+*.tsbuildinfo
+
+data/catalog/raw/
+data/catalog/crawl.log
+scripts/__pycache__/

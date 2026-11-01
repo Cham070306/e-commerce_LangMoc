@@ -72,14 +72,14 @@ Người 1 sau khi nối catalog hỗ trợ người 2 ở trang chính sách; n
 
 ## Cài PostgreSQL trên Windows và macOS
 
-Cài PostgreSQL theo bản dành cho hệ điều hành từ trang chính thức. Mỗi người dùng cùng **major version** đã chốt trong nhóm (schema yêu cầu từ PostgreSQL 16), tạo role và database local riêng. Thay `vietcraft_dev`/`vietcraft_user` bằng tên nhóm chốt, đặt mật khẩu **trên máy cá nhân**, rồi chạy:
+Cài PostgreSQL theo bản dành cho hệ điều hành từ trang chính thức. Mỗi người dùng cùng **major version** đã chốt trong nhóm (schema yêu cầu từ PostgreSQL 16), tạo role và database local riêng. Thay `langmoc_dev`/`langmoc_user` bằng tên nhóm chốt, đặt mật khẩu **trên máy cá nhân**, rồi chạy:
 
 ```sql
-CREATE ROLE vietcraft_user WITH LOGIN PASSWORD '<local-password>';
-CREATE DATABASE vietcraft_dev OWNER vietcraft_user;
+CREATE ROLE langmoc_user WITH LOGIN PASSWORD '<local-password>';
+CREATE DATABASE langmoc_dev OWNER langmoc_user;
 ```
 
-Trong terminal có `psql` trên PATH, chạy `psql -U vietcraft_user -d vietcraft_dev -f database/001_initial.sql` từ gốc repo. Trên Windows, có thể dùng SQL Shell (psql) hoặc đường dẫn tới `psql.exe`; trên macOS dùng `psql` của gói đã cài. Chạy tiếp seed khi nhóm tạo xong. Backend dùng `DATABASE_URL` trong `.env`, ví dụ mẫu `postgresql://vietcraft_user:<local-password>@localhost:5432/vietcraft_dev`; không commit mật khẩu thật. Docker có thể là cách chạy thay thế, không bắt buộc mọi thành viên dùng Docker.
+Trong terminal có `psql` trên PATH, chạy `psql -U langmoc_user -d langmoc_dev -f database/001_initial.sql` từ gốc repo. Trên Windows, có thể dùng SQL Shell (psql) hoặc đường dẫn tới `psql.exe`; trên macOS dùng `psql` của gói đã cài. Chạy tiếp seed khi nhóm tạo xong. Backend dùng `DATABASE_URL` trong `.env`, ví dụ mẫu `postgresql://langmoc_user:<local-password>@localhost:5432/langmoc_dev`; không commit mật khẩu thật. Docker có thể là cách chạy thay thế, không bắt buộc mọi thành viên dùng Docker.
 
 ## Việc cần xác nhận khi có frontend thật
 

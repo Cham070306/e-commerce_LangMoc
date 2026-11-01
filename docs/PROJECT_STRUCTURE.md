@@ -3,7 +3,7 @@
 Cây dưới đây đã được tạo trong repo. File `.gitkeep` giữ thư mục trống hiển thị trên GitHub; xóa file đó khi thư mục có code. Chưa chốt framework frontend/backend vì giao diện responsive hiện có chưa nằm trong repo.
 
 ```text
-e-commerce_vietcraft/
+e-commerce_langmoc/
 ├── frontend/                    # người 1 và 2; nhập giao diện responsive hiện có
 │   ├── public/                  # ảnh/logo/file tĩnh công khai
 │   └── src/

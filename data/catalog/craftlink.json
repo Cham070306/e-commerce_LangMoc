@@ -1,0 +1,640 @@
+{
+  "data": [
+    {
+      "id": "614cdc3d-ee24-5a4b-999e-58d3a9d78bfd",
+      "slug": "tui-hmb42",
+      "name": "Túi - HMB42",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "8784",
+      "price_vnd": 1350000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1350000,
+      "currency": "VND",
+      "description": "Luôn gắn kết với xu hướng thời trang bền vững - thân thiện với môi trường, CRAFT LINK xin giới thiệu với các bạn bộ sưu tập túi vải lanh dệt tay vẽ batik mới vô cùng ấn tượng! Chất mộc mạc tự nhiên của vải sợi lanh xe bằng tay kết hợp với nghệ thuật vẽ sáp ong và nhuộm chàm độc đáo của người Hmong đã làm nên những chiếc túi chứa đựng lòng đam mê với nghệ thuật thủ công truyền thống và sự tôn trọng, yêu thương môi trường sống quanh ta. Hãy ghé CRAFT LINK để rinh ngay cho mình những chiếc túi đáng yêu với nhiều thông điệp ý nghĩa này các bạn nhé?",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/2.jpg",
+          "alt": "Túi - HMB42",
+          "sort_order": 0
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/3.jpg",
+          "alt": "Túi - HMB42",
+          "sort_order": 1
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/8.jpg",
+          "alt": "Túi - HMB42",
+          "sort_order": 2
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/7.jpg",
+          "alt": "Túi - HMB42",
+          "sort_order": 3
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-hmb42/",
+      "collected_at": "2026-10-14T14:43:21.534781+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "3eb92b9f-42ac-57dc-8e39-d1bb022b147e",
+      "slug": "tui-hmb43",
+      "name": "Túi - HMB43",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "8780",
+      "price_vnd": 1350000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1350000,
+      "currency": "VND",
+      "description": "Túi vẽ Batik - Luôn gắn kết với xu hướng thời trang bền vững - thân thiện với môi trường, CRAFT LINK xin giới thiệu với các bạn bộ sưu tập túi vải lanh dệt tay vẽ batik mới vô cùng ấn tượng! - Chất mộc mạc tự nhiên của vải sợi lanh xe bằng tay kết hợp với nghệ thuật vẽ sáp ong và nhuộm chàm độc đáo của người Hmong đã làm nên những chiếc túi chứa đựng lòng đam mê với nghệ thuật thủ công truyền thống và sự tôn trọng, yêu thương môi trường sống quanh ta. Hãy ghé CRAFT LINK để rinh ngay cho mình những chiếc túi đáng yêu với nhiều thông điệp ý nghĩa này các bạn nhé?",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/9.jpg",
+          "alt": "Túi - HMB43",
+          "sort_order": 0
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/10.jpg",
+          "alt": "Túi - HMB43",
+          "sort_order": 1
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/6.jpg",
+          "alt": "Túi - HMB43",
+          "sort_order": 2
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/5.jpg",
+          "alt": "Túi - HMB43",
+          "sort_order": 3
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-hmb43/",
+      "collected_at": "2026-10-14T14:43:23.914638+00:00",
+      "source_availability": "http://schema.org/OutOfStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "f508e8f6-79aa-559f-ab49-2bc6de35bff3",
+      "slug": "tui-dung-binh-nuoc-cub07",
+      "name": "Túi bình nước - CUB07",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "8047",
+      "price_vnd": 327000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 327000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW07-2.jpg",
+          "alt": "Túi bình nước - CUB07",
+          "sort_order": 0
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW07-4.jpg",
+          "alt": "Túi bình nước - CUB07",
+          "sort_order": 1
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW07-3.jpg",
+          "alt": "Túi bình nước - CUB07",
+          "sort_order": 2
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW07-1.jpg",
+          "alt": "Túi bình nước - CUB07",
+          "sort_order": 3
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW07.jpg",
+          "alt": "Túi bình nước - CUB07",
+          "sort_order": 4
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-dung-binh-nuoc-cub07/",
+      "collected_at": "2026-10-14T14:43:26.159972+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "8a83c41e-b9f6-5b42-8890-41a5a8d0bf60",
+      "slug": "tui-deo-cheo-hmb45",
+      "name": "Túi đeo chéo - HMB45",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "8776",
+      "price_vnd": 699000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 699000,
+      "currency": "VND",
+      "description": "? ??́? ??̃ ????? ☘️ Luôn gắn kết với xu hướng thời trang bền vững - thân thiện với môi trường, CRAFT LINK xin giới thiệu với các bạn bộ sưu tập túi vải lanh dệt tay vẽ batik mới vô cùng ấn tượng! ☘️ Chất mộc mạc tự nhiên của vải sợi lanh xe bằng tay kết hợp với nghệ thuật vẽ sáp ong và nhuộm chàm độc đáo của người Hmong đã làm nên những chiếc túi chứa đựng lòng đam mê với nghệ thuật thủ công truyền thống và sự tôn trọng, yêu thương môi trường sống quanh ta. ?‍♀️ Hãy ghé CRAFT LINK để rinh ngay cho mình những chiếc túi đáng yêu với nhiều thông điệp ý nghĩa này các bạn nhé?",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2024/03/1.jpg",
+          "alt": "Túi đeo chéo - HMB45",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-deo-cheo-hmb45/",
+      "collected_at": "2026-10-14T14:43:28.438365+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "ab64198e-0833-5697-acfc-ccdbabbb6e40",
+      "slug": "vi-cuw25a",
+      "name": "Ví - CUW25A",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "8024",
+      "price_vnd": 269000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 269000,
+      "currency": "VND",
+      "description": "Ví nhỏ đa năng được thiết kế từ vải lanh dệt và nhuộm màu thủ công của người Hmông ở Xã Lùng Tám, Huyện Quản Bạ, Tỉnh Hà Giang. Ví được trang trí nổi bật với mảnh thêu bông hoa xinh xắn của người Hmông ở Thôn Tà Là Cáo, Xã Sính Phình, Huyện Tủa Chùa, Tỉnh Điện Biên.",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW25A-1.jpg",
+          "alt": "Ví - CUW25A",
+          "sort_order": 0
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW25A.jpg",
+          "alt": "Ví - CUW25A",
+          "sort_order": 1
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/vi-cuw25a/",
+      "collected_at": "2026-10-14T14:43:30.867675+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "faee4961-9f94-5491-8acc-285bf0045731",
+      "slug": "vi-cuw25b",
+      "name": "Ví - CUW25B",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "8028",
+      "price_vnd": 286000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 286000,
+      "currency": "VND",
+      "description": "Ví nhỏ đa năng được thiết kế từ vải lanh dệt và nhuộm màu thủ công của người Hmông ở Xã Lùng Tám, Huyện Quản Bạ, Tỉnh Hà Giang. Ví được trang trí nổi bật với mảnh thêu bông hoa xinh xắn của người Hmông ở Thôn Tà Là Cáo, Xã Sính Phình, Huyện Tủa Chùa, Tỉnh Điện Biên.",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW25B.jpg",
+          "alt": "Ví - CUW25B",
+          "sort_order": 0
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW25B-1.jpg",
+          "alt": "Ví - CUW25B",
+          "sort_order": 1
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/vi-cuw25b/",
+      "collected_at": "2026-10-14T14:43:33.045725+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "cfea0866-daa8-556a-805f-c65bcf0f81a3",
+      "slug": "vi-cuw26",
+      "name": "Ví - CUW26A",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "8032",
+      "price_vnd": 299000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 299000,
+      "currency": "VND",
+      "description": "Ví nhỏ đa năng được thiết kế từ vải lanh dệt và nhuộm màu thủ công của người Hmông ở Xã Lùng Tám, Huyện Quản Bạ, Tỉnh Hà Giang. Ví được trang trí nổi bật với mảnh thêu bông hoa xinh xắn của người Hmông ở Thôn Tà Là Cáo, Xã Sính Phình, Huyện Tủa Chùa, Tỉnh Điện Biên.",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW26A-1.jpg",
+          "alt": "Ví - CUW26A",
+          "sort_order": 0
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW26A-2.jpg",
+          "alt": "Ví - CUW26A",
+          "sort_order": 1
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW26A.jpg",
+          "alt": "Ví - CUW26A",
+          "sort_order": 2
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/vi-cuw26/",
+      "collected_at": "2026-10-14T14:43:35.232846+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "2fbb60a4-99b0-5aba-922d-bbd37f4155f5",
+      "slug": "vi-cuw27",
+      "name": "Ví - CUW27",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "8037",
+      "price_vnd": 439000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 439000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW27-3.jpg",
+          "alt": "Ví - CUW27",
+          "sort_order": 0
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW27-2.jpg",
+          "alt": "Ví - CUW27",
+          "sort_order": 1
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW27-1.jpg",
+          "alt": "Ví - CUW27",
+          "sort_order": 2
+        },
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2023/06/CUW27.jpg",
+          "alt": "Ví - CUW27",
+          "sort_order": 3
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/vi-cuw27/",
+      "collected_at": "2026-10-14T14:43:37.422053+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "e5c0e4f1-7d26-545a-b13b-f6d692105b4e",
+      "slug": "tui-deo-cheo-14",
+      "name": "Túi đeo chéo -CLBTB12",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "CLBTB12",
+      "price_vnd": 290000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 290000,
+      "currency": "VND",
+      "description": "Mã Sản Phẩm: CLBTB12 Chất Liệu: Cotton Kích thước: 28cm x 23cm x 9.5cm Nhóm sản xuất: Thái đen Yên Châu, Sơn La",
+      "attributes": {
+        "material": "Cotton",
+        "dimensions": "28cm x 23cm x 9.5cm"
+      },
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2021/10/CLBTB12-28x23x9.5cm.jpg",
+          "alt": "Túi đeo chéo -CLBTB12",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-deo-cheo-14/",
+      "collected_at": "2026-10-14T14:43:39.666617+00:00",
+      "source_availability": "http://schema.org/OutOfStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "7e9cc7c5-7e69-5308-9872-ed0b4861d70d",
+      "slug": "tui-deo-cheo-13",
+      "name": "Túi đeo chéo - CLBTB11",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "CLBTB11",
+      "price_vnd": 207000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 207000,
+      "currency": "VND",
+      "description": "Mã Sản Phẩm: CLBTB11 Chất Liệu: Cotton Kích thước: 18.5x 22.5 Nhóm sản xuất: Thái đen Yên Châu, Sơn La",
+      "attributes": {
+        "material": "Cotton",
+        "dimensions": "18.5x 22.5"
+      },
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2021/10/CLBTB11-18.5x22.5cm.jpg",
+          "alt": "Túi đeo chéo - CLBTB11",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-deo-cheo-13/",
+      "collected_at": "2026-10-14T14:43:41.834465+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "0b0be8a1-6667-5b1b-8c96-538898c80e35",
+      "slug": "tui-to-2",
+      "name": "Túi to - CLBTB04",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "CLBTB04",
+      "price_vnd": 589000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 589000,
+      "currency": "VND",
+      "description": "Mã Sản Phẩm: CLBTB04 Chất Liệu: Cotton Kích thước: 38cm x 35.5cm Nhóm sản xuất: Trường dạy nghề nhân đạo",
+      "attributes": {
+        "material": "Cotton",
+        "dimensions": "38cm x 35.5cm"
+      },
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2021/10/CLBTB04-38x35.5cm.jpg",
+          "alt": "Túi to - CLBTB04",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-to-2/",
+      "collected_at": "2026-10-14T14:43:44.061768+00:00",
+      "source_availability": "http://schema.org/OutOfStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "d549939a-e6e2-5b6b-940e-e6c8094a774b",
+      "slug": "tui-deo-to-4",
+      "name": "Túi đeo to - CLPCT21",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "CLPCT21",
+      "price_vnd": 659000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 659000,
+      "currency": "VND",
+      "description": "Mã Sản Phẩm: CLPCT21 Chất Liệu: Cotton Kích thước: 40x32x12cm Nhóm sản xuất: Trường dạy nghề nhân đạo",
+      "attributes": {
+        "material": "Cotton",
+        "dimensions": "40x32x12cm"
+      },
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2021/10/CLPCT21-40x32x12cm-14.30.jpg",
+          "alt": "Túi đeo to - CLPCT21",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-deo-to-4/",
+      "collected_at": "2026-10-14T14:43:46.295910+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "b18ff42e-e8a6-5d02-b8fc-77eb81aa958a",
+      "slug": "tui-deo-vai",
+      "name": "Túi đeo vai - CLPCT20",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "CLPCT20",
+      "price_vnd": 739000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 739000,
+      "currency": "VND",
+      "description": "Mã Sản Phẩm: CLPCT20 Chất Liệu: Cotton Kích thước: 46x26x14cm Nhóm sản xuất: Trường dạy nghề nhân đạo",
+      "attributes": {
+        "material": "Cotton",
+        "dimensions": "46x26x14cm"
+      },
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2021/10/CLPCT20-49x26x14cm-16.90.jpg",
+          "alt": "Túi đeo vai - CLPCT20",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-deo-vai/",
+      "collected_at": "2026-10-14T14:43:48.646605+00:00",
+      "source_availability": "http://schema.org/OutOfStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "fa367e85-69de-538b-a493-e36fb7c5a21f",
+      "slug": "tui-deo-to-3",
+      "name": "Túi đeo to - CLPCT22",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "CLPCT22",
+      "price_vnd": 659000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 659000,
+      "currency": "VND",
+      "description": "Mã Sản Phẩm: CLPCT22 Chất Liệu: Cotton Kích thước: 40 x 31 x 11cm Nhóm sản xuất: Trường dạy nghề nhân đạo",
+      "attributes": {
+        "material": "Cotton",
+        "dimensions": "40 x 31 x 11cm"
+      },
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2021/10/CLPCT22-40x31x11cm-13.78.jpg",
+          "alt": "Túi đeo to - CLPCT22",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-deo-to-3/",
+      "collected_at": "2026-10-14T14:43:50.962218+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "e25c7159-fbc3-536e-91c9-33578906896e",
+      "slug": "tui-deo-to-2",
+      "name": "Túi đeo to - CLPCT24",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "CLPCT24",
+      "price_vnd": 495000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 495000,
+      "currency": "VND",
+      "description": "Mã Sản Phẩm: CLPCT24 Chất Liệu: Cotton Kích thước: 50cm x 43cm Nhóm sản xuất: CRAFT LINK",
+      "attributes": {
+        "material": "Cotton",
+        "dimensions": "50cm x 43cm"
+      },
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2021/10/CLPCT24-50X43cm-18.59.jpg",
+          "alt": "Túi đeo to - CLPCT24",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-deo-to-2/",
+      "collected_at": "2026-10-14T14:43:53.278310+00:00",
+      "source_availability": "http://schema.org/OutOfStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    },
+    {
+      "id": "04cb5d52-7327-556e-b42c-5efe1be0dfb8",
+      "slug": "tui-to-vai-lanh",
+      "name": "Túi vải lanh - CLSDB11",
+      "category": "Thổ cẩm",
+      "category_id": "a60b5ba2-bbc7-5476-940d-fb02cee1ddb8",
+      "sku": "CLSDB11",
+      "price_vnd": 749000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 749000,
+      "currency": "VND",
+      "description": "Mã Sản Phẩm: CLSDB11 Chất Liệu: Lanh Kích thước: Nhóm sản xuất: Trường dạy nghề nhân đạo",
+      "attributes": {
+        "material": "Lanh",
+        "dimensions": "Nhóm sản xuất:"
+      },
+      "images": [
+        {
+          "url": "https://craftlink.com.vn/wp-content/uploads/2021/10/CLSDB114.jpg",
+          "alt": "Túi vải lanh - CLSDB11",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "craftlink",
+      "source_url": "https://craftlink.com.vn/vi/product/tui-to-vai-lanh/",
+      "collected_at": "2026-10-14T14:43:55.430763+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_display_name": "Craft Link"
+    }
+  ],
+  "report": {
+    "source": "craftlink",
+    "start_url": "https://craftlink.com.vn/vi/danh-muc-san-pham/phu-kien-thoi-trang/tui-tho-cam/",
+    "listing_pages": 1,
+    "discovered_products": 16,
+    "saved_products": 16,
+    "remaining_listing_pages": 0,
+    "limits": {
+      "listing_pages": 30,
+      "products": 200
+    },
+    "errors": []
+  }
+}

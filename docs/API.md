@@ -60,7 +60,7 @@ POST /api/v1/orders
 Idempotency-Key: 26a1c8fd-6b48-4b27-934c-46a09858fd19
 Content-Type: application/json
 
-{"address_id":"5af4b0b9-1374-4256-9abc-637019c5cfe5","promotion_code":"VIETCRAFT10","payment_method":"cod"}
+{"address_id":"5af4b0b9-1374-4256-9abc-637019c5cfe5","promotion_code":"LANGMOC10","payment_method":"cod"}
 ```
 
 ```json
@@ -109,3 +109,14 @@ Chỉ cho review từ khách đã có đơn `delivered` chứa sản phẩm là 
 - API phải có các ca kiểm thử: tìm không có kết quả, sắp xếp, tồn kho cạnh tranh, mã giảm hết hạn/hết lượt, lặp request tạo đơn, người dùng xem đơn của người khác, khách truy cập admin, callback thanh toán lặp và bình luận chứa HTML/script.
 
 Nguồn yêu cầu: `TMDT_CASE STUDY.pdf`; định hướng kinh doanh: `Nhóm 1 - Kế Hoạch Kinh Doanh.pdf`. API này là **bản thiết kế**, chưa phải mô tả code đã chạy.
+
+## Storefront C1 — shape triển khai để ghép frontend
+
+GET mock sử dụng base `/api/v1`, có trên Vite dev/preview; không thay backend C3/C4. Mock tắt bằng `VITE_API_MODE=live`.
+
+- Category: `id, name, slug, product_count`.
+- Product: `id, slug, name, category_id, category_name, sku, price_vnd, sale_price_vnd, current_price_vnd, images:[{url,alt,sort_order}], description, attributes, origin, source_name, source_url, collected_at, is_demo`. Giá có thể null trong dữ liệu crawl thiếu giá; không biến null thành 0. Slug duy nhất, có hậu tố UUID ngắn.
+- Review: `id, rating, author_name, body, created_at, status, is_demo`. GET review trả `{data,meta,summary:{average_rating,review_count},is_demo?}`; trung bình null nếu chưa có review. Backend chỉ trả review visible.
+- Tham số product và sort giữ như bảng trên. Giá chưa rõ bị loại khi có điều kiện khoảng giá, xếp cuối khi sort theo giá. Mặc định page=1, limit=12, giới hạn 100.
+
+Dữ liệu mock review có nhãn rõ và không được dùng làm review khách thật. Các trường bổ sung nguồn giúp kiểm duyệt dữ liệu; backend có thể map seller/làng nghề thật vào shape này sau khi nhóm xác nhận. Không gán tồn kho hay trạng thái mua được nếu chưa có backend.

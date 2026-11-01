@@ -1,0 +1,322 @@
+{
+  "data": [
+    {
+      "id": "3056a98f-0532-5010-be5b-bc37634297d4",
+      "slug": "ncbpr30",
+      "name": "NCBPR30",
+      "category": "Nón lá",
+      "category_id": "da1b1f23-c241-55eb-9414-74e337df6fe5",
+      "sku": "20548",
+      "price_vnd": 1155000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1155000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/86-scaled.jpg",
+          "alt": "NCBPR30",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "maries",
+      "source_url": "https://madebymaries.com/san-pham/ncbpr30/",
+      "collected_at": "2026-10-14T14:43:18.266648+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [
+        "https://madebymaries.com/wp-content/uploads/2025/05/BST-Cung-dinh-Hue.jpg"
+      ],
+      "source_display_name": "Maries"
+    },
+    {
+      "id": "862a752c-cae5-5733-b664-b03b73a72257",
+      "slug": "ncbpr34",
+      "name": "NCBPR34",
+      "category": "Nón lá",
+      "category_id": "da1b1f23-c241-55eb-9414-74e337df6fe5",
+      "sku": "20541",
+      "price_vnd": 1155000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1155000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/96-scaled.jpg",
+          "alt": "NCBPR34",
+          "sort_order": 0
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/201.jpg",
+          "alt": "NCBPR34",
+          "sort_order": 1
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/202.jpg",
+          "alt": "NCBPR34",
+          "sort_order": 2
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/203.jpg",
+          "alt": "NCBPR34",
+          "sort_order": 3
+        }
+      ],
+      "source_name": "maries",
+      "source_url": "https://madebymaries.com/san-pham/ncbpr34/",
+      "collected_at": "2026-10-14T14:43:19.473005+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [
+        "https://madebymaries.com/wp-content/uploads/2025/05/BST-Cung-dinh-Hue.jpg"
+      ],
+      "source_display_name": "Maries"
+    },
+    {
+      "id": "347357e3-a3ac-5683-921a-4f5de23d89af",
+      "slug": "ncbpr37",
+      "name": "NCBPR37",
+      "category": "Nón lá",
+      "category_id": "da1b1f23-c241-55eb-9414-74e337df6fe5",
+      "sku": "20544",
+      "price_vnd": 1155000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1155000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/85-scaled.jpg",
+          "alt": "NCBPR37",
+          "sort_order": 0
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/218.jpg",
+          "alt": "NCBPR37",
+          "sort_order": 1
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/217.jpg",
+          "alt": "NCBPR37",
+          "sort_order": 2
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/216.jpg",
+          "alt": "NCBPR37",
+          "sort_order": 3
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/215.jpg",
+          "alt": "NCBPR37",
+          "sort_order": 4
+        }
+      ],
+      "source_name": "maries",
+      "source_url": "https://madebymaries.com/san-pham/ncbpr37/",
+      "collected_at": "2026-10-14T14:43:20.689289+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [
+        "https://madebymaries.com/wp-content/uploads/2025/05/BST-Cung-dinh-Hue.jpg"
+      ],
+      "source_display_name": "Maries"
+    },
+    {
+      "id": "f6d6b712-324f-5d90-a1ec-daf7e8810f63",
+      "slug": "ncbpr38",
+      "name": "NCBPR38",
+      "category": "Nón lá",
+      "category_id": "da1b1f23-c241-55eb-9414-74e337df6fe5",
+      "sku": "20550",
+      "price_vnd": 1155000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1155000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/92-scaled.jpg",
+          "alt": "NCBPR38",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "maries",
+      "source_url": "https://madebymaries.com/san-pham/ncbpr38/",
+      "collected_at": "2026-10-14T14:43:21.874379+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [
+        "https://madebymaries.com/wp-content/uploads/2025/05/BST-Cung-dinh-Hue.jpg"
+      ],
+      "source_display_name": "Maries"
+    },
+    {
+      "id": "86398cce-fc8b-5f82-bcea-21bab3ef02d3",
+      "slug": "ncbpr39",
+      "name": "NCBPR39",
+      "category": "Nón lá",
+      "category_id": "da1b1f23-c241-55eb-9414-74e337df6fe5",
+      "sku": "20546",
+      "price_vnd": 1155000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1155000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2025/05/89-scaled.jpg",
+          "alt": "NCBPR39",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "maries",
+      "source_url": "https://madebymaries.com/san-pham/ncbpr39/",
+      "collected_at": "2026-10-14T14:43:23.072357+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [
+        "https://madebymaries.com/wp-content/uploads/2025/05/BST-Cung-dinh-Hue.jpg"
+      ],
+      "source_display_name": "Maries"
+    },
+    {
+      "id": "b3058909-d20a-5487-841c-1dd694d3edf6",
+      "slug": "ncbry05",
+      "name": "NCBRY05",
+      "category": "Nón lá",
+      "category_id": "da1b1f23-c241-55eb-9414-74e337df6fe5",
+      "sku": "19228",
+      "price_vnd": 1320000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1320000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2024/12/Ma-non-1-scaled.jpg",
+          "alt": "NCBRY05",
+          "sort_order": 0
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2024/12/65.jpg",
+          "alt": "NCBRY05",
+          "sort_order": 1
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2024/12/66.jpg",
+          "alt": "NCBRY05",
+          "sort_order": 2
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2024/12/67.jpg",
+          "alt": "NCBRY05",
+          "sort_order": 3
+        }
+      ],
+      "source_name": "maries",
+      "source_url": "https://madebymaries.com/san-pham/ncbry05/",
+      "collected_at": "2026-10-14T14:43:24.262197+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [
+        "https://madebymaries.com/wp-content/uploads/2024/11/38-1.jpg"
+      ],
+      "source_display_name": "Maries"
+    },
+    {
+      "id": "8f63f815-77cb-5fce-8dd5-5cd1f17d42ad",
+      "slug": "ncbry15",
+      "name": "NCBRY15",
+      "category": "Nón lá",
+      "category_id": "da1b1f23-c241-55eb-9414-74e337df6fe5",
+      "sku": "19227",
+      "price_vnd": 1320000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 1320000,
+      "currency": "VND",
+      "description": "",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2024/12/Ma-non-8-scaled.jpg",
+          "alt": "NCBRY15",
+          "sort_order": 0
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2024/11/62.jpg",
+          "alt": "NCBRY15",
+          "sort_order": 1
+        },
+        {
+          "url": "https://madebymaries.com/wp-content/uploads/2024/11/63.jpg",
+          "alt": "NCBRY15",
+          "sort_order": 2
+        }
+      ],
+      "source_name": "maries",
+      "source_url": "https://madebymaries.com/san-pham/ncbry15/",
+      "collected_at": "2026-10-14T14:43:25.493731+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "no_text_description",
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [
+        "https://madebymaries.com/wp-content/uploads/2024/11/38-1.jpg"
+      ],
+      "source_display_name": "Maries"
+    }
+  ],
+  "report": {
+    "source": "maries",
+    "start_url": "https://madebymaries.com/product-tag/non-la/",
+    "listing_pages": 1,
+    "discovered_products": 7,
+    "saved_products": 7,
+    "remaining_listing_pages": 0,
+    "limits": {
+      "listing_pages": 30,
+      "products": 200
+    },
+    "errors": []
+  }
+}

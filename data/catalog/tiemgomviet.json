@@ -1,0 +1,847 @@
+{
+  "data": [
+    {
+      "id": "8e556f6a-dd85-557f-a2be-9224ddaeb6ec",
+      "slug": "bat-an-com-ve-hoa-van-bat-trang",
+      "name": "Bát ăn cơm vẽ hoa văn Bát Tràng",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1352",
+      "price_vnd": 30000,
+      "sale_price_vnd": 20000,
+      "current_price_vnd": 20000,
+      "currency": "VND",
+      "description": "Bát cơm men kem, men xanh có vẽ hoạ tiết Kich thuoc 11cm",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/72328BFA-697A-44D8-BD67-515A92C635B0.jpeg",
+          "alt": "Bát ăn cơm vẽ hoa văn Bát Tràng",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/bat-an-com-ve-hoa-van-bat-trang/",
+      "collected_at": "2026-10-14T14:43:52.047272+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "30.000 đ 20.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "102d89e3-810d-5cb3-8c28-6b65267bbb1d",
+      "slug": "binh-hoa-dang-ca-sua-men-mau-pastel-hang-xuat",
+      "name": "Bình hoa dạng ca sữa men màu pastel hàng xuất",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1377",
+      "price_vnd": 300000,
+      "sale_price_vnd": 250000,
+      "current_price_vnd": 250000,
+      "currency": "VND",
+      "description": "Bình hoa, bình trang trí hàng xuất khẩu men màu pastel xám rất sang trọng, size 27cm hạng ca sữa.",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/7C3717B0-1426-4AED-BC3C-A1A2C2359B3B.jpeg",
+          "alt": "Bình hoa dạng ca sữa men màu pastel hàng xuất",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/binh-hoa-dang-ca-sua-men-mau-pastel-hang-xuat/",
+      "collected_at": "2026-10-14T14:44:07.027195+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "300.000 đ 250.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "cdfa1351-cc40-5c62-8724-7a3b2eae22b0",
+      "slug": "binh-hoa-men-tho-hang-xuat-duc",
+      "name": "Bình hoa men thô hàng xuất Đức",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1373",
+      "price_vnd": 350000,
+      "sale_price_vnd": 280000,
+      "current_price_vnd": 280000,
+      "currency": "VND",
+      "description": "Bình hoa dạng ống men thô, khắc nổi hàng đẹp xuất Đức dạng màu pastel, thích hợp với cắm nhiều loại hoa, size 27cm",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/875197F6-7789-4808-900F-E4CD5C3262AB.jpeg",
+          "alt": "Bình hoa men thô hàng xuất Đức",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/binh-hoa-men-tho-hang-xuat-duc/",
+      "collected_at": "2026-10-14T14:44:11.236095+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "350.000 đ 280.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "4c52ff6a-fe2a-5b4d-b023-dc3bb7206f89",
+      "slug": "binh-hoa-mini-men-mau",
+      "name": "Bình hoa mini men màu",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1311",
+      "price_vnd": 35000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 35000,
+      "currency": "VND",
+      "description": "Bình hoa mini men màu nhiều kiểu dáng và màu sắc, sản xuất tại Bát Tràng Kích thước 13-15cm Nhiều màu &nbsp;",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/2CF41578-A4B0-49D5-BD60-A5937286449B.jpeg",
+          "alt": "Bình hoa mini men màu",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/binh-hoa-mini-men-mau/",
+      "collected_at": "2026-10-14T14:44:13.580265+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "35.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "43638aa8-bea1-53ab-9d11-6330b8610734",
+      "slug": "binh-hoa-xuat-khau-dang-tru-co-nho",
+      "name": "Bình hoa xuất khẩu dạng tru cổ nhỏ",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1461",
+      "price_vnd": 300000,
+      "sale_price_vnd": 250000,
+      "current_price_vnd": 250000,
+      "currency": "VND",
+      "description": "Bình hoa xuất khẩu dạng trụ cổ nhỏ men màu ghi loang, thích hợp trang trí, cắm hoa. Kích thước 27cm cao",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/225CCFDE-028A-40AC-9679-0D9458939C06.jpeg",
+          "alt": "Bình hoa xuất khẩu dạng tru cổ nhỏ",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/binh-hoa-xuat-khau-dang-tru-co-nho/",
+      "collected_at": "2026-10-14T14:44:15.848962+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "300.000 đ 250.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "54b65e3c-dfa7-5d4a-922b-896af7bd343b",
+      "slug": "binh-hoa-xuat-khau-hoa-van-cham-khac",
+      "name": "Bình hoa xuất khẩu hoa văn chạm khắc",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1369",
+      "price_vnd": 400000,
+      "sale_price_vnd": 380000,
+      "current_price_vnd": 380000,
+      "currency": "VND",
+      "description": "Bình hoa dáng trụ hoa văn khắc vẽ men, cao 27cm hàng xuất khẩu. Có thể dùng cắm hoa, trang trí, làm chân đèn ngủ",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/15D33195-E179-4E92-8E2F-E2437E307859.jpeg",
+          "alt": "Bình hoa xuất khẩu hoa văn chạm khắc",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/binh-hoa-xuat-khau-hoa-van-cham-khac/",
+      "collected_at": "2026-10-14T14:44:24.447540+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "400.000 đ 380.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "5641d031-64e5-5a38-baa9-73db4f6661b3",
+      "slug": "coc-ca-phe-capuchino-men-da",
+      "name": "Cốc cà phê capuchino men đá",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1250",
+      "price_vnd": 70000,
+      "sale_price_vnd": 50000,
+      "current_price_vnd": 50000,
+      "currency": "VND",
+      "description": "Chất liệu gốm sứ Bát Tràng Dung tích 220ml chuẩn Quốc tế Nhiều màu sắc 50k/ly, đĩa lót ly mua thêm 10k",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/A4C095A6-E72A-4290-AD0D-FF975697D84B.jpeg",
+          "alt": "Cốc cà phê capuchino men đá",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-ca-phe-capuchino-men-da/",
+      "collected_at": "2026-10-14T14:44:32.001570+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "70.000 đ 50.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "ed4db82f-5f4f-5b3a-8739-49dfe1f1734d",
+      "slug": "coc-ca-phe-pha-may-capuchino-mau",
+      "name": "Cốc cà phê pha máy capuchino màu",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1238",
+      "price_vnd": 60000,
+      "sale_price_vnd": 40000,
+      "current_price_vnd": 40000,
+      "currency": "VND",
+      "description": "Chất liệu gốm sứ Bát Tràng Dung tích 220ml chuẩn Quốc tế Nhiều màu sắc Giá khuyến mại 40k/ly, đĩa lót ly mua thêm 10k",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/183ACD12-210F-44B0-8573-B02CD50E3711.jpeg",
+          "alt": "Cốc cà phê pha máy capuchino màu",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-ca-phe-pha-may-capuchino-mau/",
+      "collected_at": "2026-10-14T14:44:49.176932+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "60.000 đ 40.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "873de764-4d34-5442-b622-00436081efa4",
+      "slug": "coc-ca-phe-tay-cam-gom-su-bat-trang",
+      "name": "Cốc cà phê tay cầm gốm sứ Bát Tràng",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1317",
+      "price_vnd": 15000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 15000,
+      "currency": "VND",
+      "description": "Ly cà phê truyền thống gốm sứ Bát Tràng, sử dụng nhiều cho cà phê đen, cà phê sữa pha sẵn hoặc pha máy, pha phin. Chất liệu gốm sứ Bát Tràng Dung tích 120-150ml Nhiều màu sắc Ly 15k, đĩa lót 5k (có thể trùng hoặc không trùng màu)",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/2AB5C438-3973-4AB0-BDAF-DA2671FA5F76.jpeg",
+          "alt": "Cốc cà phê tay cầm gốm sứ Bát Tràng",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-ca-phe-tay-cam-gom-su-bat-trang/",
+      "collected_at": "2026-10-14T14:45:00.274991+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "15.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "36db8a20-96fb-5b88-8d3c-da389db26ad5",
+      "slug": "coc-capuchino-su-trang-bat-trang",
+      "name": "Cốc capuchino sứ trắng Bát Tràng",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1323",
+      "price_vnd": 35000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 35000,
+      "currency": "VND",
+      "description": "Ly cà phê capuchino 220ml sứ trắng Bát Tràng, sử dụng nhiều cho cà phê máy, trà nóng Chất liệu gốm sứ Bát Tràng Dung tích 220ml chuẩn Quốc tế Màu trắng Ly 25, đĩa lót 10k",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/58268473-1749-4205-9AA6-B3BF5DB16B9D.jpeg",
+          "alt": "Cốc capuchino sứ trắng Bát Tràng",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-capuchino-su-trang-bat-trang/",
+      "collected_at": "2026-10-14T14:45:06.168858+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "35.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "95c1cc35-a7e9-5420-a170-9571479ccbf0",
+      "slug": "coc-espresso-su-trang-bat-trang",
+      "name": "Cốc espresso sứ trắng Bát Tràng",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1327",
+      "price_vnd": 25000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 25000,
+      "currency": "VND",
+      "description": "Ly cà phê capuchino 70ml sứ trắng Bát Tràng, sử dụng nhiều cho cà phê máy, trà nóng Chất liệu gốm sứ Bát Tràng Dung tích 70ml chuẩn Quốc tế Màu trắng Ly 20k, đĩa 5k",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/FB0C336A-8772-4A55-B18E-5B0ADF7ECC0C.jpeg",
+          "alt": "Cốc espresso sứ trắng Bát Tràng",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-espresso-su-trang-bat-trang/",
+      "collected_at": "2026-10-14T14:45:08.572706+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "25.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "bc425fea-00cc-57cf-9507-b9c948cc1033",
+      "slug": "coc-latte-330ml-mau",
+      "name": "Cốc latte 330ml màu",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1345",
+      "price_vnd": 30000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 30000,
+      "currency": "VND",
+      "description": "Cốc 330ml sứ màu Bát Tràng có thể dùng làm cốc latte tiêu chuẩn, cốc trà, cốc uống nước. Chất liệu gốm sứ Dung tích 330ml Nhieu màu sắc Cốc 30k, đĩa lót 10k",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/EFFA431E-7044-46FB-89ED-6E59766676BE.jpeg",
+          "alt": "Cốc latte 330ml màu",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-latte-330ml-mau/",
+      "collected_at": "2026-10-14T14:45:13.280483+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "30.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "5627aa67-fe0f-5ca8-97d8-9740c8b24b17",
+      "slug": "coc-mau-co-quai",
+      "name": "Cốc màu có quai",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1261",
+      "price_vnd": 30000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 30000,
+      "currency": "VND",
+      "description": "Cốc màu có quai, hàng chất lượng cao được sản xuất tại Bát Tràng Chất liệu gốm sứ Bát Tràng Dung tích 330-450ml Nhiều màu sắc 30k/cốc, đĩa lót ly mua thêm 10k",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/6E208298-EE71-4BB9-9D21-A6E5DB18D477.jpeg",
+          "alt": "Cốc màu có quai",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-mau-co-quai/",
+      "collected_at": "2026-10-14T14:45:15.635023+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "30.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "e7b5f777-5821-5d92-b404-3677305cf8fb",
+      "slug": "coc-su-mau-dang-lun",
+      "name": "Cốc sứ màu dạng lùn",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1455",
+      "price_vnd": 30000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 30000,
+      "currency": "VND",
+      "description": "Cốc sứ màu dạng lùn 300ml dùng làm cốc latte, uống nước, cốc trà. Chất liệu gốm sứ Bát Tràng, nhiều màu sắc.",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/B0036BEC-128B-411E-8319-F05CC6F7D8CE.jpeg",
+          "alt": "Cốc sứ màu dạng lùn",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-su-mau-dang-lun/",
+      "collected_at": "2026-10-14T14:45:20.099852+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "30.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "f77a8103-2e36-5d8a-9fc0-6352544f214a",
+      "slug": "coc-su-trang-ve-tay",
+      "name": "Cốc sứ trắng vẽ tay",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1459",
+      "price_vnd": 50000,
+      "sale_price_vnd": 40000,
+      "current_price_vnd": 40000,
+      "currency": "VND",
+      "description": "Cốc sứ trắng vẽ tay rất đẹp, dung tích 400ml, làm cốc uống nước, trà hàng ngày, loại có quai. Gốm Bát Tràng chất lượng cao",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/FD3284A3-F4B7-4491-A193-6F6BB6B77A7E.jpeg",
+          "alt": "Cốc sứ trắng vẽ tay",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/coc-su-trang-ve-tay/",
+      "collected_at": "2026-10-14T14:45:22.609219+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "50.000 đ 40.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "5ce6a0d5-4bcb-576e-b305-2a135ddc5e62",
+      "slug": "dau-tuong-dat-nung",
+      "name": "Đầu tượng đất nung",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1221",
+      "price_vnd": 450000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 450000,
+      "currency": "VND",
+      "description": "Hướng dẫn mua hàng Gọi/Zalo: 0886.561.079 Nhắn tin Facebook Tiệm Gốm Việt",
+      "attributes": {
+        "origin": "Việt Nam"
+      },
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/IMG_5098.jpg",
+          "alt": "Đầu tượng đất nung",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/dau-tuong-dat-nung/",
+      "collected_at": "2026-10-14T14:45:24.825882+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "450.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "911bd7c5-66fd-5693-9142-2c5b71f4371b",
+      "slug": "den-xong-tinh-dau-dung-nen",
+      "name": "Đèn xông tinh dầu dùng nến",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1366",
+      "price_vnd": 50000,
+      "sale_price_vnd": 30000,
+      "current_price_vnd": 30000,
+      "currency": "VND",
+      "description": "Đèn xông tinh dầu bằng gốm sứ Bát Tràng dùng nến, nhiều màu sắc",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/987EB9F6-89D0-4681-BC4F-1B18EBFB0AF5.jpeg",
+          "alt": "Đèn xông tinh dầu dùng nến",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/den-xong-tinh-dau-dung-nen/",
+      "collected_at": "2026-10-14T14:45:33.751489+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "50.000 đ 30.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "9c0ce282-b91f-5fd4-be3d-8a7bbddaa6a1",
+      "slug": "dia-an-size-30cm-hang-xuat-cho-ikea",
+      "name": "Đĩa ăn size 30cm hàng xuất cho IKEA",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1340",
+      "price_vnd": 50000,
+      "sale_price_vnd": 30000,
+      "current_price_vnd": 30000,
+      "currency": "VND",
+      "description": "Đĩa tròn size 30cm thích hợp cho món Âu, các quán cơm tấm, cơm gà, tiệc buffe, đựng trái cây,… Hàng chất lượng cao gia công cho IKEA Thuỵ Điển Chất liệu gốm sứ Màu hồng tím Size 30cm",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/88C7BC02-E99B-4C0D-AFAB-AC8644DCC421.jpeg",
+          "alt": "Đĩa ăn size 30cm hàng xuất cho IKEA",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/dia-an-size-30cm-hang-xuat-cho-ikea/",
+      "collected_at": "2026-10-14T14:45:36.402065+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "50.000 đ 30.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "78f37395-29a9-595c-acb3-2cc1fdf335fd",
+      "slug": "dia-mau-lot-ly-coc-ban-le",
+      "name": "Đĩa màu lót ly cốc bán lẻ",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1273",
+      "price_vnd": 10000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 10000,
+      "currency": "VND",
+      "description": "Đĩa lót ly cà phê, cốc các loại, hàng chất lượng cao được sản xuất tại Bát Tràng Chất liệu gốm sứ Bát Tràng Kích thước 14cm Nhiều màu sắc",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/9DE11D08-A924-4FDF-90FD-FA435E901918.jpeg",
+          "alt": "Đĩa màu lót ly cốc bán lẻ",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/dia-mau-lot-ly-coc-ban-le/",
+      "collected_at": "2026-10-14T14:45:38.858203+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "10.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "d1e16951-29cc-54a8-9892-06f38890cabe",
+      "slug": "muong-su-hang-san-xuat-du",
+      "name": "Muỗng sứ hàng sản xuất dư",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1360",
+      "price_vnd": 10000,
+      "sale_price_vnd": 5000,
+      "current_price_vnd": 5000,
+      "currency": "VND",
+      "description": "Muỗng ăn bằng sứ hàng sản xuất và xuất khẩu dư tuyệt đẹp không lỗi, số lượng nhiều giá siêu rẻ.",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/1596632D-6A8A-4303-A259-B2C3DA6ED322.jpeg",
+          "alt": "Muỗng sứ hàng sản xuất dư",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/muong-su-hang-san-xuat-du/",
+      "collected_at": "2026-10-14T14:45:47.116773+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "10.000 đ 5.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "80fa1477-1348-56c8-85ac-d93210a25ef1",
+      "slug": "su-tu-dat-nung",
+      "name": "Sư tử đất nung",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1453",
+      "price_vnd": 800000,
+      "sale_price_vnd": 750000,
+      "current_price_vnd": 750000,
+      "currency": "VND",
+      "description": "Sư tử đất nung hàng xuất Anh Quốc, chất liệu gốm đất nung cao 50cm, nặng 20kg. Thích hợp để sân vườn, cổng nhà.",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/F14D80FC-1B3C-4972-A4DD-700EFB7725CD.jpeg",
+          "alt": "Sư tử đất nung",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/su-tu-dat-nung/",
+      "collected_at": "2026-10-14T14:45:52.095760+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "800.000 đ 750.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "56739e5a-f2bf-5c54-9610-3127ec30992c",
+      "slug": "thanh-ly-coc-ly-loi-de-trong-cay",
+      "name": "Thanh lý cốc ly lỗi để trồng cây",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1383",
+      "price_vnd": 15000,
+      "sale_price_vnd": 10000,
+      "current_price_vnd": 10000,
+      "currency": "VND",
+      "description": "Cốc ly lỗi do sứt mẻ, lỗi men lỡ bộ để trồng cây xương rồng sen đá bonsai mini",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/DB098599-530C-4CDB-B259-CB45204A14C3.jpeg",
+          "alt": "Thanh lý cốc ly lỗi để trồng cây",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/thanh-ly-coc-ly-loi-de-trong-cay/",
+      "collected_at": "2026-10-14T14:46:02.565939+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "15.000 đ 10.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "6db2bbb8-10e1-5e9c-b3d3-00b1ba51dc49",
+      "slug": "tuong-co-gai-ngoi-ben-lu-nuoc",
+      "name": "Tượng cô gái ngồi bên lu nước",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1449",
+      "price_vnd": 3000000,
+      "sale_price_vnd": 2250000,
+      "current_price_vnd": 2250000,
+      "currency": "VND",
+      "description": "Tượng cô gái ngồi bên lu nước thích hợp để sân vườn, làm thác nước chảy bên hồ cá, chất liệu gốm đất nung, kích thước cao 90cm (ngồi)",
+      "attributes": {},
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/0167F739-CA67-4058-BC74-3F3C32637399.jpeg",
+          "alt": "Tượng cô gái ngồi bên lu nước",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/tuong-co-gai-ngoi-ben-lu-nuoc/",
+      "collected_at": "2026-10-14T14:46:16.109964+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [
+        "origin_not_verified"
+      ],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "3.000.000 đ 2.250.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "9e01c8fe-e155-57b5-8b24-e48f25e6c252",
+      "slug": "tuong-phat-ngoi-nho",
+      "name": "Tượng phật ngồi nhỏ",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1230",
+      "price_vnd": 280000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 280000,
+      "currency": "VND",
+      "description": "Hướng dẫn mua hàng Gọi/Zalo: 0886.561.079 Nhắn tin Facebook Tiệm Gốm Việt",
+      "attributes": {
+        "material": "Men, đất nung",
+        "dimensions": "25cm",
+        "origin": "Viet Nam"
+      },
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/IMG_5094.jpg",
+          "alt": "Tượng phật ngồi nhỏ",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/tuong-phat-ngoi-nho/",
+      "collected_at": "2026-10-14T14:46:18.542941+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "280.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    },
+    {
+      "id": "88ec25b8-f607-5a94-868d-d0e13e3c7f3f",
+      "slug": "tuong-phat-thien",
+      "name": "Tượng phật thiền",
+      "category": "Gốm sứ",
+      "category_id": "3cbd2cf7-b665-56a8-a483-01befa5afec4",
+      "sku": "1225",
+      "price_vnd": 480000,
+      "sale_price_vnd": null,
+      "current_price_vnd": 480000,
+      "currency": "VND",
+      "description": "Hướng dẫn mua hàng Gọi/Zalo: 0886.561.079 Nhắn tin Facebook Tiệm Gốm Việt",
+      "attributes": {
+        "material": "Gốm đất nung",
+        "dimensions": "Cao 45cm",
+        "origin": "Việt Nam"
+      },
+      "images": [
+        {
+          "url": "https://tiemgomviet.com/wp-content/uploads/2021/06/IMG_5101.jpg",
+          "alt": "Tượng phật thiền",
+          "sort_order": 0
+        }
+      ],
+      "source_name": "tiemgomviet",
+      "source_url": "https://tiemgomviet.com/product/tuong-phat-thien/",
+      "collected_at": "2026-10-14T14:46:26.300432+00:00",
+      "source_availability": "http://schema.org/InStock",
+      "review_flags": [],
+      "image_rights": "not_verified",
+      "is_demo": true,
+      "description_image_urls": [],
+      "source_price_text": "480.000 đ",
+      "source_display_name": "Tiệm Gốm Việt"
+    }
+  ],
+  "report": {
+    "source": "tiemgomviet",
+    "start_url": "https://tiemgomviet.com/product-category/cua-hang/",
+    "listing_pages": 4,
+    "discovered_products": 25,
+    "saved_products": 25,
+    "remaining_listing_pages": 0,
+    "limits": {
+      "listing_pages": 30,
+      "products": 200
+    },
+    "errors": [],
+    "recovered_h2_titles": 0
+  }
+}
