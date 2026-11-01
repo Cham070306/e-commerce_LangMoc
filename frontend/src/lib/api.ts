@@ -17,7 +17,7 @@ import type {
   AdminContactWrite
 } from './adminContracts';
 import { ADDRESS_DELETE_CONTRACT } from './addressContracts';
-import { GUEST_CHECKOUT_CONTRACT, type MockGuestCheckoutPayload } from './guestContracts';
+import { GUEST_CHECKOUT_CONTRACT, type MockGuestCheckoutPayload, type MockGuestCheckoutPreviewPayload } from './guestContracts';
 const env=(import.meta as ImportMeta&{env:Record<string,string>}).env;
 export const isMock=env.VITE_API_MODE!=='live';
 
@@ -86,9 +86,9 @@ export const api={
   updateCartItem:(productId:string,quantity:number)=>request<{data:CartItem}>('PUT',`/me/cart/items/${encodeURIComponent(productId)}`,{quantity}),
   removeCartItem:(productId:string)=>request<void>('DELETE',`/me/cart/items/${encodeURIComponent(productId)}`),
   checkoutPreview:(b:PreviewPayload,s?:AbortSignal)=>request<{data:CheckoutPreview}>('POST','/checkout/preview',b,s),
-  guestCheckoutPreview:(items: MockGuestCheckoutPayload['items'])=>{
+  guestCheckoutPreview:(b:MockGuestCheckoutPreviewPayload)=>{
     if(!isMock||env.VITE_GUEST_CHECKOUT!=='true')throw new ApiError('Thanh toán khách vãng lai chỉ được bật trong chế độ mô phỏng.',403,'FORBIDDEN');
-    return request<{data:CheckoutPreview}>(GUEST_CHECKOUT_CONTRACT.preview.method,`${GUEST_CHECKOUT_CONTRACT.preview.path}?${GUEST_CHECKOUT_CONTRACT.mockFlagParameter}`,{items});
+    return request<{data:CheckoutPreview}>(GUEST_CHECKOUT_CONTRACT.preview.method,`${GUEST_CHECKOUT_CONTRACT.preview.path}?${GUEST_CHECKOUT_CONTRACT.mockFlagParameter}`,b);
   },
 
   // Orders (docs/API.md lines 51-54)

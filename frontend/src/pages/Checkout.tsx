@@ -27,7 +27,7 @@ import {
 
 export default function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
-  const { items, appliedPromo, refreshCart, clearGuestCart, loading: cartLoading } = useCart();
+  const { items, appliedPromo, refreshCart, clearGuestCart, applyPromotion, removePromotion, loading: cartLoading } = useCart();
 
   const [guestInfo, setGuestInfo] = useState({
     recipient_name: '',
@@ -123,10 +123,12 @@ export default function CheckoutPage() {
     setPreviewLoading(true);
     try {
       if (isGuestFlow) {
-        const res = await api.guestCheckoutPreview(items.map(item => ({
-          product_id: item.id,
-          quantity: item.quantity
-        })));
+        const res = await api.guestCheckoutPreview({
+          items: items.map(item => ({
+            product_id: item.id,
+            quantity: item.quantity
+          }))
+        });
         setPreview(res.data);
         return res.data;
       }
@@ -216,6 +218,8 @@ export default function CheckoutPage() {
     setErrorMessage(null);
     try {
       await api.deleteAddress(address.id);
+      setAddresses(current => current.filter(item => item.id !== address.id));
+      setSelectedAddressId(current => current === address.id ? '' : current);
       await loadAddresses(address.id);
     } catch (err) {
       if (err instanceof ApiError && err.status === 404) {
@@ -809,12 +813,12 @@ export default function CheckoutPage() {
               </div>
 
               {/* Bảng tính chi phí từ server */}
+              {isGuestFlow && (
+                <p style={{ margin: '0 0 16px', fontSize: '12px', color: 'var(--muted, #7c6a57)' }}>
+                  Đăng nhập để dùng mã giảm giá.
+                </p>
+              )}
               <div className="c2-summary-rows">
-                {isGuestFlow && (
-                  <p style={{ margin: '0 0 12px', fontSize: '12px', color: 'var(--muted, #7c6a57)' }}>
-                    Đăng nhập để dùng mã giảm giá.
-                  </p>
-                )}
                 <div className="c2-summary-row">
                   <span>Tạm tính</span>
                   <strong>{formatMoney(preview?.subtotal_vnd ?? 0)}</strong>

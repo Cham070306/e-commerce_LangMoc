@@ -26,12 +26,20 @@ function payload(phone = '0907777666'): MockGuestCheckoutPayload {
   };
 }
 
-test('T5: mock preview tính tổng từ danh sách món, không yêu cầu phiên đăng nhập', () => {
-  const result = processGuestCheckoutPreview([{ product_id: productId, quantity: 1 }]);
+test('T5: mock preview tính tổng từ danh sách món và không áp dụng mã giảm giá cho khách', () => {
+  const result = processGuestCheckoutPreview({ items: [{ product_id: productId, quantity: 1 }] });
 
   assert.equal(result.statusCode, 200);
   assert.ok(result.data?.data.total_vnd > result.data?.data.subtotal_vnd);
   assert.equal(result.data?.data.shipping_fee_vnd, 30000);
+  assert.equal(result.data?.data.discount_vnd, 0);
+
+  const promo = processGuestCheckoutPreview({
+    items: [{ product_id: productId, quantity: 1 }],
+    promotion_code: 'langmoc10'
+  });
+  assert.equal(promo.statusCode, 400);
+  assert.equal(promo.error?.error.fields?.promotion_code, 'Đăng nhập để dùng mã giảm giá.');
 });
 
 test('T5: mock chặn giỏ rỗng, điện thoại sai, thiếu địa chỉ và địa chỉ vượt giới hạn', () => {
@@ -50,6 +58,10 @@ test('T5: mock chặn giỏ rỗng, điện thoại sai, thiếu địa chỉ v�
   const longAddress = processGuestOrderCreation('guest-long-address-key', { ...payload(), address_line: 'A'.repeat(256) }, 1_000_000);
   assert.equal(longAddress.statusCode, 400);
   assert.ok(longAddress.error?.error.fields?.address_line);
+
+  const promo = processGuestOrderCreation('guest-promo-key', { ...payload(), promotion_code: 'LANGMOC10' }, 1_000_000);
+  assert.equal(promo.statusCode, 400);
+  assert.equal(promo.error?.error.fields?.promotion_code, 'Đăng nhập để dùng mã giảm giá.');
 });
 
 test('T5: tạo đơn khách COD lưu snapshot và retry cùng key chỉ tạo một đơn/trừ tồn một lần', () => {
@@ -70,6 +82,8 @@ test('T5: tạo đơn khách COD lưu snapshot và retry cùng key chỉ tạo m
     assert.equal(order.recipient_name, guestPayload.recipient_name);
     assert.equal(order.shipping_address, guestPayload.address_line);
     assert.equal(order.payment_method, 'cod');
+    assert.equal(order.promotion_code, null);
+    assert.equal(order.discount_vnd, 0);
     assert.equal(demoStockMap[productId], 4);
 
     const retry = processGuestOrderCreation(key, guestPayload, 2_000_001);

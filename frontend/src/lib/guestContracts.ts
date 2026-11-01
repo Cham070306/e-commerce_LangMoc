@@ -33,6 +33,10 @@ export interface MockGuestCheckoutPayload {
   items: Array<{ product_id: string; quantity: number }>;
 }
 
+export interface MockGuestCheckoutPreviewPayload {
+  items: MockGuestCheckoutPayload['items'];
+}
+
 export function hasGuestOrderSnapshot(orderId: string): boolean {
   try {
     const raw = sessionStorage.getItem(`langmoc.last_order.${orderId}`);

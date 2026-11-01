@@ -233,14 +233,6 @@ export default function CartPage() {
                         >
                           Hủy mã
                         </button>
-                      ) : isGuestCheckoutEnabled ? (
-                        <a
-                          href="#/checkout"
-                          className="c2-btn c2-btn-primary c2-btn-block"
-                          style={{ fontSize: '14px', padding: '14px' }}
-                        >
-                          Tiếp tục đặt hàng không cần tài khoản <ArrowRight size={16} />
-                        </a>
                       ) : (
                         <button
                           type="submit"
@@ -272,11 +264,11 @@ export default function CartPage() {
                     <strong>{formatMoney(preview ? preview.subtotal_vnd : subtotal)}</strong>
                   </div>
 
-                  {user && preview && (
+                  {(user || isGuestCheckoutEnabled) && preview && (
                     <>
-                      {preview.discount_vnd > 0 && (
+                      {user && preview.discount_vnd > 0 && (
                         <div className="c2-summary-row" style={{ color: '#1e5922' }}>
-                          <span>Giảm giá</span>
+                          <span>Giảm giá{appliedPromo ? ` (${appliedPromo})` : ''}</span>
                           <strong>−{formatMoney(preview.discount_vnd)}</strong>
                         </div>
                       )}
@@ -287,7 +279,7 @@ export default function CartPage() {
                     </>
                   )}
 
-                  {!user && (
+                  {!user && !isGuestCheckoutEnabled && (
                     <p style={{ margin: '8px 0', fontSize: '11px', color: 'var(--muted, #7c6a57)', fontStyle: 'italic' }}>
                       * Tạm tính theo giá hiển thị, chưa gồm phí vận chuyển và giảm giá.
                     </p>
@@ -297,7 +289,7 @@ export default function CartPage() {
 
                   <div className="c2-summary-row c2-summary-total">
                     <span>Tổng thanh toán</span>
-                    <span>{formatMoney(user && preview ? preview.total_vnd : subtotal)}</span>
+                    <span>{formatMoney((user || isGuestCheckoutEnabled) && preview ? preview.total_vnd : subtotal)}</span>
                   </div>
                 </div>
 

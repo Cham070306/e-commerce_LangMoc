@@ -967,6 +967,42 @@ header.site-header nav a[aria-current="page"] {
   border-color: #fecaca;
 }
 
+.admin-shell .c2-order-status-badge.c2-status-pending {
+  background: #fef3c7;
+  color: #78350f;
+  border-color: #f59e0b;
+}
+
+.admin-shell .c2-order-status-badge.c2-status-confirmed {
+  background: #bbf7d0;
+  color: #14532d;
+  border-color: #22c55e;
+}
+
+.admin-shell .c2-order-status-badge.c2-status-packing {
+  background: #dbeafe;
+  color: #1e3a8a;
+  border-color: #3b82f6;
+}
+
+.admin-shell .c2-order-status-badge.c2-status-shipping {
+  background: #1f2937;
+  color: #fff;
+  border-color: #111827;
+}
+
+.admin-shell .c2-order-status-badge.c2-status-delivered {
+  background: #166534;
+  color: #fff;
+  border-color: #14532d;
+}
+
+.admin-shell .c2-order-status-badge.c2-status-cancelled {
+  background: #fee2e2;
+  color: #7f1d1d;
+  border-color: #ef4444;
+}
+
 /* Order Item Row */
 .c2-order-item-row {
   display: flex;
@@ -1754,4 +1790,3 @@ header.site-header nav a[aria-current="page"] {
     grid-template-columns: 1fr;
   }
 }
-

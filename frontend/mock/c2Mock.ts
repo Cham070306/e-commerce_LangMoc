@@ -121,6 +121,7 @@ export interface DemoOrder {
   order_number: string;
   user_id: string | null;
   recipient_name: string;
+  email?: string | null;
   phone: string;
   shipping_address: string;
   note: string | null;
@@ -830,7 +831,14 @@ function validateGuestItems(input: unknown): {
 }
 
 export function processGuestCheckoutPreview(input: unknown) {
-  const validated = validateGuestItems(input);
+  const body = Array.isArray(input) ? { items: input } : (input || {}) as Record<string, unknown>;
+  if (typeof body.promotion_code === 'string' && body.promotion_code.trim()) {
+    return {
+      statusCode: 400,
+      error: { error: { code: 'VALIDATION_ERROR', message: 'Đăng nhập để dùng mã giảm giá.', fields: { promotion_code: 'Đăng nhập để dùng mã giảm giá.' } } }
+    };
+  }
+  const validated = validateGuestItems(body.items);
   if (validated.error) return { statusCode: 400, error: validated.error };
 
   for (const item of validated.items) {
@@ -845,9 +853,20 @@ export function processGuestCheckoutPreview(input: unknown) {
 
   const subtotal_vnd = validated.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping_fee_vnd = subtotal_vnd > 0 ? 30000 : 0;
+  const total_vnd = subtotal_vnd + shipping_fee_vnd;
   return {
     statusCode: 200,
-    data: { data: { subtotal_vnd, discount_vnd: 0, shipping_fee_vnd, total_vnd: subtotal_vnd + shipping_fee_vnd } }
+    data: {
+      data: {
+        subtotal_vnd,
+        discount_vnd: 0,
+        shipping_fee_vnd,
+        total_vnd,
+        promotion_code: null,
+        promotion_discount_vnd: 0,
+        promotion_valid: false
+      }
+    }
   };
 }
 
@@ -873,6 +892,9 @@ export function processGuestOrderCreation(
   else if (addressLine.length > 255) fields.address_line = 'Địa chỉ không được vượt quá 255 ký tự.';
   if (note.length > 500) fields.note = 'Ghi chú không được vượt quá 500 ký tự.';
   const validated = validateGuestItems(body?.items);
+  if (typeof body?.promotion_code === 'string' && body.promotion_code.trim()) {
+    fields.promotion_code = 'Đăng nhập để dùng mã giảm giá.';
+  }
   if (validated.error?.error.fields) Object.assign(fields, validated.error.error.fields);
   if (Object.keys(fields).length) {
     return { statusCode: 400, error: { error: { code: 'VALIDATION_ERROR', message: 'Vui lòng kiểm tra lại thông tin đặt hàng.', fields } } };
@@ -915,6 +937,7 @@ export function processGuestOrderCreation(
 
   const subtotal_vnd = validated.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping_fee_vnd = subtotal_vnd > 0 ? 30000 : 0;
+  const total_vnd = subtotal_vnd + shipping_fee_vnd;
   const orderId = `ord-guest-${now.toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
   const createdAt = new Date(now).toISOString();
   const order: DemoOrder = {
@@ -931,7 +954,7 @@ export function processGuestOrderCreation(
     subtotal_vnd,
     discount_vnd: 0,
     shipping_fee_vnd,
-    total_vnd: subtotal_vnd + shipping_fee_vnd,
+    total_vnd,
     promotion_code: null,
     idempotency_key: idempotencyKey,
     items: validated.items.map(item => ({
@@ -1769,7 +1792,7 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
       return true;
     }
     const body = await parseBody(req);
-    const result = processGuestCheckoutPreview(body?.items);
+    const result = processGuestCheckoutPreview(body);
     send(result.statusCode, result.error || result.data);
     return true;
   }

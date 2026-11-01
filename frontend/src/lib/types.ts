@@ -104,6 +104,7 @@ export interface Order {
   payment_status: 'unpaid' | 'pending' | 'paid' | 'failed' | 'refunded';
   payment_method: 'cod' | 'bank_transfer' | 'gateway';
   recipient_name: string;
+  email?: string | null;
   phone: string;
   shipping_address: string;
   note?: string | null;
@@ -141,4 +142,3 @@ export interface ContactMessage {
   status: 'new' | 'read' | 'resolved';
   created_at: string;
 }
-

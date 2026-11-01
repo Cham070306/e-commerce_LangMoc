@@ -95,7 +95,7 @@ export default function OrderSuccessPage({ id }: { id: string }) {
           </p>
           {isGuestOrder && (
             <p role="status" style={{ maxWidth: '540px', margin: '12px auto 0', fontSize: '13px', lineHeight: 1.6 }}>
-              Vui lòng ghi lại mã đơn hàng để tiện đối chiếu. Đây là đơn mô phỏng; hiện chưa có trang tra cứu đơn khách.
+              Vui lòng ghi lại mã đơn hàng để tiện đối chiếu. Đây là đơn mô phỏng; hiện chưa có trang tra cứu đơn khách hoặc gửi email tự động.
             </p>
           )}
 
@@ -118,6 +118,7 @@ export default function OrderSuccessPage({ id }: { id: string }) {
               <span style={{ color: 'var(--muted, #7c6a57)', display: 'block', fontSize: '11px' }}>NGƯỜI NHẬN HÀNG</span>
               <strong>{order.recipient_name}</strong>
               <div>{order.phone}</div>
+              {order.email && <div>Email xác nhận: {order.email}</div>}
             </div>
             <div>
               <span style={{ color: 'var(--muted, #7c6a57)', display: 'block', fontSize: '11px' }}>ĐỊA CHỈ NHẬN HÀNG</span>

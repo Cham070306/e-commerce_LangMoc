@@ -47,4 +47,8 @@ test('T5: thông tin khách vãng lai nằm trong dấu vân tay idempotency', (
     ...payload,
     guest_details: { ...payload.guest_details, recipient_name: 'Nguyễn Văn B' }
   }));
+  assert.notEqual(computeOrderFingerprint(payload), computeOrderFingerprint({
+    ...payload,
+    promotion_code: 'LANGMOC10'
+  }));
 });

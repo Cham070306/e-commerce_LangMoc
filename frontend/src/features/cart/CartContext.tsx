@@ -32,7 +32,7 @@ interface CartContextType {
   addToCart: (product: Product, quantity?: number) => Promise<boolean>;
   updateQuantity: (productId: string, newQuantity: number) => Promise<boolean>;
   removeFromCart: (productId: string) => Promise<void>;
-  applyPromotion: (code: string) => Promise<boolean>;
+  applyPromotion: (code: string) => Promise<{ success: boolean; error?: string }>;
   removePromotion: () => Promise<void>;
   refreshCart: () => Promise<void>;
   clearGuestCart: () => Promise<void>;
@@ -82,7 +82,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   // Gọi preview giá từ server (chỉ khi đã đăng nhập)
   const fetchPreview = useCallback(async (promoCode?: string | null) => {
     if (!user) {
-      setPreview(null);
+      if (!isGuestCheckoutEnabled) {
+        setPreview(null);
+        return;
+      }
+      const localItems = readLocalCart();
+      if (localItems.length === 0) {
+        setPreview(null);
+        return;
+      }
+      try {
+        const res = await api.guestCheckoutPreview({
+          items: localItems.map(item => ({ product_id: item.id, quantity: item.quantity }))
+        });
+        setPreview(res.data);
+      } catch (err) {
+        if (err instanceof ApiError) setError(err.message);
+        else setError('Không thể tính toán chi phí đơn hàng khách vãng lai.');
+      }
       return;
     }
     try {
@@ -121,7 +138,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } else {
       setPreview(null);
       if (isGuestCheckoutEnabled) {
-        setItems(readLocalCart().map(item => ({
+        const localItems = readLocalCart();
+        setItems(localItems.map(item => ({
           id: item.id,
           slug: item.slug,
           name: item.name,
@@ -132,6 +150,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           origin: item.origin,
           price_is_demo: item.price_is_demo
         })));
+        await fetchPreview(appliedPromo);
       } else {
         // Chưa bật guest checkout: giữ nguyên hành vi không lưu giỏ vãng lai
         setItems([]);
@@ -160,6 +179,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       } else {
         setItems([]);
         setPreview(null);
+        setAppliedPromo(null);
       }
       return;
     }
@@ -252,6 +272,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           origin: item.origin,
           price_is_demo: item.price_is_demo
         })));
+        if (appliedPromo) await fetchPreview(appliedPromo);
         return true;
       }
 
@@ -297,6 +318,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       // Guest: Lưu localStorage ngay
       const local = readLocalCart().map(i => i.id === productId ? { ...i, quantity: newQuantity } : i);
       writeLocalCart(local);
+      if (appliedPromo) await fetchPreview(appliedPromo);
       return true;
     }
 
@@ -331,6 +353,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const local = readLocalCart().filter(i => i.id !== productId);
       writeLocalCart(local);
       setItems(prev => prev.filter(i => i.id !== productId));
+      if (appliedPromo) await fetchPreview(appliedPromo);
       return;
     }
 
@@ -348,27 +371,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   // Áp dụng khuyến mãi
-  const applyPromotion = async (code: string): Promise<boolean> => {
+  const applyPromotion = async (code: string): Promise<{ success: boolean; error?: string }> => {
     setError(null);
     if (!user) {
-      setError('Vui lòng đăng nhập để áp dụng mã giảm giá.');
-      return false;
+      const message = 'Đăng nhập để dùng mã giảm giá.';
+      setError(message);
+      return { success: false, error: message };
     }
     const cleanCode = code.trim().toUpperCase();
-    if (!cleanCode) return false;
+    if (!cleanCode) return { success: false, error: 'Vui lòng nhập mã giảm giá.' };
 
     try {
-      const res = await api.checkoutPreview({
-        promotion_code: cleanCode,
-        payment_method: 'cod'
-      });
+      const res = await api.checkoutPreview({ promotion_code: cleanCode, payment_method: 'cod' });
       setPreview(res.data);
       setAppliedPromo(cleanCode);
-      return true;
+      return { success: true };
     } catch (err) {
-      if (err instanceof ApiError) setError(err.message);
-      else setError('Không thể áp dụng mã giảm giá.');
-      return false;
+      const message = err instanceof ApiError ? err.message : 'Không thể áp dụng mã giảm giá.';
+      setError(message);
+      return { success: false, error: message };
     }
   };
 
@@ -376,7 +397,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const removePromotion = async (): Promise<void> => {
     setError(null);
     setAppliedPromo(null);
-    if (user) {
+    if (user || isGuestCheckoutEnabled) {
       await fetchPreview(null);
     }
   };
