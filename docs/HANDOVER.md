@@ -2,6 +2,8 @@
 
 Cập nhật ngày 17/10/2026. Nhánh bàn giao: `develop`, kho `Cham070306/e-commerce_vietcraft`. Commit chức năng nền: `8e0f88f` (storefront, dữ liệu catalog, hình ảnh và tài liệu).
 
+> **Cập nhật 30/10/2026 — backend C3 đã có:** xác thực session cookie, API địa chỉ, catalog công khai (tìm không dấu/lọc/sắp xếp/phân trang) và admin CRUD danh mục/sản phẩm đã chạy thật trên PostgreSQL 16 với 31 test. Xem [API.md](API.md) mục "Trạng thái triển khai", [DATA_MODEL.md](DATA_MODEL.md) mục migration, và [README](../README.md) để cài đặt. Phần **chưa làm** thuộc C4: giỏ hàng, preview/checkout COD, mã giảm, đơn hàng, review ghi, contact, admin đơn/review/feedback.
+
 ## Khởi động trên máy mới
 
 ```sh

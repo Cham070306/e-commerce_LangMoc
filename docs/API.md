@@ -110,6 +110,65 @@ Chỉ cho review từ khách đã có đơn `delivered` chứa sản phẩm là 
 
 Nguồn yêu cầu: `TMDT_CASE STUDY.pdf`; định hướng kinh doanh: `Nhóm 1 - Kế Hoạch Kinh Doanh.pdf`. API này là **bản thiết kế**, chưa phải mô tả code đã chạy.
 
+## Trạng thái triển khai (cập nhật 30/10/2026)
+
+Backend thật đã có trong `backend/` (Node.js + Express + TypeScript, PostgreSQL 16). Phần dưới mô tả **hành vi đã chạy và đã test**, không phải thiết kế.
+
+| Nhóm | Trạng thái | Ghi chú |
+|---|---|---|
+| Database | Đã chạy | `001_initial.sql`, `002_auth_catalog.sql`, `003_product_image_unique.sql`; seed `database/seeds/001_demo.sql` |
+| Xác thực | Đã chạy | Session cookie HttpOnly lưu DB, bcrypt cost 12, `register/login/logout/me` |
+| Phân quyền | Đã chạy | `requireAuth` (401) và `requireAdmin` (403) kiểm tra tại API |
+| Địa chỉ | Đã chạy | `GET/POST /me/addresses`, `DELETE /me/addresses/:id` |
+| Catalog công khai | Đã chạy | `GET /categories`, `/products` (q, category, giá, sort, phân trang), `/products/:slug`, `/products/:slug/reviews` |
+| Admin catalog | Đã chạy | `GET/POST /admin/categories`, `PATCH /admin/categories/:id`, `GET/POST /admin/products`, `GET/PATCH /admin/products/:id` |
+| Giỏ, đơn, thanh toán, review ghi, contact | Chưa làm | Thuộc phần C4 trong `TEAM_PLAN.md` |
+| Upload ảnh | Chưa làm | Ảnh hiện nhận URL có sẵn (`/images/...` hoặc URL nguồn) |
+
+### Xác thực — chi tiết triển khai
+
+- `POST /auth/register`: kiểm tra `email` hợp lệ, mật khẩu ≥ 8 ký tự; email trùng trả `409 CONFLICT`. Tài khoản tạo qua đây **luôn** là `customer`.
+- `POST /auth/login`: so sánh bcrypt; sai trả `401 UNAUTHENTICATED`. Thành công tạo dòng `sessions` và đặt cookie `langmoc_sid` (`HttpOnly`, `SameSite=Lax`, `Secure` theo `COOKIE_SECURE`).
+- `POST /auth/logout`: đặt `revoked_at` cho session hiện tại và xóa cookie, trả `204`.
+- `GET /auth/me`: trả `id, full_name, email, role`; không trả `password_hash`.
+- Token thô chỉ nằm trong cookie; DB lưu SHA-256 (`sessions.token_hash`), nên lộ DB không dùng lại được cookie.
+
+### Catalog — chi tiết triển khai
+
+- `GET /categories`: chỉ danh mục `is_active = true`, kèm `product_count` = số sản phẩm `active` trong danh mục.
+- `GET /products`: chỉ trả `status = 'active'`. Tham số:
+  - `q`: tìm trên tên + mô tả + chất liệu, **không phân biệt dấu** (cột generated `products.search_text` dùng `unaccent`).
+  - `category` (slug) hoặc `category_id` (UUID).
+  - `min_price`, `max_price`: lọc theo **giá đang áp dụng**; sản phẩm không có giá bị loại khi có điều kiện giá.
+  - `sort`: `newest | price_asc | price_desc | name_asc` (allowlist). `price_*` đặt sản phẩm không có giá ở cuối.
+  - `page` (mặc định 1), `limit` (mặc định 12, tối đa 100).
+- `GET /products/:slug`: nhận cả slug và UUID; trả `images[]` đầy đủ, `category_name`, `attributes`, `origin`, `stock_quantity`.
+- `GET /products/:slug/reviews`: chỉ review `visible`, trả `{data, meta, summary:{average_rating, review_count}}`; `average_rating = null` khi chưa có review.
+- Giá đang áp dụng (`current_price_vnd`) chỉ dùng `sale_price_vnd` khi nằm trong khoảng `sale_starts_at..sale_ends_at`; ngoài khoảng trả về `price_vnd`.
+- Sản phẩm trả thêm `stock_quantity` và `status` để UI hiển thị tình trạng còn hàng.
+
+### Admin catalog — chi tiết triển khai
+
+- Mọi route `/admin/*` yêu cầu `role = admin`; customer nhận `403 FORBIDDEN`, khách chưa đăng nhập nhận `401`.
+- `POST/PATCH` sản phẩm kiểm tra: `price_vnd >= 0`, `sale_price_vnd < price_vnd`, `sale_ends_at > sale_starts_at`, `stock_quantity >= 0`, `status ∈ {draft, active, hidden}`.
+- `PATCH /admin/products/:id` nhận **một phần** các trường; gửi `images` sẽ thay toàn bộ danh sách ảnh của sản phẩm trong cùng transaction.
+- Slug tự sinh từ tên (bỏ dấu tiếng Việt) khi không truyền; slug phải duy nhất.
+
+### Mã lỗi thực tế
+
+| HTTP | code | Khi nào |
+|---:|---|---|
+| 400 | `VALIDATION_ERROR` | Zod parse lỗi; kèm `fields` |
+| 401 | `UNAUTHENTICATED` | Không có/không hợp lệ session, sai mật khẩu |
+| 403 | `FORBIDDEN` | Đã đăng nhập nhưng không phải admin |
+| 404 | `NOT_FOUND` | Slug/id không tồn tại hoặc sản phẩm không `active` |
+| 409 | `CONFLICT` | Email trùng, dữ liệu trùng ràng buộc unique |
+| 500 | `INTERNAL_ERROR` | Lỗi không mong đợi; không trả stack trace |
+
+### Kiểm thử
+
+`cd backend && npm test` chạy 31 test trên PostgreSQL thật, phủ: auth, phân quyền, địa chỉ, catalog tìm/lọc/sắp xếp/phân trang, admin CRUD và validate giá. Xem `backend/tests/`.
+
 ## Storefront C1 — shape triển khai để ghép frontend
 
 GET mock sử dụng base `/api/v1`, có trên Vite dev/preview; không thay backend C3/C4. Mock tắt bằng `VITE_API_MODE=live`.
