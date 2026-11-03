@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import { asyncHandler } from '../../common/async-handler.js';
 import { sendData, sendList } from '../../common/http.js';
 import { requireAdmin } from '../../middleware/auth.js';
@@ -47,11 +48,17 @@ adminCatalogRouter.patch(
 adminCatalogRouter.get(
   '/products',
   asyncHandler(async (req, res) => {
+    const {page,limit}=z.object({
+      page:z.coerce.number().int().min(1).default(1),
+      limit:z.coerce.number().int().min(1).max(100).default(12),
+      status:z.enum(['draft','active','hidden']).optional(),
+      category_id:z.string().uuid().optional(),
+    }).parse(req.query);
     const status = typeof req.query.status === 'string' ? req.query.status : undefined;
     const categoryId = typeof req.query.category_id === 'string' ? req.query.category_id : undefined;
     const q = typeof req.query.q === 'string' ? req.query.q : undefined;
     const products = await listAllProducts({ status, category_id: categoryId, q });
-    sendList(res, products, { page: 1, limit: products.length || 1, total: products.length });
+    sendList(res, products.slice((page-1)*limit,page*limit), { page, limit, total: products.length });
   }),
 );
 

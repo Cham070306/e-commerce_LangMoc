@@ -27,7 +27,7 @@ async function waitForServer(url: string, timeoutMs = 30_000): Promise<void> {
 export async function startServer(): Promise<void> {
   if (server) return;
   // Dùng node trực tiếp với cli của tsx: tránh shell:true (cảnh báo DEP0190) và .cmd trên Windows.
-  server = spawn(process.execPath, [TSX_CLI, 'src/server.ts'], {
+  server = spawn(process.execPath, ['--import', 'tsx', 'src/server.ts'], {
     cwd: backendRoot,
     env: { ...process.env, API_PORT: TEST_PORT, NODE_ENV: 'test' },
     stdio: 'ignore',
@@ -37,7 +37,8 @@ export async function startServer(): Promise<void> {
 
 export async function stopServer(): Promise<void> {
   if (!server) return;
-  const pid = server.pid;
+  const running = server;
+  const pid = running.pid;
   server = undefined;
   if (!pid) return;
 
@@ -50,7 +51,10 @@ export async function stopServer(): Promise<void> {
     });
     return;
   }
-  server.kill('SIGTERM');
+  await new Promise<void>((resolve) => {
+    running.once('exit', () => resolve());
+    running.kill('SIGTERM');
+  });
 }
 
 /**
@@ -81,9 +85,9 @@ export async function cleanupTestData(): Promise<void> {
 /** Gửi request và trả về status + body JSON + cookie. */
 export async function api(
   pathName: string,
-  options: { method?: string; body?: unknown; cookie?: string } = {},
+  options: { method?: string; body?: unknown; cookie?: string; headers?: Record<string,string> } = {},
 ): Promise<{ status: number; body: any; cookie: string }> {
-  const headers: Record<string, string> = { Accept: 'application/json' };
+  const headers: Record<string, string> = { Accept: 'application/json',...options.headers };
   if (options.body !== undefined) headers['Content-Type'] = 'application/json';
   if (options.cookie) headers['Cookie'] = options.cookie;
 

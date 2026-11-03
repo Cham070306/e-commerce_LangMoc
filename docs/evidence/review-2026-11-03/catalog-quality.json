@@ -1,0 +1,25 @@
+{
+  "total": 449,
+  "missingDescription": 48,
+  "missingSku": 236,
+  "unverifiedOrigin": 445,
+  "demoPrice": 35,
+  "categories": [
+    {
+      "name": "Gốm sứ",
+      "count": 221
+    },
+    {
+      "name": "Mây tre đan",
+      "count": 0
+    },
+    {
+      "name": "Thổ cẩm",
+      "count": 221
+    },
+    {
+      "name": "Nón lá",
+      "count": 7
+    }
+  ]
+}

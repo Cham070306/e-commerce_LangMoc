@@ -67,14 +67,14 @@ function selectProductSql(extraImagesJoin = true): string {
            c.name AS category_name,
            p.sku, p.price_vnd, p.sale_price_vnd,
            (${CURRENT_PRICE_EXPR}) AS current_price_vnd,
-           p.description, p.attributes, p.origin_province,
+           p.description, p.attributes, p.origin_province, p.description_image_urls, p.price_range_vnd,
            p.source_name, p.source_url, p.collected_at,
            p.is_demo, p.price_is_demo, p.stock_quantity, p.status, p.created_at,
            CASE WHEN p.price_vnd IS NULL THEN NULL ELSE (${CURRENT_PRICE_EXPR}) END AS current_price_sort,
            ${
              extraImagesJoin
                ? `COALESCE(
-                    (SELECT json_agg(json_build_object('url', pi.image_url, 'alt', pi.alt_text, 'sort_order', pi.sort_order)
+                    (SELECT json_agg(json_build_object('url', pi.image_url, 'alt', pi.alt_text, 'sort_order', pi.sort_order, 'source_url', pi.source_url)
                                      ORDER BY pi.sort_order)
                        FROM product_images pi WHERE pi.product_id = p.id),
                     '[]'::json

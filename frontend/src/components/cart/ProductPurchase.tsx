@@ -4,7 +4,7 @@ import type {Product} from '../../lib/types';
 import {formatMoney,ProductImage} from '../catalog/ProductCard';
 import {useCart} from '../../features/cart/CartContext';
 import {useAuth} from '../../features/auth/AuthContext';
-import {isGuestCheckoutEnabled} from '../../config/site';
+import {isGuestCheckoutEnabled,isMockMode} from '../../config/site';
 
 type Item={id:string;slug:string;name:string;image:string;price:number|null;quantity:number;origin?:string|null;price_is_demo?:boolean};
 
@@ -92,7 +92,7 @@ export default function ProductPurchase({product:p}:{product:Product}){
    <dialog ref={dialog} className="purchase-dialog" onCancel={e=>{e.preventDefault();close()}} onClick={e=>{if(e.target===e.currentTarget)close()}} aria-labelledby="purchase-title">
     <button className="icon-button purchase-close" aria-label="Đóng giỏ hàng" onClick={close}><X/></button>
     <h2 id="purchase-title">{mode==='buy'?'Xem trước đơn hàng':'Giỏ hàng của bạn'}</h2>
-    <p className="data-note">MÔ PHỎNG · Hệ thống đặt hàng COD thử nghiệm (C2 Mock API).</p>
+    {isMockMode&&<p className="data-note">MÔ PHỎNG · Hệ thống đặt hàng COD thử nghiệm.</p>}
     {shown.length?(
      <>
       <div className="purchase-items">
@@ -112,7 +112,7 @@ export default function ProductPurchase({product:p}:{product:Product}){
        <span>Tạm tính</span>
        <strong>{formatMoney(total)}</strong>
       </div>
-      <p className="data-note">Chưa gồm phí vận chuyển. Chức năng xác nhận đơn sẽ được kết nối khi backend sẵn sàng.</p>
+      <p className="data-note">Chưa gồm phí vận chuyển. Kiểm tra tổng tiền tại bước thanh toán.</p>
      </>
     ):(
      <p className="purchase-empty">Giỏ hàng chưa có sản phẩm.</p>

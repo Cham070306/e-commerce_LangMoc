@@ -3,6 +3,7 @@ import type { Product, CartItem, CheckoutPreview } from '../../lib/types';
 import { api, ApiError } from '../../lib/api';
 import { useAuth } from '../auth/AuthContext';
 import { planCartMerge, type LocalCartItem, type ServerCartItem } from './mergeCart';
+import { CartUpdates } from '../../lib/cartUpdates';
 import { isGuestCheckoutEnabled } from '../../config/site';
 
 const LOCAL_STORAGE_KEY = 'langmoc.cart.v1';
@@ -36,6 +37,8 @@ interface CartContextType {
   removePromotion: () => Promise<void>;
   refreshCart: () => Promise<void>;
   clearGuestCart: () => Promise<void>;
+  waitForCartUpdates: () => Promise<void>;
+  syncing: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -70,7 +73,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [rowLoading, setRowLoading] = useState<Record<string, boolean>>({});
   const [error, setError] = useState<string | null>(null);
 
-  const debounceTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const writes = useRef(new CartUpdates());
   const prevUserRef = useRef<string | null>(null);
 
   const clearError = () => setError(null);
@@ -300,7 +303,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  // Cập nhật số lượng (có debounce + rollback nếu lỗi)
+  // Cập nhật số lượng; tuần tự hóa các lần ghi cùng sản phẩm và rollback khi lỗi
   const updateQuantity = async (productId: string, newQuantity: number): Promise<boolean> => {
     if (newQuantity <= 0) {
       await removeFromCart(productId);
@@ -322,29 +325,20 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return true;
     }
 
-    // Authenticated: Debounce 350ms trước khi bắn API PUT
-    if (debounceTimers.current[productId]) {
-      clearTimeout(debounceTimers.current[productId]);
+    setRowLoading(prev => ({ ...prev, [productId]: true }));
+    try {
+      await writes.current.run(productId, async () => {
+        await api.updateCartItem(productId, newQuantity);
+        await fetchPreview(appliedPromo);
+      });
+      return true;
+    } catch (err) {
+      setItems(previousItems);
+      setError(err instanceof ApiError ? err.message : 'Không thể cập nhật số lượng.');
+      return false;
+    } finally {
+      setRowLoading(prev => ({ ...prev, [productId]: writes.current.has(productId) }));
     }
-
-    return new Promise(resolve => {
-      debounceTimers.current[productId] = setTimeout(async () => {
-        setRowLoading(prev => ({ ...prev, [productId]: true }));
-        try {
-          await api.updateCartItem(productId, newQuantity);
-          await fetchPreview(appliedPromo);
-          resolve(true);
-        } catch (err) {
-          // Rollback nếu API lỗi (như vượt tồn kho 409)
-          setItems(previousItems);
-          if (err instanceof ApiError) setError(err.message);
-          else setError('Không thể cập nhật số lượng.');
-          resolve(false);
-        } finally {
-          setRowLoading(prev => ({ ...prev, [productId]: false }));
-        }
-      }, 350);
-    });
   };
 
   // Xóa món khỏi giỏ
@@ -359,7 +353,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     setRowLoading(prev => ({ ...prev, [productId]: true }));
     try {
-      await api.removeCartItem(productId);
+      await writes.current.run(productId, () => api.removeCartItem(productId));
       setItems(prev => prev.filter(i => i.id !== productId));
       await fetchPreview(appliedPromo);
     } catch (err) {
@@ -431,7 +425,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         applyPromotion,
         removePromotion,
         refreshCart: loadCart,
-        clearGuestCart
+        clearGuestCart,
+        waitForCartUpdates: () => writes.current.wait(),
+        syncing: Object.values(rowLoading).some(Boolean)
       }}
     >
       {children}

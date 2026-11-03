@@ -21,6 +21,7 @@ import {RequireAuth,RequireAdmin} from './features/auth/guards';
 import {isGuestCheckoutEnabled} from './config/site';
 import {hasGuestOrderSnapshot} from './lib/guestContracts';
 import './styles/c2.css';
+import './styles/warm-theme.css';
 
 function AppContent(){
  const [hash,setHash]=useState(location.hash||'#/');

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isImageUrl } from '../../common/image-url.js';
 import type { PoolClient } from 'pg';
 import { query, queryOne, withTransaction } from '../../db/pool.js';
 import { AppError } from '../../common/errors.js';
@@ -101,7 +102,7 @@ export async function updateCategory(
 /* ------------------------------- Products ------------------------------- */
 
 const imageSchema = z.object({
-  url: z.string().trim().min(1, 'URL ảnh không được trống').max(1000),
+  url: z.string().trim().min(1, 'URL ảnh không được trống').max(1000).refine(isImageUrl, 'Đường dẫn ảnh không hợp lệ'),
   alt: z.string().trim().max(255).default(''),
   sort_order: z.coerce.number().int().min(0).default(0),
   source_url: z.string().trim().max(1000).optional(),
@@ -175,20 +176,34 @@ function validateSale(
 
 const PRODUCT_SELECT = `
   SELECT p.id, p.slug, p.name, p.category_id, c.name AS category_name,
+         p.seller_id, p.material, p.sale_starts_at, p.sale_ends_at, p.updated_at,
          p.sku, p.price_vnd, p.sale_price_vnd,
          (CASE WHEN p.sale_price_vnd IS NOT NULL
                 AND (p.sale_starts_at IS NULL OR p.sale_starts_at <= now())
                 AND (p.sale_ends_at IS NULL OR p.sale_ends_at >= now())
                THEN p.sale_price_vnd ELSE p.price_vnd END) AS current_price_vnd,
-         p.description, p.attributes, p.origin_province,
+         p.description, p.attributes, p.origin_province, p.description_image_urls, p.price_range_vnd,
          p.source_name, p.source_url, p.collected_at,
          p.is_demo, p.price_is_demo, p.stock_quantity, p.status, p.created_at,
-         COALESCE((SELECT json_agg(json_build_object('url', pi.image_url, 'alt', pi.alt_text, 'sort_order', pi.sort_order)
+         COALESCE((SELECT json_agg(json_build_object('url', pi.image_url, 'alt', pi.alt_text, 'sort_order', pi.sort_order, 'source_url', pi.source_url)
                                    ORDER BY pi.sort_order)
                      FROM product_images pi WHERE pi.product_id = p.id), '[]'::json) AS images
     FROM products p JOIN categories c ON c.id = p.category_id`;
 
-export async function listAllProducts(filters: { status?: string; category_id?: string; q?: string }): Promise<Product[]> {
+type AdminProductRow = ProductRow & {
+  seller_id: string | null; material: string | null;
+  sale_starts_at: Date | null; sale_ends_at: Date | null; updated_at: Date;
+};
+
+function mapAdminProduct(row: AdminProductRow) {
+  return { ...mapProduct(row), seller_id: row.seller_id, material: row.material,
+    origin_province: row.origin_province,
+    sale_starts_at: row.sale_starts_at?.toISOString() ?? null,
+    sale_ends_at: row.sale_ends_at?.toISOString() ?? null,
+    created_at: row.created_at.toISOString(), updated_at: row.updated_at.toISOString() };
+}
+
+export async function listAllProducts(filters: { status?: string; category_id?: string; q?: string }) {
   const where: string[] = ['1=1'];
   const params: unknown[] = [];
   if (filters.status) {
@@ -203,14 +218,14 @@ export async function listAllProducts(filters: { status?: string; category_id?: 
     params.push(`%${filters.q.toLowerCase().normalize('NFC')}%`);
     where.push(`p.search_text LIKE lower(immutable_unaccent($${params.length}))`);
   }
-  const rows = await query<ProductRow>(`${PRODUCT_SELECT} WHERE ${where.join(' AND ')} ORDER BY p.updated_at DESC`, params);
-  return rows.map(mapProduct);
+  const rows = await query<AdminProductRow>(`${PRODUCT_SELECT} WHERE ${where.join(' AND ')} ORDER BY p.updated_at DESC, p.id`, params);
+  return rows.map(mapAdminProduct);
 }
 
-export async function getProductForAdmin(id: string): Promise<Product> {
-  const row = await queryOne<ProductRow>(`${PRODUCT_SELECT} WHERE p.id = $1`, [id]);
+export async function getProductForAdmin(id: string) {
+  const row = await queryOne<AdminProductRow>(`${PRODUCT_SELECT} WHERE p.id = $1`, [id]);
   if (!row) throw AppError.notFound('Không tìm thấy sản phẩm.');
-  return mapProduct(row);
+  return mapAdminProduct(row);
 }
 
 async function replaceImages(client: PoolClient, productId: string, images: z.infer<typeof imageSchema>[]): Promise<void> {

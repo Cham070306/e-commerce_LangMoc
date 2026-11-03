@@ -91,11 +91,11 @@ export default function OrderSuccessPage({ id }: { id: string }) {
             Cảm ơn quý khách đã tin chọn Làng Mộc!
           </h1>
           <p className="c2-subtitle" style={{ maxWidth: '540px', margin: '0 auto' }}>
-            Đơn hàng của quý khách đã được ghi nhận vào hệ thống. Nghệ nhân và xưởng nghề đang chuẩn bị kiện hàng thủ công chu đáo nhất.
+            {isMockMode ? 'Đơn mô phỏng đã được ghi nhận để bạn trải nghiệm quy trình mua hàng. Không phát sinh giao hàng hoặc thanh toán thực tế.' : 'Đơn hàng đã được ghi nhận. Làng Mộc sẽ xác nhận thông tin và hướng dẫn bước tiếp theo.'}
           </p>
           {isGuestOrder && (
             <p role="status" style={{ maxWidth: '540px', margin: '12px auto 0', fontSize: '13px', lineHeight: 1.6 }}>
-              Vui lòng ghi lại mã đơn hàng để tiện đối chiếu. Đây là đơn mô phỏng; hiện chưa có trang tra cứu đơn khách hoặc gửi email tự động.
+              Vui lòng ghi lại mã đơn hàng để tiện đối chiếu. Bạn có thể xem lại thông tin đơn trong phiên trình duyệt này. Hiện chưa hỗ trợ tra cứu đơn khách hoặc gửi email tự động.
             </p>
           )}
 
@@ -189,7 +189,7 @@ export default function OrderSuccessPage({ id }: { id: string }) {
 
 
         <div style={{ padding: '16px 20px', background: 'rgba(165,117,75,0.06)', borderRadius: '6px', fontSize: '12px', lineHeight: 1.7, color: 'var(--cafe, #3b352d)', marginBottom: '28px', border: '1px solid rgba(165,117,75,0.2)' }}>
-          <strong>💡 Hướng dẫn nhận hàng COD:</strong> Quý khách sẽ thanh toán số tiền <strong>{formatMoney(order.total_vnd)}</strong> bằng tiền mặt trực tiếp cho nhân viên giao hàng khi nhận kiện hàng. Mọi thông tin chi tiết xin tham khảo tại <a href="#/policies/shipping" style={{ textDecoration: 'underline', color: 'inherit' }}>Chính sách giao nhận & đổi trả</a>.
+          {isMockMode ? <><strong>Đơn mô phỏng:</strong> Bạn không cần thanh toán hoặc chờ giao hàng. </> : <><strong>Hướng dẫn nhận hàng COD:</strong> Số tiền dự kiến khi nhận hàng là <strong>{formatMoney(order.total_vnd)}</strong>. </>}Tham khảo thêm tại <a href="#/policies/shipping" style={{ textDecoration: 'underline', color: 'inherit' }}>Chính sách giao nhận & đổi trả</a>.
         </div>
 
         {/* Nút hành động */}

@@ -165,49 +165,18 @@ test('(c) Bảng cấu hình Policies & Route: Không có route chết và dữ 
   assert.equal((POLICIES as any).privacy, undefined, 'Không được có chính sách bảo mật thông tin');
 
   // Kiểm tra cấu hình site: Maps đang ở trạng thái CHƯA_CHỐT
-  assert.equal(siteMaps.status, 'CHƯA_CHỐT');
-  assert.equal(siteMaps.query, null);
+  assert.equal(siteMaps.status, 'CHỐT');
+  assert.ok(siteMaps.query?.includes('57 Bàu Cát 6'));
 
   // Kiểm tra thông tin liên hệ: Đang cập nhật (CẦN NHÓM CHỐT)
-  assert.equal(siteContact.address, null);
-  assert.equal(siteContact.hotline, null);
-  assert.equal(siteContact.email, null);
+  assert.ok(siteContact.address?.includes('Phường Tân Bình'));
+  assert.equal(siteContact.hotline, '0987223434');
+  assert.equal(siteContact.email, 'langmoc.support@gmail.com');
 });
 
-test('(c) Policies: Chính sách Đổi trả và Bảo hành có đầy đủ SLA, quy chế bồi hoàn và bảng phân loại đặc thù', () => {
-  const returnsDoc = POLICIES.returns;
-  assert.equal(returnsDoc.sections.length, 5);
-
-  // Mục 2 bồi hoàn khi hàng vỡ
-  const sec2 = returnsDoc.sections.find(s => s.id === 'returns-breakage-policy');
-  assert.ok(sec2);
-  assert.ok(sec2.content.some(c => c.includes('Phân định trách nhiệm rủi ro')));
-  assert.ok(sec2.content.some(c => c.includes('đền bù 100% giá trị khai giá')));
-  assert.ok(sec2.content.some(c => c.includes('24 – 48 giờ làm việc')));
-
-  // Mục 3 SLA đổi trả
-  const sec3 = returnsDoc.sections.find(s => s.id === 'returns-sla');
-  assert.ok(sec3);
-  assert.ok(sec3.content.some(c => c.includes('24 giờ')));
-  assert.ok(sec3.content.some(c => c.includes('07 ngày')));
-
-  // Mục 4 SLA chứng từ
-  const sec4 = returnsDoc.sections.find(s => s.id === 'returns-evidence');
-  assert.ok(sec4);
-  assert.ok(sec4.content.some(c => c.includes('Video Unboxing')));
-
-  // Mục 5 Chi phí
-  const sec5 = returnsDoc.sections.find(s => s.id === 'returns-fees');
-  assert.ok(sec5);
-  assert.ok(sec5.content.some(c => c.includes('Reverse Logistics')));
-
-  // Warranty table
-  const warrantyDoc = POLICIES.warranty;
-  const warrantySec2 = warrantyDoc.sections.find(s => s.id === 'warranty-period');
-  assert.ok(warrantySec2?.table);
-  assert.equal(warrantySec2.table.rows.length, 3);
-  assert.equal(warrantySec2.table.rows[0][0], 'Gốm sứ');
-  assert.equal(warrantySec2.table.rows[1][0], 'Thổ cẩm');
-  assert.equal(warrantySec2.table.rows[2][0], 'Nón lá');
+test('Chính sách demo không hứa giải ngân, Mall hoặc luồng hoàn tiền chưa triển khai', () => {
+  const content = JSON.stringify(POLICIES);
+  for (const unsupported of ['tự động hoàn tất', 'giải ngân', 'Mall', 'Reverse Logistics']) assert.equal(content.includes(unsupported), false);
+  assert.ok(POLICIES.returns.sections.some(s => s.content.some(c => c.includes('biểu mẫu liên hệ'))));
+  assert.ok(POLICIES.warranty.sections.some(s => s.table?.rows.length));
 });
-

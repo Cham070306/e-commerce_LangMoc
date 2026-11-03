@@ -1,0 +1,134 @@
+[
+  {
+    "name": "health",
+    "path": "/health",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "4 nhóm catalog",
+    "path": "/categories",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "tìm có dấu",
+    "path": "/products?q=nón&limit=100",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "tìm không dấu",
+    "path": "/products?q=non&limit=100",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "từ khóa không tồn tại",
+    "path": "/products?q=zzzzkhongco",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "price_asc",
+    "path": "/products?sort=price_asc&limit=100",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "price_desc",
+    "path": "/products?sort=price_desc&limit=100",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "lọc khoảng giá",
+    "path": "/products?min_price=100000&max_price=200000&limit=100",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "lọc mây tre",
+    "path": "/products?category=may-tre-dan",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "query sai page=0",
+    "path": "/products?page=0",
+    "pass": true,
+    "status": 400
+  },
+  {
+    "name": "query sai limit=101",
+    "path": "/products?limit=101",
+    "pass": true,
+    "status": 400
+  },
+  {
+    "name": "query sai sort=invalid",
+    "path": "/products?sort=invalid",
+    "pass": true,
+    "status": 400
+  },
+  {
+    "name": "query sai min_price=200&max_price=100",
+    "path": "/products?min_price=200&max_price=100",
+    "pass": true,
+    "status": 400
+  },
+  {
+    "name": "query sai category_id=bad",
+    "path": "/products?category_id=bad",
+    "pass": true,
+    "status": 400
+  },
+  {
+    "name": "query sai q=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "path": "/products?q=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "pass": true,
+    "status": 400
+  },
+  {
+    "name": "sản phẩm không tồn tại",
+    "path": "/products/zzzzkhongco",
+    "pass": true,
+    "status": 404
+  },
+  {
+    "name": "reviews slug",
+    "path": "/products/gio-may-tre-dan/reviews",
+    "pass": true,
+    "status": 200
+  },
+  {
+    "name": "reviews phân trang sai",
+    "path": "/products/gio-may-tre-dan/reviews?page=0",
+    "pass": true,
+    "status": 400
+  },
+  {
+    "name": "chặn khách /auth/me",
+    "path": "/auth/me",
+    "pass": true,
+    "status": 401
+  },
+  {
+    "name": "chặn khách /me/addresses",
+    "path": "/me/addresses",
+    "pass": true,
+    "status": 401
+  },
+  {
+    "name": "chặn khách /admin/categories",
+    "path": "/admin/categories",
+    "pass": true,
+    "status": 401
+  },
+  {
+    "name": "chặn khách /admin/products",
+    "path": "/admin/products",
+    "pass": true,
+    "status": 401
+  }
+]

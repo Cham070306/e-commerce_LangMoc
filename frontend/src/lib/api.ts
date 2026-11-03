@@ -17,6 +17,7 @@ import type {
   AdminContactWrite
 } from './adminContracts';
 import { ADDRESS_DELETE_CONTRACT } from './addressContracts';
+import { fromLiveAddress, toLiveAddress, addressFieldErrors, type LiveAddress } from './liveContracts';
 import { GUEST_CHECKOUT_CONTRACT, type MockGuestCheckoutPayload, type MockGuestCheckoutPreviewPayload } from './guestContracts';
 const env=(import.meta as ImportMeta&{env:Record<string,string>}).env;
 export const isMock=env.VITE_API_MODE!=='live';
@@ -52,7 +53,7 @@ export async function request<T>(method:string,path:string,body?:unknown,signal?
   }
   const data=await res.json().catch(()=>null);
   if(!res.ok){
-    throw new ApiError(data?.error?.message||'Không thể hoàn thành yêu cầu. Vui lòng thử lại.',res.status,data?.error?.code,data?.error?.fields);
+      throw new ApiError(data?.error?.message||'Không thể hoàn thành yêu cầu. Vui lòng thử lại.',res.status,data?.error?.code,!isMock&&path.startsWith('/me/addresses')?addressFieldErrors(data?.error?.fields):data?.error?.fields);
   }
   if(!data||!('data' in data)){
     throw new ApiError('Phản hồi API không đúng định dạng.',502);
@@ -77,8 +78,16 @@ export const api={
   me:(s?:AbortSignal)=>request<{data:User}>('GET','/auth/me',undefined,s),
   
   // Addresses (chỉ GET và POST theo docs/API.md)
-  addresses:(s?:AbortSignal)=>request<{data:Address[]}>('GET','/me/addresses',undefined,s),
-  createAddress:(b:AddressPayload)=>request<{data:Address}>('POST','/me/addresses',b),
+  addresses:async(s?:AbortSignal)=>{
+    if(isMock)return request<{data:Address[]}>('GET','/me/addresses',undefined,s);
+    const result=await request<{data:LiveAddress[]}>('GET','/me/addresses',undefined,s);
+    return {...result,data:result.data.map(fromLiveAddress)};
+  },
+  createAddress:async(b:AddressPayload)=>{
+    if(isMock)return request<{data:Address}>('POST','/me/addresses',b);
+    const result=await request<{data:LiveAddress}>('POST','/me/addresses',toLiveAddress(b));
+    return {...result,data:fromLiveAddress(result.data)};
+  },
   deleteAddress:(id:string)=>request<void>(ADDRESS_DELETE_CONTRACT.method,ADDRESS_DELETE_CONTRACT.path(id)),
 
   // Cart & Preview (docs/API.md lines 47-50)
@@ -87,14 +96,14 @@ export const api={
   removeCartItem:(productId:string)=>request<void>('DELETE',`/me/cart/items/${encodeURIComponent(productId)}`),
   checkoutPreview:(b:PreviewPayload,s?:AbortSignal)=>request<{data:CheckoutPreview}>('POST','/checkout/preview',b,s),
   guestCheckoutPreview:(b:MockGuestCheckoutPreviewPayload)=>{
-    if(!isMock||env.VITE_GUEST_CHECKOUT!=='true')throw new ApiError('Thanh toán khách vãng lai chỉ được bật trong chế độ mô phỏng.',403,'FORBIDDEN');
+    if(env.VITE_GUEST_CHECKOUT==='false')throw new ApiError('Chức năng mua hàng không cần tài khoản đang tạm tắt.',403,'FORBIDDEN');
     return request<{data:CheckoutPreview}>(GUEST_CHECKOUT_CONTRACT.preview.method,`${GUEST_CHECKOUT_CONTRACT.preview.path}?${GUEST_CHECKOUT_CONTRACT.mockFlagParameter}`,b);
   },
 
   // Orders (docs/API.md lines 51-54)
   createOrder:(b:CreateOrderPayload,idempotencyKey:string,s?:AbortSignal)=>request<{data:Order}>('POST','/orders',b,s,{'Idempotency-Key':idempotencyKey}),
   createGuestOrder:(b:MockGuestCheckoutPayload,idempotencyKey:string)=>{
-    if(!isMock||env.VITE_GUEST_CHECKOUT!=='true')throw new ApiError('Thanh toán khách vãng lai chỉ được bật trong chế độ mô phỏng.',403,'FORBIDDEN');
+    if(env.VITE_GUEST_CHECKOUT==='false')throw new ApiError('Chức năng mua hàng không cần tài khoản đang tạm tắt.',403,'FORBIDDEN');
     return request<{data:Order}>(GUEST_CHECKOUT_CONTRACT.createOrder.method,`${GUEST_CHECKOUT_CONTRACT.createOrder.path}?${GUEST_CHECKOUT_CONTRACT.mockFlagParameter}`,b,undefined,{[GUEST_CHECKOUT_CONTRACT.createOrder.idempotencyHeader]:idempotencyKey});
   },
   order:(id:string,s?:AbortSignal)=>request<{data:Order}>('GET',`/me/orders/${encodeURIComponent(id)}`,undefined,s),

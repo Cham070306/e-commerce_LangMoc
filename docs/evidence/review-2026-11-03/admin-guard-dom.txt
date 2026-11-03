@@ -1,0 +1,83 @@
+- link "Đến nội dung":
+  - /url: "#main"
+- text: Gìn giữ nét nghề · Kết nối những giá trị Việt
+- generic: Thủ công & tâm huyết
+- banner:
+  - link "Làng Mộc — Trang chủ":
+    - /url: "#/"
+    - text: làng mộc
+    - generic: .
+  - navigation "Điều hướng chính":
+    - link "Trang chủ":
+      - /url: "#/"
+    - link "Sản phẩm":
+      - /url: "#/catalog"
+    - button "Mở danh mục sản phẩm":
+    - link "Làng nghề Việt":
+      - /url: "#lang-nghe"
+    - link "Câu chuyện":
+      - /url: "#cau-chuyen"
+    - link "Liên hệ":
+      - /url: "#/contact"
+  - button "Tìm kiếm sản phẩm":
+  - link "Đăng nhập tài khoản":
+    - /url: "#/login"
+    - generic: Đăng nhập
+  - link "Giỏ hàng có 0 món":
+    - /url: "#/cart"
+    - generic: Giỏ hàng
+  - link "Khám phá":
+    - /url: "#/catalog"
+    - text: Khám phá
+- main:
+  - link "← Về trang chủ":
+    - /url: "#/"
+  - region "Đăng nhập":
+    - heading "Đăng nhập" [level=1]
+    - paragraph: Chào mừng bạn quay lại với Làng Mộc.
+    - generic: Email
+    - textbox "Email":
+      - /placeholder: ban@email.com
+    - generic: Mật khẩu
+    - textbox "Mật khẩu":
+      - /placeholder: Nhập mật khẩu
+    - button "Hiện mật khẩu":
+    - button "Đăng nhập":
+      - text: Đăng nhập
+    - paragraph:
+      - text: Chưa có tài khoản?
+      - link "Đăng ký ngay":
+        - /url: "#/register"
+  - paragraph: Sản phẩm thủ công Việt, kết nối những giá trị đẹp.
+- contentinfo:
+  - generic: Website demo
+  - paragraph: Dự án học phần thương mại điện tử · Thông tin, sản phẩm và giá dùng để minh họa. Bản thử nghiệm; chức năng giao dịch đang được hoàn thiện.
+  - link "làng mộc.":
+    - /url: "#/"
+  - paragraph:
+    - text: Nét Việt, từ đôi bàn tay.
+    - text: Sàn thương mại điện tử kết nối sản phẩm thủ công và câu chuyện làng nghề Việt Nam.
+  - heading "Khám phá Làng Mộc" [level=3]
+  - link "Danh mục sản phẩm":
+    - /url: "#/catalog"
+  - link "Làng nghề Việt":
+    - /url: "#lang-nghe"
+  - link "Câu chuyện Làng Mộc":
+    - /url: "#cau-chuyen"
+  - link "Liên hệ & Góp ý":
+    - /url: "#/contact"
+  - heading "Chính sách dịch vụ" [level=3]
+  - link "Chính sách vận chuyển & COD":
+    - /url: "#/policies/shipping"
+  - link "Chính sách đổi trả & bồi hoàn":
+    - /url: "#/policies/returns"
+  - link "Chính sách bảo hành & bảo quản":
+    - /url: "#/policies/warranty"
+  - generic: © 2026 Làng Mộc · Dự án học phần
+  - link "Hỗ trợ khách hàng":
+    - /url: "#/contact"
+  - text: ·
+  - link "Chính sách":
+    - /url: "#/policies"
+  - link "Về đầu trang ↑":
+    - /url: "#/"

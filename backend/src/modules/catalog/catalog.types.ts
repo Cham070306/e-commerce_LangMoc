@@ -33,6 +33,8 @@ export interface Product {
   price_is_demo: boolean;
   stock_quantity: number;
   status: string;
+  description_image_urls: string[];
+  price_range_vnd: {min:number;max:number} | null;
 }
 
 export interface Review {

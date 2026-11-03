@@ -1,0 +1,57 @@
+Đối chiếu API live: 449/449 sản phẩm gốc, tổng DB 452.
+665 ảnh gallery, 274 ảnh nội dung khớp nguồn; tất cả đường dẫn ảnh local tồn tại.
+Nhập lần hai vẫn tổng 452; không nhân đôi sản phẩm.
+
+> lang-moc-backend@0.1.0 test
+> tsx --test --test-concurrency=1 tests/*.test.ts
+
+▶ Auth: register/login/logout/me
+  ✔ trả 401 khi /auth/me không có phiên (4.916333ms)
+  ✔ đăng ký tài khoản mới trả 201 và role customer (225.739541ms)
+  ✔ đăng ký trùng email trả 409 (198.325375ms)
+  ✔ đăng ký với email sai trả 400 và có fields (2.193666ms)
+  ✔ đăng nhập đúng trả 200 và đặt cookie HttpOnly (195.308334ms)
+  ✔ đăng nhập sai mật khẩu trả 401 (194.100833ms)
+  ✔ /auth/me trả hồ sơ khi có phiên và logout thu hồi phiên (200.647917ms)
+✔ Auth: register/login/logout/me (1351.28ms)
+▶ Phân quyền admin/customer
+  ✔ khách chưa đăng nhập bị 401 khi vào admin (1.049875ms)
+  ✔ customer bị 403 khi vào admin (206.205375ms)
+  ✔ admin truy cập được danh sách admin (202.33175ms)
+  ✔ admin tạo/sửa danh mục và sản phẩm (204.315958ms)
+  ✔ admin không đặt giá giảm lớn hơn giá gốc (203.085333ms)
+  ✔ admin phân trang không trùng sản phẩm và từ chối query sai (209.771166ms)
+✔ Phân quyền admin/customer (1334.567ms)
+▶ Địa chỉ của người dùng
+  ✔ chưa đăng nhập không xem được địa chỉ (1.894375ms)
+  ✔ customer xem và tạo được địa chỉ của mình (235.964208ms)
+  ✔ chặn số điện thoại sai và không cho xóa địa chỉ người khác (400.032209ms)
+  ✔ tạo mặc định đồng thời rồi xóa vẫn còn đúng một địa chỉ mặc định (202.652083ms)
+✔ Địa chỉ của người dùng (1153.477542ms)
+▶ Catalog công khai
+  ✔ GET /categories trả 4 danh mục đang bật kèm product_count (9.598791ms)
+  ✔ GET /products phân trang mặc định 12/trang (28.225584ms)
+  ✔ chỉ trả sản phẩm active (6.091917ms)
+  ✔ lọc theo danh mục slug (3.486083ms)
+  ✔ tìm kiếm không dấu trả đúng kết quả (gom) (4.519083ms)
+  ✔ tìm kiếm không có kết quả trả mảng rỗng (3.59575ms)
+  ✔ sắp xếp price_asc tăng dần (4.683792ms)
+  ✔ sắp xếp price_desc giảm dần (3.751292ms)
+  ✔ lọc khoảng giá loại sản phẩm ngoài khoảng (4.505167ms)
+  ✔ từ chối sort không hợp lệ với 400 (2.190208ms)
+  ✔ từ chối khoảng giá ngược với 400 (1.863625ms)
+  ✔ limit vượt 100 bị từ chối (1.81625ms)
+  ✔ GET chi tiết theo slug trả đủ ảnh và category_name (2.176792ms)
+  ✔ chi tiết không tồn tại trả 404 (2.049333ms)
+  ✔ GET reviews trả summary và mảng data đúng shape (2.59625ms)
+  ✔ reviews của sản phẩm không tồn tại trả 404 (1.899041ms)
+  ✔ response envelope luôn có data (1.325833ms)
+✔ Catalog công khai (416.280458ms)
+ℹ tests 34
+ℹ suites 4
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4387.873666

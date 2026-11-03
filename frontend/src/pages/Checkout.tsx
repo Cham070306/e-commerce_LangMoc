@@ -1,3 +1,4 @@
+import { AddressFields } from '../components/AddressFields';
 import React, { useEffect, useState, useRef } from 'react';
 import { useCart } from '../features/cart/CartContext';
 import { useAuth } from '../features/auth/AuthContext';
@@ -27,7 +28,7 @@ import {
 
 export default function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
-  const { items, appliedPromo, refreshCart, clearGuestCart, applyPromotion, removePromotion, loading: cartLoading } = useCart();
+  const { items, appliedPromo, refreshCart, clearGuestCart, applyPromotion, removePromotion, loading: cartLoading, waitForCartUpdates, syncing } = useCart();
 
   const [guestInfo, setGuestInfo] = useState({
     recipient_name: '',
@@ -57,6 +58,7 @@ export default function CheckoutPage() {
   const [note, setNote] = useState('');
   const [preview, setPreview] = useState<CheckoutPreview | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
+  const previewVersion = useRef(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [priceChangeWarning, setPriceChangeWarning] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -120,8 +122,10 @@ export default function CheckoutPage() {
 
   // Tải giá từ POST /checkout/preview
   const updatePreview = async (addrId?: string): Promise<CheckoutPreview | null> => {
+    const version = ++previewVersion.current;
     setPreviewLoading(true);
     try {
+      await waitForCartUpdates();
       if (isGuestFlow) {
         const res = await api.guestCheckoutPreview({
           items: items.map(item => ({
@@ -129,7 +133,7 @@ export default function CheckoutPage() {
             quantity: item.quantity
           }))
         });
-        setPreview(res.data);
+        if (version === previewVersion.current) setPreview(res.data);
         return res.data;
       }
       const res = await api.checkoutPreview({
@@ -137,9 +141,10 @@ export default function CheckoutPage() {
         promotion_code: appliedPromo || undefined,
         payment_method: 'cod'
       });
-      setPreview(res.data);
+      if (version === previewVersion.current) setPreview(res.data);
       return res.data;
     } catch (err) {
+      if (version === previewVersion.current) setPreview(null);
       if (err instanceof ApiError) {
         if (err.status === 401) {
           window.location.hash = '#/login?redirect=' + encodeURIComponent('/checkout');
@@ -151,7 +156,7 @@ export default function CheckoutPage() {
       }
       return null;
     } finally {
-      setPreviewLoading(false);
+      if (version === previewVersion.current) setPreviewLoading(false);
     }
   };
 
@@ -159,7 +164,7 @@ export default function CheckoutPage() {
     if (items.length > 0 && (user || isGuestFlow)) {
       updatePreview(selectedAddressId);
     }
-  }, [selectedAddressId, appliedPromo, items, user]);
+  }, [selectedAddressId, appliedPromo, items, user, syncing]);
 
   // Thêm địa chỉ mới ngay tại checkout
   const handleCreateAddress = async (e: React.FormEvent) => {
@@ -171,7 +176,6 @@ export default function CheckoutPage() {
       errs.phone = phoneCheck.error || 'Số điện thoại không hợp lệ';
     }
     if (!newAddr.province.trim()) errs.province = 'Vui lòng nhập tỉnh/thành';
-    if (!newAddr.district.trim()) errs.district = 'Vui lòng nhập quận/huyện';
     if (!newAddr.ward.trim()) errs.ward = 'Vui lòng nhập phường/xã';
     if (!newAddr.street_address.trim()) errs.street_address = 'Vui lòng nhập địa chỉ cụ thể';
 
@@ -210,7 +214,7 @@ export default function CheckoutPage() {
 
   const handleDeleteAddress = async (address: Address) => {
     if (isDeletingAddressRef.current || deletingAddressId || submitting || isSubmittingRef.current) return;
-    const shortAddress = `${address.street_address}, ${address.ward}, ${address.district}, ${address.province}`;
+    const shortAddress = [address.street_address,address.ward,address.district,address.province].filter(Boolean).join(', ');
     if (!window.confirm(`Xóa địa chỉ của ${address.full_name}: ${shortAddress}?`)) return;
 
     isDeletingAddressRef.current = true;
@@ -461,7 +465,7 @@ export default function CheckoutPage() {
               {isGuestFlow ? (
                 <div>
                   <p className="c2-mock-badge" style={{ display: 'inline-block', margin: '0 0 14px' }}>
-                    MÔ PHỎNG / ĐỀ XUẤT CHỜ KHẢI-SƠN — địa chỉ tự khai báo, chưa đối chiếu dữ liệu hành chính chuẩn
+                    Mua hàng không cần tài khoản · Nhập đầy đủ địa chỉ để nhận hàng.
                   </p>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
                     <div>
@@ -572,36 +576,9 @@ export default function CheckoutPage() {
                       />
                       {addrErrors.phone && <small className="field-error">{addrErrors.phone}</small>}
                     </div>
-                    <div>
-                      <label className="c2-form-label">Tỉnh / Thành phố *</label>
-                      <input
-                        className="c2-form-input"
-                        value={newAddr.province}
-                        onChange={e => setNewAddr({ ...newAddr, province: e.target.value })}
-                        placeholder="VD: Hà Nội"
-                      />
-                      {addrErrors.province && <small className="field-error">{addrErrors.province}</small>}
-                    </div>
-                    <div>
-                      <label className="c2-form-label">Quận / Huyện *</label>
-                      <input
-                        className="c2-form-input"
-                        value={newAddr.district}
-                        onChange={e => setNewAddr({ ...newAddr, district: e.target.value })}
-                        placeholder="VD: Hoàn Kiếm"
-                      />
-                      {addrErrors.district && <small className="field-error">{addrErrors.district}</small>}
-                    </div>
-                    <div>
-                      <label className="c2-form-label">Phường / Xã *</label>
-                      <input
-                        className="c2-form-input"
-                        value={newAddr.ward}
-                        onChange={e => setNewAddr({ ...newAddr, ward: e.target.value })}
-                        placeholder="VD: Tràng Tiền"
-                      />
-                      {addrErrors.ward && <small className="field-error">{addrErrors.ward}</small>}
-                    </div>
+                    <AddressFields id="checkout-address" province={newAddr.province} ward={newAddr.ward}
+                      onChange={(province,ward)=>setNewAddr({...newAddr,province,ward,district:''})}
+                      errors={addrErrors} disabled={addrSubmitting}/>
                     <div>
                       <label className="c2-form-label">Địa chỉ chi tiết (số nhà, đường) *</label>
                       <input
@@ -668,7 +645,7 @@ export default function CheckoutPage() {
                             )}
                           </div>
                           <div style={{ color: 'var(--cafe, #3b352d)', marginTop: '2px' }}>
-                            {addr.street_address}, {addr.ward}, {addr.district}, {addr.province}
+                            {[addr.street_address,addr.ward,addr.district,addr.province].filter(Boolean).join(', ')}
                           </div>
                         </div>
                         {canDeleteAddress && (
@@ -852,7 +829,7 @@ export default function CheckoutPage() {
                   {isGuestFlow ? (
                     <><strong>Giao đến:</strong> {guestInfo.recipient_name || 'Người nhận'} ({guestInfo.phone || 'Chưa nhập số điện thoại'}) - {guestInfo.address_line || 'Chưa nhập địa chỉ'}</>
                   ) : selectedAddr && (
-                    <><strong>Giao đến:</strong> {selectedAddr.full_name} ({selectedAddr.phone}) - {selectedAddr.street_address}, {selectedAddr.ward}, {selectedAddr.district}, {selectedAddr.province}</>
+                    <><strong>Giao đến:</strong> {selectedAddr.full_name} ({selectedAddr.phone}) - {[selectedAddr.street_address,selectedAddr.ward,selectedAddr.district,selectedAddr.province].filter(Boolean).join(', ')}</>
                   )}
                 </div>
               )}
@@ -905,8 +882,8 @@ export default function CheckoutPage() {
                 className={`c2-btn c2-btn-primary ${requiresCheckoutTermsAcceptance(hasAcceptedTerms) ? 'c2-btn-terms-locked' : ''}`}
                 style={{ width: '100%', marginTop: '20px', padding: '14px', fontSize: '14px', fontWeight: 600 }}
                 onClick={handlePlaceOrder}
-                disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || (!isGuestFlow && !selectedAddressId)}
-                aria-disabled={submitting || Boolean(deletingAddressId) || items.length === 0 || (!isGuestFlow && !selectedAddressId) || requiresCheckoutTermsAcceptance(hasAcceptedTerms)}
+                disabled={submitting || !preview || previewLoading || syncing || Boolean(deletingAddressId) || items.length === 0 || (!isGuestFlow && !selectedAddressId)}
+                aria-disabled={submitting || !preview || previewLoading || syncing || Boolean(deletingAddressId) || items.length === 0 || (!isGuestFlow && !selectedAddressId) || requiresCheckoutTermsAcceptance(hasAcceptedTerms)}
                 aria-describedby={requiresCheckoutTermsAcceptance(hasAcceptedTerms) ? 'checkout-terms-help' : undefined}
               >
                 {submitting ? (
@@ -914,7 +891,7 @@ export default function CheckoutPage() {
                     <span className="spinner" style={{ width: '14px', height: '14px', margin: 0 }} /> Đang xử lý đặt hàng…
                   </span>
                 ) : (
-                  <>Đặt hàng COD — {preview ? formatMoney(preview.total_vnd) : '...'} <ArrowRight size={16} /></>
+                  <>Đặt hàng COD — {previewLoading || syncing ? 'Đang tính lại…' : preview ? formatMoney(preview.total_vnd) : '...'} <ArrowRight size={16} /></>
                 )}
               </button>
 

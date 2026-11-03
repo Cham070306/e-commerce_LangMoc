@@ -1,0 +1,6 @@
+
+> lang-moc-backend@0.1.0 import:catalog
+> tsx src/db/import-catalog.ts
+
+Đã nhập 452 sản phẩm từ catalog gốc. Tổng DB: 452.
+Giữ ID, tồn kho và trạng thái sản phẩm đã có; sản phẩm mới có tồn kho demo 8, không phải tồn kho thực.

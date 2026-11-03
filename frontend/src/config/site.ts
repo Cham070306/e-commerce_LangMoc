@@ -2,6 +2,7 @@ const env = ((import.meta as any).env as Record<string, string> | undefined) || 
 
 export const SITE_NAME = 'Làng Mộc';
 export const SITE_TAGLINE = 'Nét Việt, từ đôi bàn tay';
+const confirmedAddress = '57 Bàu Cát 6, Phường Tân Bình, TP.HCM (Phường 14, Quận Tân Bình cũ)';
 
 // Cấu hình Google Maps (Yêu cầu M5: Địa điểm Maps CHƯA_CHỐT, không bịa địa chỉ giả)
 export interface SiteMapsConfig {
@@ -11,9 +12,9 @@ export interface SiteMapsConfig {
 }
 
 export const siteMaps: SiteMapsConfig = {
-  status: 'CHƯA_CHỐT',
-  query: null,
-  label: null
+  status: 'CHỐT',
+  query: env.VITE_MAPS_QUERY?.trim() || '57 Bàu Cát 6, Tân Bình, Thành phố Hồ Chí Minh',
+  label: env.VITE_MAPS_LABEL?.trim() || env.VITE_CONTACT_ADDRESS?.trim() || confirmedAddress
 };
 
 export const MAPS_LOCATION = siteMaps.status;
@@ -27,16 +28,16 @@ export interface SiteContactInfo {
 }
 
 export const siteContact: SiteContactInfo = {
-  address: null,       // Đang cập nhật (CẦN NHÓM CHỐT)
-  hotline: null,       // Đang cập nhật (CẦN NHÓM CHỐT)
-  email: null,         // Đang cập nhật (CẦN NHÓM CHỐT)
-  workingHours: null   // Đang cập nhật (CẦN NHÓM CHỐT)
+  address: env.VITE_CONTACT_ADDRESS?.trim() || confirmedAddress,
+  hotline: env.VITE_CONTACT_HOTLINE?.trim() || '0987223434',
+  email: env.VITE_CONTACT_EMAIL?.trim() || 'langmoc.support@gmail.com',
+  workingHours: env.VITE_CONTACT_HOURS?.trim() || null
 };
 
 export const isMockMode = env.VITE_API_MODE !== 'live';
 
-// ĐỀ XUẤT CHỜ KHẢI: DELETE /me/addresses/:id chưa có trong docs/API.md.
-export const canDeleteAddress = isMockMode || env.VITE_FEATURE_ADDRESS_DELETE === 'true';
+// Backend Khải đã có DELETE /me/addresses/:id với kiểm tra quyền sở hữu.
+export const canDeleteAddress = true;
 
-// F08: mặc định tắt; live luôn tắt vì schema/API chưa hỗ trợ đơn khách.
-export const isGuestCheckoutEnabled = isMockMode && env.VITE_GUEST_CHECKOUT === 'true';
+// Khách có thể mua COD qua API guest; có thể tắt khi triển khai.
+export const isGuestCheckoutEnabled = env.VITE_GUEST_CHECKOUT !== 'false';

@@ -5,7 +5,7 @@ import { formatMoney, ProductImage } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { ShoppingBag, Trash2, ArrowRight, Tag, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { isGuestCheckoutEnabled, isMockMode } from '../config/site';
-import { CheckoutProgressBar } from '../components/checkout/CheckoutProgressBar';
+import '../styles/customer-pages.css';
 
 export default function CartPage() {
   const { user } = useAuth();
@@ -21,7 +21,9 @@ export default function CartPage() {
     updateQuantity,
     removeFromCart,
     applyPromotion,
-    removePromotion
+    removePromotion,
+    refreshCart,
+    waitForCartUpdates
   } = useCart();
 
   const [promoInput, setPromoInput] = useState('');
@@ -37,7 +39,7 @@ export default function CartPage() {
 
   if (loading) {
     return (
-      <main id="main" className="c2-page-wrap">
+      <main id="main" className="c2-page-wrap customer-page cart-page">
         <Loading label="Đang cập nhật giỏ hàng…" />
       </main>
     );
@@ -45,16 +47,15 @@ export default function CartPage() {
 
   if (!user && !isGuestCheckoutEnabled) {
     return (
-      <main id="main" className="c2-page-wrap">
+      <main id="main" className="c2-page-wrap customer-page cart-page">
         <div className="c2-main-container">
-        <CheckoutProgressBar currentStep="cart" />
           <div className="c2-card" style={{ textAlign: 'center', padding: '64px 24px', maxWidth: '560px', margin: '40px auto' }}>
             <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(73,52,33,0.06)', display: 'grid', placeItems: 'center', margin: '0 auto 20px', color: 'var(--brown, #493421)' }}>
               <ShoppingBag size={34} />
             </div>
             <h1 className="c2-title" style={{ fontSize: '24px', marginBottom: '10px' }}>Yêu cầu đăng nhập</h1>
             <p className="c2-subtitle" style={{ margin: '0 auto 28px', lineHeight: 1.8 }}>
-              Quý khách vui lòng đăng nhập tài khoản <strong>Làng Mộc</strong> để thêm sản phẩm vào giỏ hàng, đồng bộ dữ liệu và tiến hành quản lý đơn hàng.
+              Đăng nhập để xem giỏ hàng và tiếp tục mua sắm tại Làng Mộc.
             </p>
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a href="#/login?redirect=/cart" className="c2-btn c2-btn-primary">
@@ -71,18 +72,18 @@ export default function CartPage() {
   }
 
   return (
-    <main id="main" className="c2-page-wrap">
+    <main id="main" className="c2-page-wrap customer-page cart-page">
       <div className="c2-main-container">
         {/* Tiêu đề & Thông báo Mock */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <h1 className="c2-title" style={{ margin: 0 }}>Giỏ hàng của bạn</h1>
+            <h1 className="c2-title" style={{ margin: 0 }}>Giỏ hàng</h1>
             <p className="c2-subtitle" style={{ margin: '4px 0 0' }}>
               {items.length > 0 ? `Bạn đang có ${items.reduce((s, i) => s + i.quantity, 0)} món đồ thủ công trong giỏ` : 'Giỏ hàng đang trống'}
             </p>
           </div>
           {isMockMode && (
-            <span className="c2-mock-badge">⚙️ CHẾ ĐỘ MÔ PHỎNG (MOCK API)</span>
+            <span className="c2-mock-badge">Bản thử nghiệm</span>
           )}
         </div>
 
@@ -101,7 +102,9 @@ export default function CartPage() {
           </div>
         )}
 
-        {items.length === 0 ? (
+        {items.length === 0 && error ? (
+          <div className="c2-card cart-load-error"><AlertCircle size={30}/><h2>Chưa thể tải giỏ hàng</h2><p>Vui lòng thử lại sau để xem sản phẩm trong giỏ.</p><button type="button" className="c2-btn c2-btn-primary" onClick={()=>{clearError();void refreshCart();}}>Thử lại</button><a href="#/catalog">Tiếp tục xem sản phẩm</a></div>
+        ) : items.length === 0 ? (
           /* TRẠNG THÁI GIỎ HÀNG TRỐNG */
           <div className="c2-card" style={{ textAlign: 'center', padding: '60px 20px' }}>
             <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'rgba(73,52,33,0.06)', display: 'grid', placeItems: 'center', margin: '0 auto 18px', color: 'var(--brown, #493421)' }}>
@@ -221,7 +224,8 @@ export default function CartPage() {
                           className="c2-input c2-promo-input"
                           value={promoInput}
                           onChange={e => setPromoInput(e.target.value)}
-                          placeholder="Mã giảm giá (LANGMOC10)"
+                          placeholder="Nhập mã giảm giá"
+                          aria-label="Mã giảm giá"
                           disabled={promoSubmitting || !!appliedPromo}
                         />
                       </div>
@@ -287,8 +291,9 @@ export default function CartPage() {
 
                   <div className="c2-summary-divider" />
 
+                  {!preview&&<p className="cart-price-note">Phí vận chuyển và giảm giá được xác nhận tại bước thanh toán.</p>}
                   <div className="c2-summary-row c2-summary-total">
-                    <span>Tổng thanh toán</span>
+                    <span>{preview?'Tổng thanh toán':'Tạm tính'}</span>
                     <span>{formatMoney((user || isGuestCheckoutEnabled) && preview ? preview.total_vnd : subtotal)}</span>
                   </div>
                 </div>
@@ -297,15 +302,15 @@ export default function CartPage() {
                 <div style={{ marginTop: '24px' }}>
                   {user ? (
                     <a
-                      href="#/checkout"
+                      href="#/checkout" onClick={async e=>{e.preventDefault();try{await waitForCartUpdates();window.location.hash='/checkout';}catch{/* The cart displays the update error; keep the customer here. */}}}
                       className="c2-btn c2-btn-primary c2-btn-block"
                       style={{ fontSize: '14px', padding: '14px' }}
                     >
-                      Tiến hành đặt hàng (COD) <ArrowRight size={16} />
+                      Tiếp tục thanh toán <ArrowRight size={16} />
                     </a>
                   ) : isGuestCheckoutEnabled ? (
                     <a
-                      href="#/checkout"
+                      href="#/checkout" onClick={async e=>{e.preventDefault();try{await waitForCartUpdates();window.location.hash='/checkout';}catch{/* The cart displays the update error; keep the customer here. */}}}
                       className="c2-btn c2-btn-primary c2-btn-block"
                       style={{ fontSize: '14px', padding: '14px' }}
                     >

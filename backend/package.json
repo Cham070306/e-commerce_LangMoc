@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "lang-moc-backend",
   "private": true,
   "version": "0.1.0",
@@ -14,8 +14,9 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "migrate": "tsx src/db/migrate.ts",
     "seed": "tsx src/db/seed.ts",
-    "test": "tsx --test tests/*.test.ts",
-    "test:watch": "tsx --test --watch tests/*.test.ts"
+    "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
+    "test:watch": "tsx --test --watch tests/*.test.ts",
+    "import:catalog": "tsx src/db/import-catalog.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -37,4 +38,3 @@
     "typescript": "~5.7.2"
   }
 }
-

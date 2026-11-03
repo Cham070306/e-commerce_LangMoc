@@ -4,7 +4,7 @@ import type { Order } from '../lib/types';
 import { formatMoney } from '../components/catalog/ProductCard';
 import { Loading } from '../components/common/States';
 import { ArrowLeft, Clock, MapPin, Package, CheckCircle, AlertCircle, Ban, Truck, ShieldCheck, Printer } from 'lucide-react';
-import { isMockMode } from '../config/site';
+import { siteContact, isMockMode } from '../config/site';
 import { getStatusBadge, getPaymentBadge } from '../lib/orderStatusView';
 
 interface OrderDetailProps {
@@ -354,7 +354,7 @@ export default function OrderDetailPage({ id }: OrderDetailProps) {
               </div>
 
               <div style={{ marginTop: '16px', fontSize: '11px', color: 'var(--muted, #7c6a57)', textAlign: 'center', lineHeight: '1.5' }}>
-                Cần hỗ trợ đơn hàng? Liên hệ hotline Làng Mộc: <strong>1900 6868</strong> (8:00 - 20:00)
+                Cần hỗ trợ đơn hàng? {siteContact.hotline ? <a href={'tel:'+siteContact.hotline}>Gọi {siteContact.hotline}</a> : <a href="#/contact">Gửi yêu cầu hỗ trợ Làng Mộc</a>}{siteContact.workingHours ? ` (${siteContact.workingHours})` : ''}
               </div>
             </div>
           </div>

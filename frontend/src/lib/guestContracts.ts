@@ -1,10 +1,6 @@
-/**
- * MÔ PHỎNG / ĐỀ XUẤT CHỜ KHẢI-SƠN.
- * Các endpoint này không tồn tại trong docs/API.md và không được gọi ở live.
- * Chỉ là điểm tập trung để thảo luận hợp đồng backend cho khách vãng lai.
- */
+// API mua hàng không cần tài khoản: mock và backend PostgreSQL dùng cùng payload.
 export const GUEST_CHECKOUT_CONTRACT = {
-  label: 'MÔ PHỎNG / ĐỀ XUẤT CHỜ KHẢI-SƠN',
+  label: 'Đặt hàng COD không cần tài khoản',
   mockFlagParameter: '_guest_checkout=true',
   preview: { method: 'POST', path: '/guest/checkout/preview' },
   createOrder: { method: 'POST', path: '/guest/orders', idempotencyHeader: 'Idempotency-Key' },

@@ -1,0 +1,14 @@
+
+> lang-moc-frontend@0.1.0 build
+> tsc -b && vite build
+
+vite v6.4.4 building for production...
+transforming...
+✓ 1638 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                              0.56 kB │ gzip:   0.39 kB
+dist/assets/index-BahRT7KG.css             125.65 kB │ gzip:  24.62 kB
+dist/assets/vietnam-addresses-DF465FEH.js  127.84 kB │ gzip:  27.13 kB
+dist/assets/index-CYXRkZg2.js              470.07 kB │ gzip: 127.50 kB
+✓ built in 821ms

@@ -23,6 +23,8 @@ export interface ProductRow {
   status: string;
   created_at: Date;
   images: ProductImage[] | null;
+  description_image_urls: string[];
+  price_range_vnd: {min:number;max:number} | null;
 }
 
 export function mapProduct(row: ProductRow): Product {
@@ -47,6 +49,8 @@ export function mapProduct(row: ProductRow): Product {
     price_is_demo: row.price_is_demo,
     stock_quantity: row.stock_quantity,
     status: row.status,
+    description_image_urls: row.description_image_urls ?? [],
+    price_range_vnd: row.price_range_vnd ?? null,
   };
 }
 

@@ -24,6 +24,11 @@ authRouter.post(
   asyncHandler(async (req, res) => {
     const input = parseRegisterInput(req.body);
     const user = await registerUser(input);
+    const { token, expiresAt } = await createSession(user.id, {
+      userAgent: req.get('user-agent') ?? undefined,
+      ip: req.ip,
+    });
+    setSessionCookie(res, token, expiresAt);
     sendData(res, user, 201);
   }),
 );
@@ -59,6 +64,6 @@ authRouter.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     const user = req.user!;
-    sendData(res, { id: user.id, full_name: user.full_name, email: user.email, role: user.role });
+    sendData(res, { id: user.id, full_name: user.full_name, email: user.email, role: user.role, phone: user.phone });
   }),
 );

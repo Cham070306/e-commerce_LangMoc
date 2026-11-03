@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../features/auth/AuthContext';
 import { api, ApiError } from '../lib/api';
 import { siteContact, siteMaps, isMockMode } from '../config/site';
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle, AlertCircle, Map, ExternalLink } from 'lucide-react';
+import { Mail, Phone, MapPin, Clock, ArrowUpRight, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import '../styles/contact.css';
 
 const SUBJECT_OPTIONS = [
   'Hỗ trợ đơn hàng',
@@ -45,7 +46,7 @@ export default function ContactPage() {
     if (!trimmedName) {
       errs.name = 'Vui lòng nhập họ và tên.';
     } else if (trimmedName.length > 120) {
-      errs.name = 'Họ và tên không được vượt quá 120 ký tự (theo đặc tả CSDL).';
+      errs.name = 'Họ và tên không được vượt quá 120 ký tự.';
     }
 
     const trimmedEmail = email.trim();
@@ -53,7 +54,7 @@ export default function ContactPage() {
     if (!trimmedEmail) {
       errs.email = 'Vui lòng nhập địa chỉ email.';
     } else if (trimmedEmail.length > 255) {
-      errs.email = 'Email không được vượt quá 255 ký tự (theo đặc tả CSDL).';
+      errs.email = 'Email không được vượt quá 255 ký tự.';
     } else if (!emailRegex.test(trimmedEmail)) {
       errs.email = 'Địa chỉ email không đúng định dạng.';
     }
@@ -62,7 +63,7 @@ export default function ContactPage() {
     if (!finalSubject) {
       errs.subject = 'Vui lòng nhập chủ đề liên hệ.';
     } else if (finalSubject.length > 160) {
-      errs.subject = 'Tiêu đề liên hệ không được vượt quá 160 ký tự (theo đặc tả CSDL).';
+      errs.subject = 'Tiêu đề liên hệ không được vượt quá 160 ký tự.';
     }
 
     const trimmedMsg = message.trim();
@@ -96,7 +97,7 @@ export default function ContactPage() {
         message: message.trim()
       });
 
-      setSuccessMsg(`Cảm ơn bạn đã liên hệ! Tin nhắn của bạn đã được gửi thành công đến đội ngũ Làng Mộc (Mã phản hồi: #${res.data.id.slice(0, 8)}).`);
+      setSuccessMsg(`Cảm ơn bạn đã liên hệ! Tin nhắn của bạn đã được gửi thành công đến đội ngũ Làng Mộc (Mã phản hồi: #${res.data.id}).`);
       
       // Chỉ reset dữ liệu khi gửi thành công
       setMessage('');
@@ -124,349 +125,47 @@ export default function ContactPage() {
     }
   };
 
+  const mapsUrl = siteMaps.query ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteMaps.query)}` : null;
   return (
-    <main id="main" className="c2-page-wrap">
-      <div className="c2-main-container">
-        {/* Breadcrumb & Tiêu đề */}
-        <div style={{ marginBottom: '24px' }}>
-          <div style={{ fontSize: '12px', color: 'var(--muted, #7c6a57)', marginBottom: '4px' }}>
-            <a href="#/" style={{ color: 'inherit', textDecoration: 'none' }}>Trang chủ</a> ›{' '}
-            <strong>Liên hệ & Góp ý</strong>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-            <div>
-              <h1 className="c2-title" style={{ margin: 0 }}>Liên hệ & Góp ý</h1>
-              <p className="c2-subtitle" style={{ margin: '4px 0 0' }}>
-                Gửi phản hồi, yêu cầu hỗ trợ đơn hàng hoặc liên hệ kết nối nhà bán thủ công cùng Làng Mộc.
-              </p>
+    <main id="main" className="contact-page">
+      <div className="contact-shell">
+        <div className="contact-breadcrumb" role="navigation" aria-label="Đường dẫn"><a href="#/">Trang chủ</a><span>/</span><span>Liên hệ</span></div>
+        <div className="contact-intro"><h1>Liên hệ</h1><p>Gửi câu hỏi hoặc góp ý cho Làng Mộc qua biểu mẫu bên dưới.</p></div>
+        <div className="contact-layout">
+          <section className="contact-form-panel" aria-labelledby="contact-form-title" id="contact-form">
+            {isMockMode&&<p className="contact-demo">Bản thử nghiệm</p>}
+            <h2 id="contact-form-title">Gửi tin nhắn</h2>
+            <p className="contact-form-lead">Điền các thông tin có dấu * để gửi tin nhắn.</p>
+            <div aria-live="polite">
+              {successMsg&&<div className="contact-alert contact-alert-success"><CheckCircle size={19}/><p>{successMsg}</p></div>}
+              {apiError&&<div className="contact-alert contact-alert-error" role="alert"><AlertCircle size={19}/><p>{apiError}</p></div>}
             </div>
-            {isMockMode && <span className="c2-mock-badge">⚙️ CHẾ ĐỘ MÔ PHỎNG (MOCK API)</span>}
-          </div>
-        </div>
-
-        {/* Thông báo trạng thái dùng vùng aria-live */}
-        <div aria-live="polite" style={{ marginBottom: '20px' }}>
-          {successMsg && (
-            <div style={{ padding: '14px 18px', background: '#ecfdf5', border: '1px solid #10b981', borderRadius: '6px', color: '#065f46', fontSize: '13px', display: 'flex', alignItems: 'flex-start', gap: '10px', lineHeight: '1.5' }}>
-              <CheckCircle size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
-              <div>
-                <strong>Gửi thành công!</strong> {successMsg}
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="contact-form-row">
+                <div className="contact-field"><label htmlFor="contactName">Họ và tên <span>*</span></label><input id="contactName" name="name" autoComplete="name" placeholder="Tên của bạn" value={name} maxLength={120} onChange={e=>{setName(e.target.value);setErrors(prev=>({...prev,name:''}));}} disabled={submitting} required aria-invalid={!!errors.name} aria-describedby={errors.name?'contactName-error':undefined}/>{errors.name&&<small id="contactName-error">{errors.name}</small>}</div>
+                <div className="contact-field"><label htmlFor="contactEmail">Email <span>*</span></label><input id="contactEmail" name="email" type="email" autoComplete="email" placeholder="ban@email.com" value={email} maxLength={255} onChange={e=>{setEmail(e.target.value);setErrors(prev=>({...prev,email:''}));}} disabled={submitting} required aria-invalid={!!errors.email} aria-describedby={errors.email?'contactEmail-error':undefined}/>{errors.email&&<small id="contactEmail-error">{errors.email}</small>}</div>
               </div>
-            </div>
-          )}
-
-          {apiError && (
-            <div style={{ padding: '14px 18px', background: '#fef2f2', border: '1px solid #ef4444', borderRadius: '6px', color: '#991b1b', fontSize: '13px', display: 'flex', alignItems: 'flex-start', gap: '10px', lineHeight: '1.5' }}>
-              <AlertCircle size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
-              <div>
-                <strong>Lỗi gửi phản hồi:</strong> {apiError}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Bố cục 2 cột: Cột Form và Cột Thông tin liên hệ */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px', alignItems: 'start' }}>
-          {/* CỘT 1: FORM GỬI LIÊN HỆ */}
-          <div className="c2-card" style={{ padding: '32px' }}>
-            <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '20px', color: 'var(--brown, #493421)', margin: '0 0 6px' }}>
-              Gửi tin nhắn cho Làng Mộc
-            </h2>
-            <p style={{ fontSize: '12px', color: 'var(--muted, #7c6a57)', margin: '0 0 20px', lineHeight: 1.5 }}>
-              Mọi ý kiến đóng góp của quý khách sẽ được tiếp nhận và phản hồi sớm nhất có thể.
-            </p>
-
-            <form onSubmit={handleSubmit} noValidate className="c2-form">
-              {/* Họ và tên */}
-              <div className="c2-form-group">
-                <label htmlFor="contactName" className="c2-label">
-                  Họ và tên <span className="c2-required">*</span>
-                </label>
-                <input
-                  id="contactName"
-                  type="text"
-                  className={`c2-input ${errors.name ? 'c2-input-error' : ''}`}
-                  placeholder="Nhập họ và tên của bạn"
-                  value={name}
-                  maxLength={120}
-                  onChange={e => {
-                    setName(e.target.value);
-                    if (errors.name) setErrors(prev => ({ ...prev, name: '' }));
-                  }}
-                  disabled={submitting}
-                  aria-invalid={!!errors.name}
-                  aria-describedby={errors.name ? 'contactName-error' : undefined}
-                />
-                {errors.name && (
-                  <span id="contactName-error" className="c2-field-error" style={{ color: '#b91c1c', fontSize: '11px', marginTop: '3px' }}>
-                    {errors.name}
-                  </span>
-                )}
-              </div>
-
-              {/* Email */}
-              <div className="c2-form-group">
-                <label htmlFor="contactEmail" className="c2-label">
-                  Địa chỉ email <span className="c2-required">*</span>
-                </label>
-                <input
-                  id="contactEmail"
-                  type="email"
-                  className={`c2-input ${errors.email ? 'c2-input-error' : ''}`}
-                  placeholder="name@example.com"
-                  value={email}
-                  maxLength={255}
-                  onChange={e => {
-                    setEmail(e.target.value);
-                    if (errors.email) setErrors(prev => ({ ...prev, email: '' }));
-                  }}
-                  disabled={submitting}
-                  aria-invalid={!!errors.email}
-                  aria-describedby={errors.email ? 'contactEmail-error' : undefined}
-                />
-                {errors.email && (
-                  <span id="contactEmail-error" className="c2-field-error" style={{ color: '#b91c1c', fontSize: '11px', marginTop: '3px' }}>
-                    {errors.email}
-                  </span>
-                )}
-              </div>
-
-              {/* Chủ đề liên hệ */}
-              <div className="c2-form-group">
-                <label htmlFor="contactSubjectSelect" className="c2-label">
-                  Chủ đề liên hệ <span className="c2-required">*</span>
-                </label>
-                <select
-                  id="contactSubjectSelect"
-                  className="c2-input"
-                  value={subjectCategory}
-                  onChange={e => {
-                    setSubjectCategory(e.target.value);
-                    if (errors.subject) setErrors(prev => ({ ...prev, subject: '' }));
-                  }}
-                  disabled={submitting}
-                >
-                  {SUBJECT_OPTIONS.map(opt => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
-                </select>
-
-                {subjectCategory === 'Khác' && (
-                  <div style={{ marginTop: '8px' }}>
-                    <input
-                      id="contactCustomSubject"
-                      type="text"
-                      className={`c2-input ${errors.subject ? 'c2-input-error' : ''}`}
-                      placeholder="Vui lòng nhập chủ đề cụ thể (tối đa 160 ký tự)"
-                      value={customSubject}
-                      maxLength={160}
-                      onChange={e => {
-                        setCustomSubject(e.target.value);
-                        if (errors.subject) setErrors(prev => ({ ...prev, subject: '' }));
-                      }}
-                      disabled={submitting}
-                      aria-invalid={!!errors.subject}
-                      aria-describedby={errors.subject ? 'contactSubject-error' : undefined}
-                    />
-                  </div>
-                )}
-
-                {errors.subject && (
-                  <span id="contactSubject-error" className="c2-field-error" style={{ color: '#b91c1c', fontSize: '11px', marginTop: '3px' }}>
-                    {errors.subject}
-                  </span>
-                )}
-              </div>
-
-              {/* Nội dung tin nhắn */}
-              <div className="c2-form-group">
-                <label htmlFor="contactMessage" className="c2-label">
-                  Nội dung tin nhắn / góp ý <span className="c2-required">*</span>
-                </label>
-                <textarea
-                  id="contactMessage"
-                  className={`c2-input ${errors.message ? 'c2-input-error' : ''}`}
-                  rows={5}
-                  placeholder="Nhập chi tiết nội dung bạn muốn gửi tới Làng Mộc…"
-                  value={message}
-                  onChange={e => {
-                    setMessage(e.target.value);
-                    if (errors.message) setErrors(prev => ({ ...prev, message: '' }));
-                  }}
-                  disabled={submitting}
-                  style={{ resize: 'vertical', minHeight: '120px' }}
-                  aria-invalid={!!errors.message}
-                  aria-describedby={errors.message ? 'contactMessage-error' : undefined}
-                />
-                {errors.message && (
-                  <span id="contactMessage-error" className="c2-field-error" style={{ color: '#b91c1c', fontSize: '11px', marginTop: '3px' }}>
-                    {errors.message}
-                  </span>
-                )}
-              </div>
-
-              {/* Nút gửi */}
-              <div style={{ marginTop: '8px' }}>
-                <button
-                  type="submit"
-                  className="c2-btn c2-btn-primary"
-                  disabled={submitting}
-                  style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
-                >
-                  <Send size={16} />
-                  {submitting ? 'Đang gửi phản hồi…' : 'Gửi liên hệ'}
-                </button>
-              </div>
+              <div className="contact-field"><label htmlFor="contactSubjectSelect">Chủ đề <span>*</span></label><select id="contactSubjectSelect" value={subjectCategory} onChange={e=>{setSubjectCategory(e.target.value);setErrors(prev=>({...prev,subject:''}));}} disabled={submitting}>{SUBJECT_OPTIONS.map(opt=><option key={opt}>{opt}</option>)}</select></div>
+              {subjectCategory==='Khác'&&<div className="contact-field"><label htmlFor="contactCustomSubject">Chủ đề cụ thể <span>*</span></label><input id="contactCustomSubject" value={customSubject} maxLength={160} placeholder="Điều bạn muốn chia sẻ" onChange={e=>{setCustomSubject(e.target.value);setErrors(prev=>({...prev,subject:''}));}} disabled={submitting} required aria-invalid={!!errors.subject} aria-describedby={errors.subject?'contactSubject-error':undefined}/>{errors.subject&&<small id="contactSubject-error">{errors.subject}</small>}</div>}
+              <div className="contact-field"><label htmlFor="contactMessage">Nội dung <span>*</span></label><textarea id="contactMessage" name="message" rows={5} placeholder="Nhập nội dung bạn muốn trao đổi…" value={message} onChange={e=>{setMessage(e.target.value);setErrors(prev=>({...prev,message:''}));}} disabled={submitting} required aria-invalid={!!errors.message} aria-describedby={errors.message?'contactMessage-error':undefined}/>{errors.message&&<small id="contactMessage-error">{errors.message}</small>}</div>
+              <div className="contact-submit-row"><p><span>*</span> Thông tin cần điền</p><button type="submit" disabled={submitting}>{submitting?'Đang gửi…':'Gửi tin nhắn'}<Send size={16}/></button></div>
             </form>
-          </div>
-
-          {/* CỘT 2: THÔNG TIN LIÊN HỆ & BẢN ĐỒ MAPS */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {/* Khung Thông tin liên hệ */}
-            <div className="c2-card" style={{ padding: '28px' }}>
-              <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '18px', color: 'var(--brown, #493421)', margin: '0 0 16px' }}>
-                Thông tin sàn thương mại Làng Mộc
-              </h2>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '13px' }}>
-                {/* Địa chỉ */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <MapPin size={18} style={{ color: 'var(--copper, #a5754b)', flexShrink: 0, marginTop: '2px' }} />
-                  <div>
-                    <strong style={{ display: 'block', color: 'var(--brown, #493421)' }}>Địa chỉ văn phòng / điều hành:</strong>
-                    {siteContact.address ? (
-                      <span style={{ color: 'var(--cafe, #3b352d)' }}>{siteContact.address}</span>
-                    ) : (
-                      <div style={{ color: '#92400e', fontSize: '12px', marginTop: '2px' }}>
-                        <span>Đang cập nhật</span>{' '}
-                        <span style={{ background: '#fef3c7', padding: '2px 6px', borderRadius: '4px', border: '1px dashed #f59e0b', fontSize: '10px', fontWeight: 600 }}>
-                          CẦN NHÓM CHỐT
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Hotline */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <Phone size={18} style={{ color: 'var(--copper, #a5754b)', flexShrink: 0, marginTop: '2px' }} />
-                  <div>
-                    <strong style={{ display: 'block', color: 'var(--brown, #493421)' }}>Tổng đài hỗ trợ:</strong>
-                    {siteContact.hotline ? (
-                      <span style={{ color: 'var(--cafe, #3b352d)' }}>{siteContact.hotline}</span>
-                    ) : (
-                      <div style={{ color: '#92400e', fontSize: '12px', marginTop: '2px' }}>
-                        <span>Đang cập nhật</span>{' '}
-                        <span style={{ background: '#fef3c7', padding: '2px 6px', borderRadius: '4px', border: '1px dashed #f59e0b', fontSize: '10px', fontWeight: 600 }}>
-                          CẦN NHÓM CHỐT
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Email */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <Mail size={18} style={{ color: 'var(--copper, #a5754b)', flexShrink: 0, marginTop: '2px' }} />
-                  <div>
-                    <strong style={{ display: 'block', color: 'var(--brown, #493421)' }}>Hộp thư điện tử:</strong>
-                    {siteContact.email ? (
-                      <span style={{ color: 'var(--cafe, #3b352d)' }}>{siteContact.email}</span>
-                    ) : (
-                      <div style={{ color: '#92400e', fontSize: '12px', marginTop: '2px' }}>
-                        <span>Đang cập nhật</span>{' '}
-                        <span style={{ background: '#fef3c7', padding: '2px 6px', borderRadius: '4px', border: '1px dashed #f59e0b', fontSize: '10px', fontWeight: 600 }}>
-                          CẦN NHÓM CHỐT
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Giờ làm việc */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                  <Clock size={18} style={{ color: 'var(--copper, #a5754b)', flexShrink: 0, marginTop: '2px' }} />
-                  <div>
-                    <strong style={{ display: 'block', color: 'var(--brown, #493421)' }}>Thời gian trực tiếp nhận:</strong>
-                    {siteContact.workingHours ? (
-                      <span style={{ color: 'var(--cafe, #3b352d)' }}>{siteContact.workingHours}</span>
-                    ) : (
-                      <div style={{ color: '#92400e', fontSize: '12px', marginTop: '2px' }}>
-                        <span>Đang cập nhật</span>{' '}
-                        <span style={{ background: '#fef3c7', padding: '2px 6px', borderRadius: '4px', border: '1px dashed #f59e0b', fontSize: '10px', fontWeight: 600 }}>
-                          CẦN NHÓM CHỐT
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
+          </section>
+          <aside className="contact-details" aria-labelledby="contact-details-title">
+            <h2 id="contact-details-title">Thông tin liên hệ</h2>
+            <div className="contact-address"><MapPin size={20}/><div><h3>Địa chỉ</h3><p>{siteContact.address||'Địa chỉ đang được cập nhật.'}</p>{mapsUrl&&<a href={mapsUrl} target="_blank" rel="noreferrer">Chỉ đường đến Làng Mộc <ArrowUpRight size={16}/></a>}</div></div>
+            <div className="contact-details-list">
+              <div><Phone size={18}/><div><h3>Điện thoại</h3>{siteContact.hotline?<a href={'tel:'+siteContact.hotline.replace(/[^+0-9]/g,'')}>{siteContact.hotline}</a>:<p>Đang cập nhật</p>}</div></div>
+              <div><Mail size={18}/><div><h3>Email</h3>{siteContact.email?<a href={'mailto:'+siteContact.email}>{siteContact.email}</a>:<p>Đang cập nhật</p>}</div></div>
+              {siteContact.workingHours&&<div><Clock size={18}/><div><h3>Giờ làm việc</h3><p>{siteContact.workingHours}</p></div></div>}
             </div>
-
-            {/* Khung Google Maps */}
-            <div className="c2-card" style={{ padding: '28px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
-                <h2 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '18px', color: 'var(--brown, #493421)', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Map size={18} /> Bản đồ vị trí
-                </h2>
-                {siteMaps.status === 'CHỐT' && siteMaps.query && (
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteMaps.query)}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ fontSize: '12px', color: 'var(--copper, #a5754b)', display: 'inline-flex', alignItems: 'center', gap: '4px', textDecoration: 'none' }}
-                  >
-                    Mở trong Google Maps <ExternalLink size={12} />
-                  </a>
-                )}
-              </div>
-
-              {siteMaps.status === 'CHỐT' && siteMaps.query ? (
-                /* Đã có địa điểm: nhúng iframe không cần API key, title, loading lazy */
-                <div style={{ borderRadius: '6px', overflow: 'hidden', border: '1px solid var(--line, #c8b99e)', height: '260px' }}>
-                  <iframe
-                    title="Bản đồ Làng Mộc"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    loading="lazy"
-                    allowFullScreen
-                    referrerPolicy="no-referrer-when-downgrade"
-                    src={`https://maps.google.com/maps?q=${encodeURIComponent(siteMaps.query)}&t=&z=14&ie=UTF8&iwloc=&output=embed`}
-                  />
-                </div>
-              ) : (
-                /* CHƯA_CHỐT: hiển thị placeholder, KHÔNG nhúng địa chỉ giả theo yêu cầu M5 */
-                <div
-                  style={{
-                    height: '220px',
-                    borderRadius: '6px',
-                    border: '1px dashed var(--line, #c8b99e)',
-                    background: 'rgba(73, 52, 33, 0.03)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    textAlign: 'center',
-                    padding: '20px',
-                    color: 'var(--muted, #7c6a57)'
-                  }}
-                >
-                  <MapPin size={32} style={{ color: '#d97706', marginBottom: '8px' }} />
-                  <strong style={{ fontSize: '14px', color: 'var(--brown, #493421)', marginBottom: '4px' }}>
-                    Địa điểm Maps: CHƯA_CHỐT
-                  </strong>
-                  <p style={{ fontSize: '12px', maxWidth: '320px', margin: '0 auto 10px', lineHeight: 1.5 }}>
-                    Vị trí hiển thị bản đồ đang chờ nhóm thống nhất địa chỉ thực tế chính thức.
-                  </p>
-                  <span style={{ background: '#fef3c7', color: '#92400e', padding: '3px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 600, border: '1px dashed #f59e0b' }}>
-                    ⚠️ CẦN NHÓM CHỐT ĐỊA ĐIỂM
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
+          </aside>
         </div>
+        <section className="contact-map-section" aria-labelledby="contact-map-title">
+          <div className="contact-map-heading"><div><h2 id="contact-map-title">Bản đồ</h2></div>{mapsUrl&&<a href={mapsUrl} target="_blank" rel="noreferrer">Mở Google Maps <ArrowUpRight size={18}/></a>}</div>
+          <div className="contact-map-frame">{siteMaps.status==='CHỐT'&&siteMaps.query?<iframe title="Bản đồ Làng Mộc" src={`https://maps.google.com/maps?q=${encodeURIComponent(siteMaps.query)}&z=16&output=embed`} loading="lazy" allowFullScreen referrerPolicy="no-referrer-when-downgrade"/>:<p>Vị trí bản đồ đang được cập nhật.</p>}</div>
+          <p className="contact-map-caption"><MapPin size={14}/>{siteMaps.label||siteContact.address}</p>
+        </section>
       </div>
     </main>
   );

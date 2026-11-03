@@ -1,3 +1,5 @@
+> Cập nhật 03/11/2026: địa chỉ mới chọn tỉnh/phường-xã theo snapshot dùng chung; `district` có thể bỏ trống. Backend trả 400 khi cặp tỉnh/xã không hợp lệ. Địa chỉ cũ vẫn đọc được. Admin catalog nhận `images` (tối đa 20), `sku`, `source_name`; UI hiện quản lý thêm/xóa/sắp xếp ảnh bằng URL http(s) hoặc `/images/`. Xem [dữ liệu địa chỉ](ADDRESS_DATA.md) và [bản sửa](FIXES_2026-11-03.md).
+
 # Hợp đồng API Việt Craft MVP
 
 Tài liệu này là bản thống nhất trước khi code. Base URL: `/api/v1`; request/response JSON UTF-8; tiền là **số nguyên VND**, thời gian là ISO 8601 UTC, ID là UUID. Client không được tự gửi `total_vnd` hay trạng thái thanh toán làm nguồn sự thật. Các endpoint `/me` yêu cầu phiên đăng nhập; `/admin` yêu cầu vai trò `admin` được kiểm tra tại API. Phiên nên dùng cookie HttpOnly, Secure khi chạy HTTPS, SameSite phù hợp cấu hình triển khai; không lưu token trong localStorage. Cần thống nhất CSRF nếu frontend và API dùng cookie khác origin.
@@ -167,7 +169,7 @@ Backend thật đã có trong `backend/` (Node.js + Express + TypeScript, Postgr
 
 ### Kiểm thử
 
-`cd backend && npm test` chạy 31 test trên PostgreSQL thật, phủ: auth, phân quyền, địa chỉ, catalog tìm/lọc/sắp xếp/phân trang, admin CRUD và validate giá. Xem `backend/tests/`.
+`cd backend && npm test` chạy 34 test trên PostgreSQL thật, phủ: auth, phân quyền, địa chỉ, catalog tìm/lọc/sắp xếp/phân trang, admin CRUD và validate giá. Xem `backend/tests/`.
 
 ## Storefront C1 — shape triển khai để ghép frontend
 
@@ -179,3 +181,13 @@ GET mock sử dụng base `/api/v1`, có trên Vite dev/preview; không thay bac
 - Tham số product và sort giữ như bảng trên. Giá chưa rõ bị loại khi có điều kiện khoảng giá, xếp cuối khi sort theo giá. Mặc định page=1, limit=12, giới hạn 100.
 
 Dữ liệu mock review có nhãn rõ và không được dùng làm review khách thật. Các trường bổ sung nguồn giúp kiểm duyệt dữ liệu; backend có thể map seller/làng nghề thật vào shape này sau khi nhóm xác nhận. Không gán tồn kho hay trạng thái mua được nếu chưa có backend.
+
+
+## Cập nhật tích hợp Khải–Quân 02/11/2026
+
+Xem [bàn giao Khải–Quân](KHAI_QUAN_HANDOVER.md) để biết thay đổi, cách chạy mock/live, kiểm thử và phụ thuộc còn lại. Đăng ký hiện tạo cookie phiên; địa chỉ backend nhận `recipient_name`/`address_line`, frontend chuyển đổi tên trường. Phone nhận 10 chữ số Việt Nam. Admin products hỗ trợ `page`/`limit` và trả đủ trường chỉnh sửa. DELETE địa chỉ kiểm tra chủ sở hữu và chọn lại mặc định.
+
+
+## Cập nhật mua hàng không cần tài khoản
+
+Đã có API COD khách trên PostgreSQL, mặc định bật ở frontend. Xem [hướng dẫn guest checkout](GUEST_CHECKOUT.md) cho migration 005, payload, cookie, phí ship demo, kiểm thử và các giới hạn còn lại. Ghi chú guest chỉ mock trong tài liệu cũ đã được thay thế bởi cập nhật này.

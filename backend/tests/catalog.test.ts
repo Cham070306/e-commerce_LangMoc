@@ -21,7 +21,12 @@ describe('Catalog công khai', () => {
     assert.equal(res.status, 200);
     assert.equal(res.body.meta.page, 1);
     assert.equal(res.body.meta.limit, 12);
-    assert.equal(res.body.meta.total, 12);
+    assert.ok(res.body.meta.total >= 12);
+    // Tổng phải phản ánh dữ liệu DB hiện tại, kể cả khi đã nhập catalog gốc.
+    const {pool}=await import('../src/db/pool.js');
+    const count=await pool.query(`SELECT count(*)::int AS total FROM products p
+      JOIN categories c ON c.id=p.category_id WHERE p.status='active' AND c.is_active`);
+    assert.equal(res.body.meta.total,count.rows[0].total);
     assert.equal(res.body.data.length, 12);
   });
 

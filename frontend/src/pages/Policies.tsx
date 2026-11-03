@@ -31,7 +31,7 @@ export default function PoliciesPage({ subroute }: PoliciesPageProps) {
                 Quy định về giao nhận COD, đổi trả hàng vỡ và bảo quản sản phẩm thủ công truyền thống.
               </p>
             </div>
-            {isMockMode && <span className="c2-mock-badge">⚙️ CHÍNH SÁCH TĨNH</span>}
+            {isMockMode && <span className="c2-mock-badge">Thông tin bản thử nghiệm</span>}
           </div>
         </div>
 
@@ -182,7 +182,7 @@ export default function PoliciesPage({ subroute }: PoliciesPageProps) {
 
           <footer style={{ marginTop: '36px', paddingTop: '20px', borderTop: '1px solid var(--line, #c8b99e)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
             <span style={{ fontSize: '11px', color: 'var(--muted, #7c6a57)' }}>
-              * {doc.lastUpdated}. Nội dung tuân thủ tài liệu đặc tả học phần e-commerce Làng Mộc.
+              * {doc.lastUpdated}. Thông tin minh họa; điều kiện thực tế cần được xác nhận trước khi mở bán.
             </span>
             <div style={{ display: 'flex', gap: '10px' }}>
               <a href="#/contact" className="c2-btn c2-btn-outline c2-btn-sm" style={{ textDecoration: 'none' }}>

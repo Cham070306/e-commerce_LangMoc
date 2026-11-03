@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { useAuth } from '../features/auth/AuthContext';
 import { ApiError } from '../lib/api';
 import { SITE_NAME, isMockMode } from '../config/site';
+import { loginDestination } from '../lib/loginRedirect';
+import {Eye, EyeOff, ArrowRight} from 'lucide-react';
+import '../styles/customer-pages.css';
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -14,10 +18,7 @@ export default function LoginPage() {
   // Lấy đường dẫn chuyển hướng sau khi đăng nhập thành công
   const searchParams = new URLSearchParams(window.location.hash.split('?')[1] || '');
   // An toàn: Chặn open redirect, chỉ cho phép đường dẫn nội bộ hợp lệ
-  const rawRedirect = searchParams.get('redirect') || '/';
-  const redirectTarget = (rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') && !rawRedirect.includes('://'))
-    ? rawRedirect
-    : '/';
+  const redirectTarget = loginDestination(searchParams.get('redirect'));
 
   const validate = (): boolean => {
     const nextErrors: Record<string, string> = {};
@@ -64,168 +65,26 @@ export default function LoginPage() {
   };
 
   return (
-    <main id="main" className="c2-page-wrap">
-      <div className="c2-auth-container">
-        <div className="c2-card">
-          <div className="c2-card-header">
-            {isMockMode && (
-              <div style={{ marginBottom: '14px' }}>
-                <span className="c2-mock-badge">⚙️ CHẾ ĐỘ MÔ PHỎNG (MOCK API)</span>
-              </div>
-            )}
-            <h1 className="c2-title">Đăng nhập tài khoản</h1>
-            <p className="c2-subtitle">
-              Chào mừng bạn quay lại với <strong>{SITE_NAME}</strong>
-            </p>
-          </div>
-
-          {apiError && (
-            <div className="c2-alert c2-alert-error" role="alert" style={{ marginBottom: '20px' }}>
-              <span>⚠️</span>
-              <div>{apiError}</div>
-            </div>
-          )}
-
-          <form className="c2-form" onSubmit={handleSubmit} noValidate>
-            <div className="c2-form-group">
-              <label className="c2-label" htmlFor="login-email">
-                Địa chỉ Email <span className="c2-required">*</span>
-              </label>
-              <input
-                id="login-email"
-                type="email"
-                className={`c2-input ${errors.email ? 'c2-input-error' : ''}`}
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="vidu@example.com"
-                autoComplete="email"
-                disabled={submitting}
-              />
-              {errors.email && <span className="c2-error-text">{errors.email}</span>}
-            </div>
-
-            <div className="c2-form-group">
-              <label className="c2-label" htmlFor="login-password">
-                Mật khẩu <span className="c2-required">*</span>
-              </label>
-              <input
-                id="login-password"
-                type="password"
-                className={`c2-input ${errors.password ? 'c2-input-error' : ''}`}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="Nhập mật khẩu của bạn"
-                autoComplete="current-password"
-                disabled={submitting}
-              />
-              {errors.password && <span className="c2-error-text">{errors.password}</span>}
-            </div>
-
-            <button
-              type="submit"
-              className="c2-btn c2-btn-primary c2-btn-block"
-              disabled={submitting}
-            >
-              {submitting ? 'Đang xác thực…' : 'Đăng nhập'}
-            </button>
-
-            <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '13px' }}>
-              <span>Chưa có tài khoản? </span>
-              <a href="#/register" style={{ fontWeight: 600, textDecoration: 'underline' }}>
-                Đăng ký ngay
-              </a>
-            </div>
+    <main id="main" className="customer-page login-page">
+      <div className="login-shell">
+        <a className="customer-back" href="#/">← Về trang chủ</a>
+        <section className="login-card" aria-labelledby="login-title">
+          <div className="login-card-heading"><h1 id="login-title">Đăng nhập</h1><p>Chào mừng bạn quay lại với {SITE_NAME}.</p></div>
+          {apiError&&<div className="customer-error" role="alert">{apiError}</div>}
+          <form onSubmit={handleSubmit} noValidate>
+            <div className="customer-field"><label htmlFor="login-email">Email</label><input id="login-email" name="email" type="email" autoComplete="email" placeholder="ban@email.com" value={email} onChange={e=>{setEmail(e.target.value);setErrors(prev=>({...prev,email:''}));}} disabled={submitting} required aria-invalid={!!errors.email} aria-describedby={errors.email?'login-email-error':undefined}/>{errors.email&&<small id="login-email-error">{errors.email}</small>}</div>
+            <div className="customer-field"><label htmlFor="login-password">Mật khẩu</label><div className="login-password"><input id="login-password" name="password" type={showPassword?'text':'password'} autoComplete="current-password" placeholder="Nhập mật khẩu" value={password} onChange={e=>{setPassword(e.target.value);setErrors(prev=>({...prev,password:''}));}} disabled={submitting} required aria-invalid={!!errors.password} aria-describedby={errors.password?'login-password-error':undefined}/><button type="button" aria-label={showPassword?'Ẩn mật khẩu':'Hiện mật khẩu'} aria-pressed={showPassword} onClick={()=>setShowPassword(!showPassword)} disabled={submitting}>{showPassword?<EyeOff size={18}/>:<Eye size={18}/>}</button></div>{errors.password&&<small id="login-password-error">{errors.password}</small>}</div>
+            <button className="customer-primary login-submit" type="submit" disabled={submitting}>{submitting?'Đang đăng nhập…':'Đăng nhập'}<ArrowRight size={17}/></button>
           </form>
-
-          {isMockMode && (
-            <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px dashed var(--line, #c8b99e)' }}>
-              <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted, #7c6a57)', marginBottom: '8px' }}>
-                🔑 Tài khoản kiểm thử nhanh (bấm để tự động điền):
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <button
-                  type="button"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '8px 12px',
-                    background: '#ffffff',
-                    border: '1px solid #d4c8b8',
-                    borderRadius: '6px',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                    color: 'var(--brown, #493421)',
-                    textAlign: 'left'
-                  }}
-                  onClick={() => {
-                    setEmail('linh@example.com');
-                    setPassword('MatKhau123@');
-                    setErrors({});
-                    setApiError(null);
-                  }}
-                >
-                  <span>👤 <strong>Khách hàng (Linh Nguyễn):</strong> linh@example.com</span>
-                  <span style={{ color: 'var(--muted, #7c6a57)', fontFamily: 'monospace' }}>MatKhau123@</span>
-                </button>
-
-                <button
-                  type="button"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '8px 12px',
-                    background: '#ffffff',
-                    border: '1px solid #d4c8b8',
-                    borderRadius: '6px',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                    color: 'var(--brown, #493421)',
-                    textAlign: 'left'
-                  }}
-                  onClick={() => {
-                    setEmail('minh@example.com');
-                    setPassword('MatKhau123@');
-                    setErrors({});
-                    setApiError(null);
-                  }}
-                >
-                  <span>👤 <strong>Khách hàng (Minh Trần):</strong> minh@example.com</span>
-                  <span style={{ color: 'var(--muted, #7c6a57)', fontFamily: 'monospace' }}>MatKhau123@</span>
-                </button>
-
-                <button
-                  type="button"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '8px 12px',
-                    background: '#faf6f0',
-                    border: '1px solid #b85d38',
-                    borderRadius: '6px',
-                    fontSize: '12px',
-                    cursor: 'pointer',
-                    color: '#b85d38',
-                    textAlign: 'left'
-                  }}
-                  onClick={() => {
-                    setEmail('admin@langmoc.example');
-                    setPassword('AdminSecret123@');
-                    setErrors({});
-                    setApiError(null);
-                  }}
-                >
-                  <span>🛡️ <strong>Quản trị viên (Admin):</strong> admin@langmoc.example</span>
-                  <span style={{ color: '#b85d38', fontFamily: 'monospace' }}>AdminSecret123@</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+          <p className="login-register">Chưa có tài khoản? <a href="#/register">Đăng ký ngay</a></p>
+          {isMockMode&&<details className="login-demo"><summary>Tài khoản dùng thử</summary><div>{[
+            {label:'Khách hàng · Linh',email:'linh@example.com',password:'MatKhau123@'},
+            {label:'Khách hàng · Minh',email:'minh@example.com',password:'MatKhau123@'},
+            {label:'Quản trị viên',email:'admin@langmoc.example',password:'AdminSecret123@'}
+          ].map(account=><button type="button" key={account.email} onClick={()=>{setEmail(account.email);setPassword(account.password);setErrors({});setApiError(null);}}>{account.label}<ArrowRight size={14}/></button>)}</div></details>}
+        </section>
+        <p className="login-footnote">Sản phẩm thủ công Việt, kết nối những giá trị đẹp.</p>
       </div>
     </main>
   );
 }
-

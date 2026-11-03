@@ -1,0 +1,2 @@
+PASS: đủ 452/452 sản phẩm gốc trên API live; tổng 452.
+PASS: tên, mô tả, danh mục, giá, nguồn, 668 ảnh gallery và 274 ảnh nội dung khớp nguồn; ảnh local tồn tại.

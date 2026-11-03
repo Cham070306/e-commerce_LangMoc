@@ -1,0 +1,8 @@
+
+> lang-moc-backend@0.1.0 seed
+> tsx src/db/seed.ts
+
+[seed] Đang chạy 001_demo.sql...
+[seed] Xong 001_demo.sql.
+[seed] Hoàn tất: 4 danh mục, 12 sản phẩm, 2 người dùng.
+[seed] Demo admin@langmoc.local / Admin@123 · customer@langmoc.local / Customer@123 (chỉ local).

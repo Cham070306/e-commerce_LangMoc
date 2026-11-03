@@ -4,6 +4,8 @@ import { api, ApiError } from '../../../lib/api';
 import type { AdminProduct, AdminCategory, AdminProductWrite } from '../../../lib/adminContracts';
 import { formatMoney } from '../../../components/catalog/ProductCard';
 import { Loading, ErrorState, Pagination } from '../../../components/common/States';
+import { isImageUrl } from '../../../lib/imageUrls';
+import { ProductImage } from '../../../components/catalog/ProductCard';
 import { slugify } from '../../../lib/slugify';
 import { AdminAccessDenied } from '../AdminLayout';
 import { useAdminAccess } from '../useAdminAccess';
@@ -48,6 +50,9 @@ export default function AdminProducts({ search }: { search: string }) {
   const [formStatus, setFormStatus] = useState<'active' | 'draft' | 'hidden'>('active');
   const [formMaterial, setFormMaterial] = useState('');
   const [formProvince, setFormProvince] = useState('');
+  const [formSku, setFormSku] = useState('');
+  const [formSource, setFormSource] = useState('');
+  const [formImages, setFormImages] = useState<NonNullable<AdminProduct['images']>>([]);
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -99,6 +104,7 @@ export default function AdminProducts({ search }: { search: string }) {
     setFormStatus('active');
     setFormMaterial('');
     setFormProvince('');
+    setFormSku('');setFormSource('');setFormImages([]);
     setFieldErrors({});
     setShowModal(true);
   };
@@ -115,6 +121,7 @@ export default function AdminProducts({ search }: { search: string }) {
     setFormStatus(p.status);
     setFormMaterial(p.material || '');
     setFormProvince(p.origin_province || '');
+    setFormSku(p.sku || '');setFormSource(p.source_name || '');setFormImages((p.images || []).map(image=>({...image})));
     setFieldErrors({});
     setShowModal(true);
   };
@@ -133,8 +140,8 @@ export default function AdminProducts({ search }: { search: string }) {
     const errors: Record<string, string> = {};
     const trimmedName = formName.trim();
     const trimmedSlug = formSlug.trim();
-    const parsedPrice = Math.floor(Number(formPrice));
-    const parsedStock = Math.floor(Number(formStock));
+    const parsedPrice = Number(formPrice);
+    const parsedStock = Number(formStock);
 
     if (!trimmedName) errors.name = 'Vui lòng nhập tên sản phẩm.';
     else if (trimmedName.length > 200) errors.name = 'Tên sản phẩm không quá 200 ký tự.';
@@ -144,21 +151,21 @@ export default function AdminProducts({ search }: { search: string }) {
 
     if (!formCategory) errors.category_id = 'Vui lòng chọn danh mục.';
 
-    if (isNaN(parsedPrice) || parsedPrice < 0) {
+    if (!formPrice.trim() || !Number.isSafeInteger(parsedPrice) || parsedPrice < 0) {
       errors.price_vnd = 'Giá gốc phải là số nguyên không âm.';
     }
 
     let parsedSalePrice: number | null = null;
     if (formSalePrice.trim()) {
-      parsedSalePrice = Math.floor(Number(formSalePrice));
-      if (isNaN(parsedSalePrice) || parsedSalePrice < 0) {
+      parsedSalePrice = Number(formSalePrice);
+      if (!Number.isSafeInteger(parsedSalePrice) || parsedSalePrice < 0) {
         errors.sale_price_vnd = 'Giá khuyến mãi phải là số nguyên không âm.';
       } else if (!isNaN(parsedPrice) && parsedSalePrice >= parsedPrice) {
         errors.sale_price_vnd = 'Giá khuyến mãi phải nhỏ hơn giá gốc.';
       }
     }
 
-    if (isNaN(parsedStock) || parsedStock < 0) {
+    if (!formStock.trim() || !Number.isSafeInteger(parsedStock) || parsedStock < 0) {
       errors.stock_quantity = 'Tồn kho phải là số nguyên không âm.';
     }
 
@@ -170,6 +177,7 @@ export default function AdminProducts({ search }: { search: string }) {
       errors.origin_province = 'Tỉnh xuất xứ không quá 100 ký tự.';
     }
 
+    if(formImages.length>20 || formImages.some(image=>!isImageUrl(image.url.trim()))) errors.images='Mỗi ảnh cần đường dẫn /images/ hoặc URL http(s) hợp lệ, tối đa 20 ảnh.';
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -188,10 +196,13 @@ export default function AdminProducts({ search }: { search: string }) {
       origin_province: formProvince.trim() || null,
       price_vnd: parsedPrice,
       sale_price_vnd: parsedSalePrice,
-      sale_starts_at: null,
-      sale_ends_at: null,
+      sale_starts_at: editingProduct?.sale_starts_at ?? null,
+      sale_ends_at: editingProduct?.sale_ends_at ?? null,
       stock_quantity: parsedStock,
-      status: formStatus
+      status: formStatus,
+      sku: formSku.trim() || null,
+      source_name: formSource.trim() || null,
+      images: formImages.map((image,index)=>({url:image.url.trim(),alt:image.alt.trim(),sort_order:index,...(image.source_url?{source_url:image.source_url}:{})}))
     };
 
     try {
@@ -324,6 +335,7 @@ export default function AdminProducts({ search }: { search: string }) {
           </div>
         ) : (
           <>
+            <p className="mobile-table-hint">Vuốt ngang bảng để xem giá, tồn kho và thao tác.</p>
             <div className="admin-table-scroll">
               <table className="admin-table">
                 <thead>
@@ -634,9 +646,22 @@ export default function AdminProducts({ search }: { search: string }) {
                 />
               </div>
 
-              <p style={{ fontSize: '11px', color: 'var(--muted, #7c6a57)', margin: '0 0 16px', background: '#f5efe6', padding: '8px 12px', borderRadius: '4px' }}>
-                * Lưu ý: Theo hợp đồng API, ảnh sản phẩm được lưu ở bảng riêng qua API upload của hệ thống. Không hỗ trợ nhập URL tùy ý từ giao diện.
-              </p>
+              <div className="address-location-fields">
+                <div className="c2-form-group"><label htmlFor="prodSkuInput">Mã sản phẩm (SKU)</label><input id="prodSkuInput" className="c2-input" value={formSku} maxLength={60} onChange={e=>setFormSku(e.target.value)} disabled={submitting}/></div>
+                <div className="c2-form-group"><label htmlFor="prodSourceInput">Đơn vị nguồn / nhà sản xuất</label><input id="prodSourceInput" className="c2-input" value={formSource} maxLength={160} onChange={e=>setFormSource(e.target.value)} disabled={submitting}/></div>
+              </div>
+              <fieldset className="product-image-editor" disabled={submitting}>
+                <legend>Ảnh sản phẩm</legend><p>Ảnh đầu tiên là ảnh đại diện. Dùng URL ảnh hoặc đường dẫn ảnh có sẵn trong /images/.</p>
+                {formImages.map((image,index)=><div className="product-image-row" key={index}>
+                  <ProductImage src={isImageUrl(image.url)?image.url:undefined} alt={image.alt||'Xem trước ảnh '+(index+1)}/>
+                  <div><label htmlFor={'image-url-'+index}>Đường dẫn ảnh {index+1}</label><input id={'image-url-'+index} className="c2-input" value={image.url} maxLength={1000} onChange={e=>setFormImages(current=>current.map((im,i)=>i===index?{...im,url:e.target.value}:im))}/>
+                    <label htmlFor={'image-alt-'+index}>Mô tả ảnh {index+1}</label><input id={'image-alt-'+index} className="c2-input" value={image.alt} maxLength={255} onChange={e=>setFormImages(current=>current.map((im,i)=>i===index?{...im,alt:e.target.value}:im))}/>
+                    <div className="image-row-actions"><button type="button" disabled={index===0} onClick={()=>setFormImages(current=>{const next=[...current];[next[index-1],next[index]]=[next[index],next[index-1]];return next;})}>Đưa lên trước</button><button type="button" onClick={()=>setFormImages(current=>current.filter((_,i)=>i!==index))}>Xóa ảnh {index+1}</button></div>
+                  </div>
+                </div>)}
+                <button type="button" className="c2-btn c2-btn-outline" disabled={formImages.length>=20} onClick={()=>setFormImages(current=>[...current,{url:'',alt:'',sort_order:current.length}])}>Thêm ảnh</button>
+                {fieldErrors.images&&<p className="field-error" role="alert">{fieldErrors.images}</p>}
+              </fieldset>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                 <button

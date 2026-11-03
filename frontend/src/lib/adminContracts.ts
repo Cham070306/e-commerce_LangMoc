@@ -84,6 +84,9 @@ export type AdminCategoryWrite = Pick<AdminCategory, 'name' | 'slug'> & {
 export interface AdminProduct {
   id: string;
   seller_id: string | null;
+  sku?: string | null;
+  source_name?: string | null;
+  images?: {url:string;alt:string;sort_order:number;source_url?:string|null}[];
   category_id: string;
   name: string;
   slug: string;
@@ -103,7 +106,7 @@ export interface AdminProduct {
 export type AdminProductWrite = Pick<AdminProduct,
   'category_id' | 'name' | 'slug' | 'description' | 'material' | 'origin_province' |
   'price_vnd' | 'sale_price_vnd' | 'sale_starts_at' | 'sale_ends_at' | 'stock_quantity' | 'status'
-> & { seller_id?: string | null };
+> & { seller_id?: string | null; sku?:string|null; source_name?:string|null; images?: {url:string;alt:string;sort_order:number;source_url?:string}[] };
 
 export interface AdminReview {
   id: string;

@@ -1,5 +1,6 @@
 // Mock C2 cho API hiện có và các luồng guest được gắn nhãn đề xuất.
 // Chỉ hoạt động ở chế độ mock trong môi trường Vite dev/preview.
+import { isImageUrl } from '../src/lib/imageUrls.ts';
 import catalog from './catalog.json' with { type: 'json' };
 import { isOrderStatus, isValidTransition } from '../src/lib/orderStatus.ts';
 import { validateVietnamPhone } from '../src/lib/addressValidation.ts';
@@ -416,6 +417,9 @@ export const demoCategories: DemoCategory[] = (catalog.categories as any[]).map(
 export interface DemoProduct {
   id: string;
   seller_id: string | null;
+  sku?: string|null;
+  source_name?: string|null;
+  images?: {url:string;alt:string;sort_order:number}[];
   category_id: string;
   name: string;
   slug: string;
@@ -435,6 +439,7 @@ export interface DemoProduct {
 export const demoProducts: DemoProduct[] = (catalog.products as any[]).map(p => ({
   id: p.id,
   seller_id: null,
+  sku:p.sku||null,source_name:p.source_name||null,images:p.images||[],
   category_id: p.category_id,
   name: p.name,
   slug: p.slug,
@@ -1256,9 +1261,13 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
         return true;
       }
 
+      if(body?.images !== undefined && (!Array.isArray(body.images) || body.images.length>20 || body.images.some((image:any)=>!image || typeof image.url!=='string' || !isImageUrl(image.url)))) {
+        send(400,{error:{code:'VALIDATION_ERROR',message:'Ảnh sản phẩm không hợp lệ.',fields:{images:'Kiểm tra đường dẫn ảnh.'}}});return true;
+      }
       const newProduct: DemoProduct = {
         id: slug,
         seller_id: null,
+        sku:body?.sku||null,source_name:body?.source_name||null,images:body?.images||[],
         category_id,
         name,
         slug,
@@ -1348,6 +1357,9 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
         return true;
       }
 
+      if(body?.images !== undefined && (!Array.isArray(body.images) || body.images.length>20 || body.images.some((image:any)=>!image || typeof image.url!=='string' || !isImageUrl(image.url)))) {
+        send(400,{error:{code:'VALIDATION_ERROR',message:'Ảnh sản phẩm không hợp lệ.',fields:{images:'Kiểm tra đường dẫn ảnh.'}}});return true;
+      }
       // Validate đạt toàn bộ -> Mới áp dụng cập nhật
       if (validatedName !== undefined) product.name = validatedName;
       if (validatedPrice !== undefined) product.price_vnd = validatedPrice;
@@ -1361,6 +1373,9 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
       if (body?.material !== undefined) product.material = body.material ? String(body.material).trim() : null;
       if (body?.origin_province !== undefined) product.origin_province = body.origin_province ? String(body.origin_province).trim() : null;
 
+      if(body?.images !== undefined) product.images=body.images;
+      if(body?.sku !== undefined) product.sku=body.sku;
+      if(body?.source_name !== undefined) product.source_name=body.source_name;
       product.updated_at = new Date().toISOString();
 
       // Đồng bộ sang catalog.products của storefront
@@ -1371,6 +1386,7 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
         catP.sale_price_vnd = product.sale_price_vnd;
         catP.current_price_vnd = product.sale_price_vnd ?? product.price_vnd;
         catP.status = product.status;
+        catP.images=product.images||[];catP.sku=product.sku;catP.source_name=product.source_name;catP.description=product.description;catP.origin=product.origin_province;
       }
 
       send(200, { data: product });
@@ -1630,7 +1646,7 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
     const phoneCheck = validateVietnamPhone(typeof phone === 'string' ? phone : '');
     const phoneError = phoneCheck.valid ? null : phoneCheck.error || null;
 
-    if (!full_name || !province || !district || !ward || !street_address || phoneError) {
+    if (!full_name || !province || !ward || !street_address || phoneError) {
       send(400, {
         error: {
           code: 'VALIDATION_ERROR',
@@ -1639,7 +1655,7 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
             ...(!full_name ? { full_name: 'Vui lòng nhập họ tên người nhận' } : {}),
             ...(phoneError ? { phone: phoneError } : {}),
             ...(!province ? { province: 'Vui lòng chọn tỉnh/thành phố' } : {}),
-            ...(!district ? { district: 'Vui lòng chọn quận/huyện' } : {}),
+
             ...(!ward ? { ward: 'Vui lòng chọn phường/xã' } : {}),
             ...(!street_address ? { street_address: 'Vui lòng nhập địa chỉ chi tiết' } : {})
           }
@@ -1654,7 +1670,7 @@ export async function handleC2Mock(req: any, res: any, url: URL, send: (code: nu
       full_name: String(full_name).trim(),
       phone: String(phone).trim(),
       province: String(province).trim(),
-      district: String(district).trim(),
+      district: String(district || '').trim(),
       ward: String(ward).trim(),
       street_address: String(street_address).trim(),
       is_default: Boolean(is_default),

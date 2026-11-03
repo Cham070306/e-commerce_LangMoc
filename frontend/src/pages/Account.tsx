@@ -1,3 +1,4 @@
+import { AddressFields } from '../components/AddressFields';
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../features/auth/AuthContext';
 import { api, ApiError } from '../lib/api';
@@ -24,7 +25,7 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [fullName, setFullName] = useState(user?.full_name || '');
   const [phone, setPhone] = useState(user?.phone || '');
-  const [province, setProvince] = useState('Thành phố Hồ Chí Minh');
+  const [province, setProvince] = useState('Hồ Chí Minh');
   const [district, setDistrict] = useState('');
   const [ward, setWard] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
@@ -66,7 +67,6 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
       errs.phone = phoneCheck.error || 'Số điện thoại không hợp lệ.';
     }
     if (!province.trim()) errs.province = 'Vui lòng chọn hoặc nhập Tỉnh/Thành phố.';
-    if (!district.trim()) errs.district = 'Vui lòng nhập Quận/Huyện.';
     if (!ward.trim()) errs.ward = 'Vui lòng nhập Phường/Xã.';
     if (!streetAddress.trim()) errs.streetAddress = 'Vui lòng nhập địa chỉ chi tiết (số nhà, tên đường).';
     setFormErrors(errs);
@@ -114,7 +114,7 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
 
   const handleDeleteAddress = async (address: Address) => {
     if (isDeletingAddressRef.current || deletingAddressId || submittingAddress) return;
-    const shortAddress = `${address.street_address}, ${address.ward}, ${address.district}, ${address.province}`;
+    const shortAddress = [address.street_address,address.ward,address.district,address.province].filter(Boolean).join(', ');
     if (!window.confirm(`Xóa địa chỉ của ${address.full_name}: ${shortAddress}?`)) return;
 
     isDeletingAddressRef.current = true;
@@ -327,52 +327,9 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
                       </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px' }}>
-                      <div className="c2-form-group">
-                        <label className="c2-label" htmlFor="addr-province">
-                          Tỉnh / Thành phố <span className="c2-required">*</span>
-                        </label>
-                        <input
-                          id="addr-province"
-                          type="text"
-                          className={`c2-input ${formErrors.province ? 'c2-input-error' : ''}`}
-                          value={province}
-                          onChange={e => setProvince(e.target.value)}
-                          placeholder="TP. Hồ Chí Minh"
-                        />
-                        {formErrors.province && <span className="c2-error-text">{formErrors.province}</span>}
-                      </div>
-
-                      <div className="c2-form-group">
-                        <label className="c2-label" htmlFor="addr-district">
-                          Quận / Huyện <span className="c2-required">*</span>
-                        </label>
-                        <input
-                          id="addr-district"
-                          type="text"
-                          className={`c2-input ${formErrors.district ? 'c2-input-error' : ''}`}
-                          value={district}
-                          onChange={e => setDistrict(e.target.value)}
-                          placeholder="Quận 1, Bình Thạnh..."
-                        />
-                        {formErrors.district && <span className="c2-error-text">{formErrors.district}</span>}
-                      </div>
-
-                      <div className="c2-form-group">
-                        <label className="c2-label" htmlFor="addr-ward">
-                          Phường / Xã <span className="c2-required">*</span>
-                        </label>
-                        <input
-                          id="addr-ward"
-                          type="text"
-                          className={`c2-input ${formErrors.ward ? 'c2-input-error' : ''}`}
-                          value={ward}
-                          onChange={e => setWard(e.target.value)}
-                          placeholder="Phường Bến Nghé..."
-                        />
-                        {formErrors.ward && <span className="c2-error-text">{formErrors.ward}</span>}
-                      </div>
-                    </div>
+                    <AddressFields id="addr" province={province} ward={ward}
+                      onChange={(p,w)=>{setProvince(p);setWard(w);setDistrict('');}}
+                      errors={formErrors} disabled={submittingAddress}/>
 
                     <div className="c2-form-group">
                       <label className="c2-label" htmlFor="addr-street">
@@ -454,7 +411,7 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
                         </h4>
                         <div className="c2-address-phone">📞 {addr.phone}</div>
                         <div className="c2-address-text">
-                          📍 {addr.street_address}, {addr.ward}, {addr.district}, {addr.province}
+                          📍 {[addr.street_address,addr.ward,addr.district,addr.province].filter(Boolean).join(', ')}
                         </div>
                       </div>
                       {canDeleteAddress && (
@@ -474,7 +431,7 @@ export default function AccountPage({ initialTab = 'info' }: AccountPageProps) {
 
               {/* GHI CHÚ PHẠM VI HỢP ĐỒNG API */}
               <div style={{ marginTop: '24px', padding: '12px 16px', background: '#f4efe6', borderRadius: '4px', fontSize: '11px', color: 'var(--muted, #7c6a57)', lineHeight: '1.6' }}>
-                ℹ️ <strong>Đối chiếu hợp đồng docs/API.md:</strong> API hiện tại quy định <code>GET /me/addresses</code> và <code>POST /me/addresses</code>. Thao tác Sửa / Xóa / Đặt mặc định địa chỉ chưa có endpoint trong tài liệu hợp đồng v1, giao diện tuân thủ chính xác và không tự ý bịa endpoint.
+                Khi xóa địa chỉ mặc định, hệ thống sẽ chọn một địa chỉ còn lại làm mặc định. Thông tin nhận hàng trong các đơn đã đặt vẫn được giữ nguyên.
               </div>
             </div>
           )}

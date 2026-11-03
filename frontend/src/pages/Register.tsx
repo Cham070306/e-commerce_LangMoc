@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../features/auth/AuthContext';
 import { ApiError } from '../lib/api';
 import { SITE_NAME, isMockMode } from '../config/site';
+import { validateVietnamPhone, sanitizePhoneInput } from '../lib/addressValidation';
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -26,14 +27,14 @@ export default function RegisterPage() {
     }
     if (!password) {
       nextErrors.password = 'Vui lòng nhập mật khẩu.';
-    } else if (password.length < 6) {
-      nextErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự.';
+    } else if (password.length < 8 || password.length > 128) {
+      nextErrors.password = 'Mật khẩu phải có từ 8 đến 128 ký tự.';
     }
     if (confirmPassword !== password) {
       nextErrors.confirmPassword = 'Mật khẩu xác nhận không khớp.';
     }
-    if (phone.trim() && !/^[0-9+() -]{8,15}$/.test(phone.trim())) {
-      nextErrors.phone = 'Số điện thoại không hợp lệ.';
+    if (phone && !validateVietnamPhone(phone).valid) {
+      nextErrors.phone = validateVietnamPhone(phone).error!;
     }
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -57,7 +58,8 @@ export default function RegisterPage() {
       if (err instanceof ApiError) {
         setApiError(err.message);
         if (err.fields) {
-          setErrors(prev => ({ ...prev, ...err.fields }));
+          const {full_name, ...fields} = err.fields;
+          setErrors(prev => ({ ...prev, ...fields, ...(full_name ? {fullName: full_name} : {}) }));
         }
       } else {
         setApiError('Đăng ký không thành công. Vui lòng kiểm tra lại kết nối mạng.');
@@ -133,7 +135,7 @@ export default function RegisterPage() {
                 type="tel"
                 className={`c2-input ${errors.phone ? 'c2-input-error' : ''}`}
                 value={phone}
-                onChange={e => setPhone(e.target.value)}
+                onChange={e => setPhone(sanitizePhoneInput(e.target.value))}
                 placeholder="090 123 4567"
                 disabled={submitting}
               />
@@ -150,7 +152,7 @@ export default function RegisterPage() {
                 className={`c2-input ${errors.password ? 'c2-input-error' : ''}`}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                placeholder="Tối thiểu 6 ký tự"
+                placeholder="Từ 8 đến 128 ký tự"
                 autoComplete="new-password"
                 disabled={submitting}
               />

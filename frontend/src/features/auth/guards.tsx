@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAuth } from './AuthContext';
+import { redirectToLogin } from '../../lib/loginRedirect';
 import { Loading } from '../../components/common/States';
 
 export function RequireAuth({
@@ -13,9 +14,7 @@ export function RequireAuth({
 
   useEffect(() => {
     if (!loading && !user) {
-      const currentHash = window.location.hash.replace(/^#/, '');
-      const target = redirectTo || currentHash || '/';
-      window.location.hash = `#/login?redirect=${encodeURIComponent(target)}`;
+      redirectToLogin(redirectTo);
     }
   }, [user, loading, redirectTo]);
 
@@ -39,8 +38,7 @@ export function RequireAdmin({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!loading && !user) {
-      const currentHash = window.location.hash.replace(/^#/, '') || '/admin';
-      window.location.hash = `#/login?redirect=${encodeURIComponent(currentHash)}`;
+      redirectToLogin();
     }
   }, [user, loading]);
 

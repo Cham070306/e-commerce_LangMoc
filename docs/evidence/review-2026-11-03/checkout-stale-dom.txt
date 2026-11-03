@@ -1,0 +1,128 @@
+- link "Đến nội dung":
+  - /url: "#main"
+- text: Gìn giữ nét nghề · Kết nối những giá trị Việt
+- generic: Thủ công & tâm huyết
+- banner:
+  - link "Làng Mộc — Trang chủ":
+    - /url: "#/"
+    - text: làng mộc
+    - generic: .
+  - navigation "Điều hướng chính":
+    - link "Trang chủ":
+      - /url: "#/"
+    - link "Sản phẩm":
+      - /url: "#/catalog"
+    - button "Mở danh mục sản phẩm":
+    - link "Làng nghề Việt":
+      - /url: "#lang-nghe"
+    - link "Câu chuyện":
+      - /url: "#cau-chuyen"
+    - link "Liên hệ":
+      - /url: "#/contact"
+  - button "Tìm kiếm sản phẩm":
+  - link "Tài khoản của tôi":
+    - /url: "#/account"
+    - generic: Nguyễn
+  - link "Giỏ hàng có 1 món":
+    - /url: "#/cart"
+    - generic: Giỏ hàng
+    - generic: "1"
+  - link "Khám phá":
+    - /url: "#/catalog"
+    - text: Khám phá
+- main:
+  - navigation "Tiến trình đặt hàng":
+    - link "Giỏ hàng":
+      - /url: "#/cart"
+      - generic: Giỏ hàng
+    - generic: "2"
+    - generic: Thông tin đặt hàng
+    - generic: "3"
+    - generic: Hoàn tất
+  - heading "Thanh toán đơn hàng" [level=1]
+  - paragraph: Quý khách vui lòng kiểm tra kỹ địa chỉ nhận hàng và thông tin thanh toán khi nhận hàng (COD).
+  - generic: ⚙️ CHẾ ĐỘ MÔ PHỎNG (MOCK API)
+  - heading "Địa chỉ nhận hàng" [level=2]:
+    - text: Địa chỉ nhận hàng
+  - button "Thêm địa chỉ mới":
+    - text: Thêm địa chỉ mới
+  - radio "Linh Nguyễn | 0901234567 Mặc định 123 Đồng Khởi, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh Xóa" [checked]
+  - strong: Linh Nguyễn
+  - generic: "| 0901234567"
+  - generic: Mặc định
+  - generic: 123 Đồng Khởi, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh
+  - button "Xóa"
+  - heading "Phương thức thanh toán" [level=2]:
+    - text: Phương thức thanh toán
+  - radio "Thanh toán tiền mặt khi nhận hàng (COD) Quý khách thanh toán tiền mặt cho nhân viên giao hàng khi nhận kiện hàng. Xem chính sách vận chuyển & bảo hành" [checked]
+  - generic: Thanh toán tiền mặt khi nhận hàng (COD)
+  - text: Quý khách thanh toán tiền mặt cho nhân viên giao hàng khi nhận kiện hàng.
+  - link "Xem chính sách vận chuyển & bảo hành":
+    - /url: "#/policies/shipping"
+  - generic: Chuyển khoản ngân hàng trực tiếp
+  - generic: Chưa hỗ trợ
+  - generic: Thanh toán thẻ quốc tế / Cổng trực tuyến (Visa/Mastercard)
+  - generic: Chưa hỗ trợ
+  - heading "Ghi chú đơn hàng (nếu có)" [level=2]:
+    - text: Ghi chú đơn hàng (nếu có)
+  - 'textbox "Ví dụ: Giao vào giờ hành chính, gọi điện trước khi đến…"'
+  - heading "Sản phẩm đặt mua (1)" [level=2]
+  - img "Tô Lượn"
+  - generic: Tô Lượn
+  - generic: 313.200 ₫ × 1
+  - generic: 313.200 ₫
+  - generic: Tạm tính
+  - strong: 626.400 ₫
+  - generic: Phí vận chuyển
+  - generic: 30.000 ₫
+  - generic: Tổng thanh toán
+  - generic: 656.400 ₫
+  - strong: "Giao đến:"
+  - text: Linh Nguyễn (0901234567) - 123 Đồng Khởi, Phường Bến Nghé, Quận 1, Thành phố Hồ Chí Minh
+  - checkbox "Tôi đã đọc và đồng ý với"
+  - generic: Tôi đã đọc và đồng ý với
+  - link "[Chính sách vận chuyển]":
+    - /url: "#/policies/shipping"
+  - text: ","
+  - link "[Chính sách đổi trả]":
+    - /url: "#/policies/returns"
+  - text: ","
+  - link "[Chính sách bảo hành]":
+    - /url: "#/policies/warranty"
+  - paragraph: Vui lòng đồng ý với điều khoản để đặt hàng
+  - button "Đặt hàng COD — 656.400 ₫" [disabled]:
+    - text: Đặt hàng COD — 656.400 ₫
+  - link "← Quay lại chỉnh sửa giỏ hàng":
+    - /url: "#/cart"
+- contentinfo:
+  - generic: Website demo
+  - paragraph: Dự án học phần thương mại điện tử · Thông tin, sản phẩm và giá dùng để minh họa. Luồng đặt hàng COD đang mô phỏng.
+  - link "làng mộc.":
+    - /url: "#/"
+  - paragraph:
+    - text: Nét Việt, từ đôi bàn tay.
+    - text: Sàn thương mại điện tử kết nối sản phẩm thủ công và câu chuyện làng nghề Việt Nam.
+  - heading "Khám phá Làng Mộc" [level=3]
+  - link "Danh mục sản phẩm":
+    - /url: "#/catalog"
+  - link "Làng nghề Việt":
+    - /url: "#lang-nghe"
+  - link "Câu chuyện Làng Mộc":
+    - /url: "#cau-chuyen"
+  - link "Liên hệ & Góp ý":
+    - /url: "#/contact"
+  - heading "Chính sách dịch vụ" [level=3]
+  - link "Chính sách vận chuyển & COD":
+    - /url: "#/policies/shipping"
+  - link "Chính sách đổi trả & bồi hoàn":
+    - /url: "#/policies/returns"
+  - link "Chính sách bảo hành & bảo quản":
+    - /url: "#/policies/warranty"
+  - generic: © 2026 Làng Mộc · Dự án học phần
+  - link "Hỗ trợ khách hàng":
+    - /url: "#/contact"
+  - text: ·
+  - link "Chính sách":
+    - /url: "#/policies"
+  - link "Về đầu trang ↑":
+    - /url: "#/"
