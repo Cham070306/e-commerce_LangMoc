@@ -70,6 +70,7 @@ export interface CartData {
 }
 
 export interface CheckoutPreview {
+  checkout_quote?: string;
   subtotal_vnd: number;
   discount_vnd: number;
   shipping_fee_vnd: number;
@@ -119,6 +120,7 @@ export interface Order {
 }
 
 export interface CreateOrderPayload {
+  checkout_quote?: string;
   address_id: string;
   promotion_code?: string;
   payment_method: 'cod';

@@ -8,12 +8,12 @@ Website học phần thương mại điện tử sản phẩm làng nghề Việ
 - Auth/session cookie, phân quyền, sổ địa chỉ, catalog và admin danh mục/sản phẩm đã có API PostgreSQL.
 - Địa chỉ mới chọn tỉnh rồi phường/xã; backend kiểm tra cặp hợp lệ. Địa chỉ cũ vẫn đọc được. [Nguồn dữ liệu](docs/ADDRESS_DATA.md).
 - Admin sản phẩm hỗ trợ tên, giá, tồn, trạng thái, mô tả, SKU, đơn vị nguồn và gallery bằng URL/ảnh local; có xem trước, đổi thứ tự và xóa ảnh. Chưa có upload file từ máy.
-- Frontend mặc định dùng mock. API giao dịch tài khoản, khuyến mại, review ghi, contact và admin giao dịch vẫn thuộc phần tích hợp C4; thành công trên mock không chứng minh các API này đã hoàn tất.
+- Frontend mặc định dùng mock. C4 bổ sung API giao dịch, khuyến mại, review ghi, contact và admin giao dịch; cần chạy kiểm thử tích hợp trước khi coi luồng live hoàn tất.
 - Guest COD đã có module riêng trên DB, mặc định bật: [hướng dẫn và giới hạn](docs/GUEST_CHECKOUT.md). Không dùng module này để kết luận toàn bộ C4 hoàn thành.
 - Catalog mock có 452 sản phẩm, gồm 449 bản nguồn và 3 sản phẩm mây tre demo từ seed. Giá/tồn/ảnh seed là minh họa. Thông tin nguồn chưa có vẫn được ghi rõ chưa xác minh; không tự tạo xuất xứ hoặc thông số sản phẩm.
 - Hotline `0987223434`, email `langmoc.support@gmail.com` do người dùng cung cấp. Giờ làm việc chưa được cung cấp; có thể cấu hình qua môi trường.
 
-[Bản sửa và kiểm tra lại](docs/FIXES_2026-11-03.md) · [Phân công](docs/TEAM_PLAN.md) · [API](docs/API.md) · [Dữ liệu](docs/DATA_MODEL.md) · [Bàn giao tích hợp](docs/KHAI_QUAN_HANDOVER.md).
+[Bản sửa và kiểm tra lại](docs/FIXES_2026-11-03.md) · [Phân công](docs/TEAM_PLAN.md) · [API](docs/API.md) · [Dữ liệu](docs/DATA_MODEL.md) · [Bàn giao tích hợp](docs/KHAI_QUAN_HANDOVER.md) · [Backend C4 của Sơn](backend/README.md).
 
 ## Môi trường
 

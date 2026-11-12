@@ -1,0 +1,27 @@
+✔ sale window is start-inclusive and end-exclusive (1.9338ms)
+✔ integer discounts floor VND, cap and reject expired/exhausted codes (1.5225ms)
+✔ quote binds user, contents, expiry and secret (5.4565ms)
+✔ unsafe monetary values and pagination injection are rejected (0.3311ms)
+▶ C4 against isolated PostgreSQL (including parallel connections)
+  ✔ server reprices; identical concurrent retries create one order and decrement once (296.6297ms)
+  ✔ ownership and pending cancellation restore stock only once (10.7626ms)
+  ✔ two customers compete for the final item without overselling (36.9703ms)
+  ✔ price changes, missing quote, foreign address and bad quantity are rejected (23.8147ms)
+  ✔ single-use promotion is locked across customers; expired promotion has no effects (31.1658ms)
+  ✔ database failure rolls back order, stock, coupon and cart mutations (39.9183ms)
+  ✔ shipment and status transitions keep COD payment independent (44.3903ms)
+  ✔ HTTP cart, preview, order retry and deletion use the same live contract (148.6498ms)
+  ✔ HTTP 401/403, Origin, malformed input, inactive user and admin lists (47.5228ms)
+  ✔ reviews require auth, deduplicate, moderate and expose only visible plain text (40.2193ms)
+  ✔ contact validates, throttles across handlers and stays admin-only (32.6831ms)
+  ✔ admin promotion write/list validation and error envelope (15.533ms)
+✔ C4 against isolated PostgreSQL (including parallel connections) (3958.2797ms)
+ℹ PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4175.6394

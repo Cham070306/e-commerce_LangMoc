@@ -70,6 +70,8 @@ Hàm `set_updated_at()` được gắn cho `users`, `products`, `orders` để m
 
 ## Các quy tắc dữ liệu nhóm phải giữ
 
+Nhánh C4 bổ sung [006_c4_transactions.sql](../database/006_c4_transactions.sql), chạy sau migrations 001–005 của develop: thêm `orders.request_fingerprint` để kiểm nội dung request lặp và `c4_contact_rate_limits` chứa hash/thời hạn/số lượt gửi liên hệ, không lưu IP thô. Migration cần C3 review trước merge; không sửa các migration đã áp dụng.
+
 - Tiền là số nguyên VND trong cột `bigint`. Frontend chỉ định dạng hiển thị; backend tính giá cuối và tổng đơn.
 - `products.price_vnd` là giá gốc. `sale_price_vnd` nhỏ hơn giá gốc; thời hạn giảm giá kiểm tra khi đọc và khi đặt đơn.
 - `orders` chứa tổng tiền và thông tin nhận hàng dạng snapshot; `order_items` giữ tên, ảnh, giá, số lượng tại thời điểm đặt. Không tính lại đơn cũ bằng giá hiện tại của sản phẩm.

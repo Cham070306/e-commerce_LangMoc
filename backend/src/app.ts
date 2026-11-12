@@ -9,6 +9,8 @@ import { meRouter } from './modules/auth/me.routes.js';
 import { catalogRouter } from './modules/catalog/catalog.routes.js';
 import { adminCatalogRouter } from './modules/admin/catalog.admin.routes.js';
 import {guestRouter} from './modules/orders/guest.routes.js';
+import {createC4Handler} from './c4.mjs';
+import {pool} from './db/pool.js';
 
 export function createApp(): express.Express {
   const app = express();
@@ -20,9 +22,15 @@ export function createApp(): express.Express {
       credentials: true,
     }),
   );
-  app.use(express.json({ limit: '1mb' }));
+  app.use(express.json({ limit: '64kb' }));
   app.use(cookieParser());
   app.use(attachUser);
+  app.use(createC4Handler({
+    pool,
+    authenticate: async (req: express.Request) => req.user ?? null,
+    quoteSecret: config.quoteSecret,
+    allowedOrigins: [config.frontendOrigin],
+  }));
 
   app.get('/api/v1/health', (_req, res) => {
     res.json({ data: { status: 'ok', service: 'lang-moc-backend' } });

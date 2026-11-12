@@ -6,6 +6,16 @@ Tài liệu này là bản thống nhất trước khi code. Base URL: `/api/v1`
 
 ## Quy ước chung
 
+**Cập nhật tích hợp C4:** code giỏ/checkout/COD/đơn, khuyến mại, review/contact và admin đã được đưa vào branch tích hợp. Test cần chạy lại trên branch này; chưa xác nhận frontend live end-to-end. Xem [bàn giao C4](testing/checkout.md). Những thay đổi hợp đồng/schema cần review chéo trước merge:
+
+- Preview trả thêm `data.checkout_quote` ký HMAC, hạn 5 phút. Tạo đơn mới gửi thêm `checkout_quote` trong body. Quote gắn user, địa chỉ, giỏ, giá, mã và tổng do server tính. Giá/giỏ đổi hoặc quote hết hạn trả 409 `PRICE_CHANGED`; cần preview lại và xác nhận. Frontend đã chuyển quote vừa preview sang request tạo đơn, không đưa quote vào fingerprint idempotency.
+- Retry cùng user + Idempotency-Key + payload trả đơn cũ (201) trước kiểm giỏ/quote; thay payload với key cũ trả 409. Key tối đa 100 ký tự. Ghi chú tối đa 2.000 ký tự.
+- `GET /admin/orders/:id` trả items snapshot và shipment, chỉ admin; endpoint vận đơn dùng `PATCH` như bảng dưới. Danh sách đơn khách hỗ trợ thêm `status` hợp lệ.
+- COD-only, ship demo 30.000 VND. Hủy pending hoàn tồn một lần, không trả lượt mã. Delivered không tự đánh dấu paid.
+- Review MVP cho tài khoản hoạt động, mỗi sản phẩm một lần, comment 1-5.000 ký tự, chờ admin duyệt; GET đúng shape C1. Không bắt buộc đơn delivered trong nhánh này.
+- Contact tối đa 5 tin/phút/IP socket, quota chung PostgreSQL; trả 429 `RATE_LIMITED`, Retry-After 60. Message tối đa 10.000 ký tự. Sau reverse proxy cần chốt resolver IP tin cậy.
+- C4 xử lý checkout cho tài khoản; guest checkout là luồng riêng đã có trong develop. Gateway/webhook, lưu đồng ý điều khoản và upload ảnh ngoài phạm vi C4.
+
 | Tình huống | HTTP | JSON mẫu |
 |---|---:|---|
 | Thành công | 200/201 | `{ "data": { ... } }` |
@@ -110,7 +120,7 @@ Chỉ cho review từ khách đã có đơn `delivered` chứa sản phẩm là 
 - Giá hiển thị cần khớp giữa trang sản phẩm, giỏ, preview và đơn; khi giá đổi giữa lúc mua, preview/checkout báo thay đổi và yêu cầu xác nhận lại.
 - API phải có các ca kiểm thử: tìm không có kết quả, sắp xếp, tồn kho cạnh tranh, mã giảm hết hạn/hết lượt, lặp request tạo đơn, người dùng xem đơn của người khác, khách truy cập admin, callback thanh toán lặp và bình luận chứa HTML/script.
 
-Nguồn yêu cầu: `TMDT_CASE STUDY.pdf`; định hướng kinh doanh: `Nhóm 1 - Kế Hoạch Kinh Doanh.pdf`. API này là **bản thiết kế**, chưa phải mô tả code đã chạy.
+Nguồn yêu cầu: `TMDT_CASE STUDY.pdf`; định hướng kinh doanh: `Nhóm 1 - Kế Hoạch Kinh Doanh.pdf`. Các phần chưa triển khai vẫn là **bản thiết kế**; trạng thái code/kiểm thử C4 được ghi riêng ở phần cập nhật đầu tài liệu và minh chứng, không suy ra toàn bộ API đã chạy live.
 
 ## Trạng thái triển khai (cập nhật 30/10/2026)
 
@@ -124,7 +134,7 @@ Backend thật đã có trong `backend/` (Node.js + Express + TypeScript, Postgr
 | Địa chỉ | Đã chạy | `GET/POST /me/addresses`, `DELETE /me/addresses/:id` |
 | Catalog công khai | Đã chạy | `GET /categories`, `/products` (q, category, giá, sort, phân trang), `/products/:slug`, `/products/:slug/reviews` |
 | Admin catalog | Đã chạy | `GET/POST /admin/categories`, `PATCH /admin/categories/:id`, `GET/POST /admin/products`, `GET/PATCH /admin/products/:id` |
-| Giỏ, đơn, thanh toán, review ghi, contact | Chưa làm | Thuộc phần C4 trong `TEAM_PLAN.md` |
+| Giỏ, COD, đơn, khuyến mại, review ghi, contact | Đã có code C4; cần chạy lại test sau tích hợp | Xem `docs/testing/checkout.md`; chưa xác nhận live end-to-end |
 | Upload ảnh | Chưa làm | Ảnh hiện nhận URL có sẵn (`/images/...` hoặc URL nguồn) |
 
 ### Xác thực — chi tiết triển khai

@@ -24,6 +24,7 @@ export const config = {
   databaseUrl: required('DATABASE_URL'),
   frontendOrigin: process.env.FRONTEND_ORIGIN ?? 'http://localhost:5173',
   sessionSecret: process.env.SESSION_SECRET ?? 'dev-only-secret-change-me',
+  quoteSecret: process.env.C4_QUOTE_SECRET ?? (process.env.NODE_ENV === 'test' ? 'test-only-c4-quote-secret-not-for-deployment' : ''),
   sessionTtlSeconds: intEnv('SESSION_TTL_SECONDS', 7 * 24 * 60 * 60),
   cookieSecure: (process.env.COOKIE_SECURE ?? 'false').toLowerCase() === 'true',
   sessionCookieName: 'langmoc_sid',
@@ -36,6 +37,9 @@ export function assertProductionConfig(): void {
     }
     if (!config.cookieSecure) {
       throw new Error('COOKIE_SECURE phải là true khi chạy production (HTTPS).');
+    }
+    if (config.quoteSecret.length < 32 || config.quoteSecret === 'replace-with-a-separate-random-secret-at-least-32-characters') {
+      throw new Error('C4_QUOTE_SECRET phải là chuỗi ngẫu nhiên tối thiểu 32 ký tự khi chạy production.');
     }
   }
 }

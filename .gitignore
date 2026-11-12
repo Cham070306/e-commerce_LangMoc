@@ -12,6 +12,7 @@ coverage/
 *.dump
 frontend/public/uploads/
 backend/uploads/
+backend/data/db/
 
 *.tsbuildinfo
 

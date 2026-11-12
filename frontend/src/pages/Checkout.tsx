@@ -323,6 +323,7 @@ export default function CheckoutPage() {
             note: note.trim() || undefined
           } : {
             address_id: selectedAddressId,
+            checkout_quote: freshPreview.checkout_quote,
             promotion_code: appliedPromo || undefined,
             payment_method: 'cod',
             note: note.trim() || undefined
@@ -342,6 +343,7 @@ export default function CheckoutPage() {
         ? await api.createGuestOrder(guestPayload, idempotencyKey)
         : await api.createOrder({
           address_id: selectedAddressId,
+          checkout_quote: freshPreview.checkout_quote,
           promotion_code: appliedPromo || undefined,
           payment_method: 'cod',
           note: note.trim() || undefined
