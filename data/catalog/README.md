@@ -29,3 +29,10 @@ python3 scripts/finalize_catalog.py
 ```
 
 Hai bước sau chỉ đọc cache local, không gửi yêu cầu mạng. Xem xét thay đổi quy định truy cập trước lần chạy mới. Đọc báo cáo lỗi trước khi dùng dữ liệu.
+
+
+## DemTrangHome
+
+Danh mục [Nội thất mây tre đan](https://demtranghome.vn/collections/noi-that-may-tre) được thu thập từ 5 trang danh sách. Catalog Làng Mộc dùng 86 trong số 96 sản phẩm từ danh sách và bỏ qua 10 mẫu có tiêu đề ghi đã ngừng sản xuất. Dữ liệu nằm trong `frontend/mock/catalog.json` và ảnh chính nằm trong `frontend/public/images/products/demtranghome/`.
+
+Mỗi sản phẩm giữ giá hiển thị và URL trang nguồn. Thông số, xuất xứ và tồn kho thật chưa được xác minh. Số lượng 8 là tồn kho demo do trình nhập local đặt. Quyền sử dụng ảnh chưa được xác minh.

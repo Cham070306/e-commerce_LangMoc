@@ -21,16 +21,24 @@ const catalogSchema=z.object({
 async function main(){
   const source=fileURLToPath(new URL('../../../frontend/mock/catalog.json',import.meta.url));
   const catalog=catalogSchema.parse(JSON.parse(await readFile(source,'utf8')));
+  const [option, sourceName, ...extra] = process.argv.slice(2);
+  if (option !== undefined && (option !== '--source' || !sourceName?.trim() || extra.length > 0)) {
+    throw new Error('Cách dùng: npm run import:catalog -- [--source "Tên nguồn"]');
+  }
+  const products = sourceName ? catalog.products.filter(product => product.source_name === sourceName) : catalog.products;
+  if (sourceName && products.length === 0) throw new Error(`Không tìm thấy sản phẩm từ nguồn ${sourceName}.`);
+  const categoryIds = new Set(products.map(product => product.category_id));
   if(new Set(catalog.products.map(p=>p.slug)).size!==catalog.products.length)throw new Error('Trùng slug trong catalog nguồn.');
   const result=await withTransaction(async client=>{
     // Không xóa seed/custom products; giữ ID hiện có để không làm hỏng các khóa ngoại.
     const categories=new Map<string,string>();
     for(const c of catalog.categories){
+      if (sourceName && !categoryIds.has(c.id)) continue;
       const row=await client.query<{id:string}>(`INSERT INTO categories(id,name,slug) VALUES($1,$2,$3)
-        ON CONFLICT(slug) DO UPDATE SET name=EXCLUDED.name RETURNING id`,[c.id,c.name,c.slug]);
+        ON CONFLICT(slug) DO UPDATE SET name=CASE WHEN $4 THEN categories.name ELSE EXCLUDED.name END RETURNING id`,[c.id,c.name,c.slug,Boolean(sourceName)]);
       categories.set(c.id,row.rows[0]!.id);
     }
-    for(const p of catalog.products){
+    for(const p of products){
       const categoryId=categories.get(p.category_id);
       if(!categoryId)throw new Error(`Không tìm thấy danh mục ${p.category_id}`);
       const row=await client.query<{id:string}>(`INSERT INTO products(
@@ -57,7 +65,7 @@ async function main(){
     const count=await client.query<{total:string}>(`SELECT count(*)::text AS total FROM products`);
     return count.rows[0]!.total;
   });
-  console.log(`Đã nhập ${catalog.products.length} sản phẩm từ catalog gốc. Tổng DB: ${result}.`);
+  console.log(`Đã nhập ${products.length} sản phẩm từ catalog gốc. Tổng DB: ${result}.`);
   console.log('Giữ ID, tồn kho và trạng thái sản phẩm đã có; sản phẩm mới có tồn kho demo 8, không phải tồn kho thực.');
 }
 main().then(()=>pool.end()).catch(async error=>{console.error(error);await pool.end();process.exitCode=1;});

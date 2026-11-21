@@ -10,7 +10,7 @@ Website học phần thương mại điện tử sản phẩm làng nghề Việ
 - Admin sản phẩm hỗ trợ tên, giá, tồn, trạng thái, mô tả, SKU, đơn vị nguồn và gallery bằng URL/ảnh local; có xem trước, đổi thứ tự và xóa ảnh. Chưa có upload file từ máy.
 - Frontend mặc định dùng mock. C4 bổ sung API giao dịch, khuyến mại, review ghi, contact và admin giao dịch; cần chạy kiểm thử tích hợp trước khi coi luồng live hoàn tất.
 - Guest COD đã có module riêng trên DB, mặc định bật: [hướng dẫn và giới hạn](docs/GUEST_CHECKOUT.md). Không dùng module này để kết luận toàn bộ C4 hoàn thành.
-- Catalog mock có 452 sản phẩm, gồm 449 bản nguồn và 3 sản phẩm mây tre demo từ seed. Giá/tồn/ảnh seed là minh họa. Thông tin nguồn chưa có vẫn được ghi rõ chưa xác minh; không tự tạo xuất xứ hoặc thông số sản phẩm.
+- Catalog mock có 538 sản phẩm, gồm 449 bản nguồn ban đầu, 86 sản phẩm DemTrangHome và 3 sản phẩm mây tre demo từ seed. Giá/tồn/ảnh seed là minh họa. Thông tin nguồn chưa có vẫn được ghi rõ chưa xác minh; không tự tạo xuất xứ hoặc thông số sản phẩm.
 - Hotline `0987223434`, email `langmoc.support@gmail.com` do người dùng cung cấp. Giờ làm việc chưa được cung cấp; có thể cấu hình qua môi trường.
 
 [Bản sửa và kiểm tra lại](docs/FIXES_2026-11-03.md) · [Phân công](docs/TEAM_PLAN.md) · [API](docs/API.md) · [Dữ liệu](docs/DATA_MODEL.md) · [Bàn giao tích hợp](docs/KHAI_QUAN_HANDOVER.md) · [Backend C4 của Sơn](backend/README.md).
@@ -36,7 +36,9 @@ npm run dev
 
 API mặc định tại `http://127.0.0.1:4000/api/v1`; kiểm tra `GET /health` và `GET /categories`. Không chạy seed/import lên dữ liệu thật khi chưa backup.
 
-Migration chạy theo thứ tự các file SQL. Seed tạo 4 danh mục, 12 sản phẩm và hai tài khoản demo. Import đồng bộ 452 sản phẩm trong fixture: trùng slug cập nhật nội dung, giữ ID/tồn/trạng thái hiện có; không xóa sản phẩm khác. Chạy lại không nhân đôi nhưng sẽ ghi lại giá/nội dung/ảnh nguồn. Sản phẩm mới có tồn demo 8.
+Migration chạy theo thứ tự các file SQL. Seed tạo 4 danh mục, 12 sản phẩm và hai tài khoản demo. Import đồng bộ 538 sản phẩm trong fixture: trùng slug cập nhật nội dung, giữ ID/tồn/trạng thái hiện có; không xóa sản phẩm khác. Chạy lại không nhân đôi nhưng sẽ ghi lại giá/nội dung/ảnh nguồn. Sản phẩm mới có tồn demo 8.
+
+Để chỉ nhập nguồn mây tre mới, chạy `npm run import:catalog -- --source DemTrangHome` trong `backend/`. [Phạm vi và dữ liệu nguồn](data/catalog/README.md#demtranghome).
 
 ```sh
 npm run build
