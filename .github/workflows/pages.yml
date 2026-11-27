@@ -2,7 +2,7 @@ name: Deploy Làng Mộc demo to GitHub Pages
 
 on:
   push:
-    branches: [deploy/github-pages]
+    branches: [develop]
   workflow_dispatch:
 
 permissions:
