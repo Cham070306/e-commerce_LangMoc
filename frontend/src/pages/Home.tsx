@@ -1,7 +1,7 @@
 import {useState,useEffect,useRef} from 'react';
 import {ArrowUpRight,Leaf,HandHeart,MapPin} from 'lucide-react';
 import FeaturedProducts from '../components/catalog/FeaturedProducts';
-const base='/images/crafts/';
+const base=import.meta.env.BASE_URL+'images/crafts/';
 const photos={hat:'01-conical-hat-workshop.jpeg',jars:'02-traditional-workshop-jars.jpeg',artisan:'03-bamboo-artisan.jpeg',textile:'04-mai-chau-textile-artwork.jpeg',hatArt:'06-chuong-conical-hat-artwork.jpeg',ceramic:'17-chu-dau-ceramic.jpeg',wheel:'08-pottery-wheel.jpeg',canopy:'12-textile-canopy-banner.png',baskets:'13-bamboo-market-banner.png',seagrass:'14-kim-son-seagrass.jpeg',weaving:'15-weaving-workshop.jpeg',kiln:'16-brick-kiln.jpeg',weavingClose:'18-weaving-closeup.jpeg',potteryHands:'19-pottery-hands.jpeg'};
 const categories=[{name:'Gốm sứ',slug:'gom-su',image:photos.ceramic,caption:'Đất lành, bàn tay khéo'},{name:'Thổ cẩm',slug:'tho-cam',image:photos.textile,caption:'Sắc màu trong từng sợi dệt'},{name:'Nón lá',slug:'non-la',image:photos.hatArt,caption:'Một dáng hình rất Việt'}];
 function Picture({image,alt,className='',eager=false}:{image:string;alt:string;className?:string;eager?:boolean}){return <img className={className} src={base+image} alt={alt} loading={eager?'eager':'lazy'} decoding="async"/>}
