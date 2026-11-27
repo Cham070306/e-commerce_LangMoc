@@ -41,7 +41,9 @@ export async function request<T>(method:string,path:string,body?:unknown,signal?
   if(body!==undefined){
     reqHeaders['Content-Type']='application/json';
   }
-  const res=await fetch((env.VITE_API_BASE_URL||'/api/v1')+path,{
+  const res = isMock && import.meta.env.VITE_BROWSER_MOCK === 'true'
+    ? await (await import('./browserMock')).requestBrowserMock(method, path, reqHeaders, body, signal)
+    : await fetch((env.VITE_API_BASE_URL||'/api/v1')+path,{
     method,
     signal,
     credentials:'include',
