@@ -3,7 +3,7 @@ import {queryProducts} from '../src/features/catalog/query';
 import type {Product} from '../src/lib/types';
 import {handleC2Mock, demoReviews} from './c2Mock';
 
-const products=catalog.products as Product[];
+const products=catalog.products as unknown as Product[];
 
 export async function mockApi(req:any,res:any,next:any){
  const url=new URL(req.url||'/','http://localhost');if(!url.pathname.startsWith('/api/v1/'))return next();

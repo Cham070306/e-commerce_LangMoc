@@ -1,5 +1,5 @@
 import {useEffect,useState} from 'react';
-const slides=['/images/crafts/07-ceramic-painting.jpeg','/images/crafts/08-pottery-wheel.jpeg','/images/crafts/09-decorative-ceramics.jpeg'];
+const slides=[import.meta.env.BASE_URL+'images/crafts/07-ceramic-painting.jpeg',import.meta.env.BASE_URL+'images/crafts/08-pottery-wheel.jpeg',import.meta.env.BASE_URL+'images/crafts/09-decorative-ceramics.jpeg'];
 export default function CatalogBanner(){
  const [active,setActive]=useState(0);
  useEffect(()=>{const timer=window.setInterval(()=>setActive(current=>(current+1)%slides.length),6500);return()=>window.clearInterval(timer)},[]);

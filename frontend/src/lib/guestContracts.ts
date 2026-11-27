@@ -18,6 +18,7 @@ export interface ProposedGuestCheckoutPayload {
   phone: string;
   address: ProposedGuestAddress;
   note?: string;
+  promotion_code?: string;
   items: Array<{ product_id: string; quantity: number }>;
 }
 
@@ -26,6 +27,7 @@ export interface MockGuestCheckoutPayload {
   phone: string;
   address_line: string;
   note?: string;
+  promotion_code?: string;
   items: Array<{ product_id: string; quantity: number }>;
 }
 
